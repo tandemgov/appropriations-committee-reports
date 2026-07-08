@@ -1,0 +1,34 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Environment variables
+.env
+
+# Downloaded data (large files)
+data/raw/
+data/extracted/
+data/verified/
+
+# OS files
+.DS_Store
+
+# Local agent/editor state
+.claude/settings.local.json
+
+# Local session scratch (mg-tools)
+.mg-tools/
+
+# Generated outputs and local archive
+data/output/
+data/_archive_flat_extracted/
+
+# Generated crosswalk review queue (regenerable via `approps crosswalk`)
+data/reference/account_crosswalk.csv

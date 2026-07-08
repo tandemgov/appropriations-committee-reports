@@ -1,0 +1,64 @@
+{
+  "subcommittees": [
+    {
+      "id": "Agriculture",
+      "full_name": "Agriculture, Rural Development, Food and Drug Administration, and Related Agencies",
+      "aliases": ["Agriculture"]
+    },
+    {
+      "id": "Commerce-Justice-Science",
+      "full_name": "Commerce, Justice, Science, and Related Agencies",
+      "aliases": ["CJS"]
+    },
+    {
+      "id": "Defense",
+      "full_name": "Department of Defense",
+      "aliases": ["DOD"]
+    },
+    {
+      "id": "Energy-Water",
+      "full_name": "Energy and Water Development and Related Agencies",
+      "aliases": ["E&W"]
+    },
+    {
+      "id": "Financial-Services",
+      "full_name": "Financial Services and General Government",
+      "aliases": ["FSGG"]
+    },
+    {
+      "id": "Homeland-Security",
+      "full_name": "Department of Homeland Security",
+      "aliases": ["DHS"]
+    },
+    {
+      "id": "Interior-Environment",
+      "full_name": "Interior, Environment, and Related Agencies",
+      "aliases": ["Interior"]
+    },
+    {
+      "id": "Labor-HHS-Education",
+      "full_name": "Departments of Labor, Health and Human Services, and Education, and Related Agencies",
+      "aliases": ["LHHS", "Labor-H"]
+    },
+    {
+      "id": "Legislative-Branch",
+      "full_name": "Legislative Branch",
+      "aliases": ["Leg Branch"]
+    },
+    {
+      "id": "MilCon-VA",
+      "full_name": "Military Construction, Veterans Affairs, and Related Agencies",
+      "aliases": ["MilCon"]
+    },
+    {
+      "id": "State-Foreign-Ops",
+      "full_name": "State, Foreign Operations, and Related Programs",
+      "aliases": ["SFOPs", "SFOPS"]
+    },
+    {
+      "id": "THUD",
+      "full_name": "Transportation, Housing and Urban Development, and Related Agencies",
+      "aliases": ["T-HUD"]
+    }
+  ]
+}

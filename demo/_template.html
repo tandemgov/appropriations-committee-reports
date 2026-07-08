@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reading the Unreadable — Verified Extraction of House Appropriations Tables</title>
+<style>
+  :root{
+    --paper: oklch(0.985 0.006 85);
+    --paper-2: oklch(0.966 0.009 82);
+    --paper-3: oklch(0.945 0.011 80);
+    --ink: oklch(0.235 0.018 268);
+    --ink-2: oklch(0.455 0.015 268);
+    --ink-3: oklch(0.60 0.012 268);
+    --rule: oklch(0.86 0.012 85);
+    --red: oklch(0.532 0.193 27);
+    --red-soft: oklch(0.93 0.045 30);
+    --green: oklch(0.47 0.092 150);
+    --green-soft: oklch(0.93 0.04 150);
+    --serif: "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --sans: -apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    --mono: ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); font-size:18px; line-height:1.65;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  .progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--red);z-index:50;transition:width .12s linear}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+  .col{max-width:64ch;margin-inline:auto}
+
+  /* type */
+  h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-0.01em;line-height:1.08}
+  h1{font-size:clamp(2.6rem,6vw,4.7rem);margin:0}
+  h2{font-size:clamp(1.9rem,3.6vw,2.9rem);margin:0 0 .5em}
+  h3{font-size:1.32rem;margin:0 0 .35em;letter-spacing:0}
+  p{margin:0 0 1.05em}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .lede{font-family:var(--serif);font-size:clamp(1.25rem,2.2vw,1.6rem);line-height:1.5;color:var(--ink);font-weight:400}
+  .kicker{font-family:var(--mono);font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3)}
+  .step-no{font-family:var(--mono);font-size:.8rem;letter-spacing:.18em;color:var(--red);text-transform:uppercase}
+  em{font-style:italic}
+  strong{font-weight:600}
+
+  /* hero */
+  .hero{padding:15vh 0 7vh;border-bottom:1px solid var(--rule)}
+  .hero .kicker{margin-bottom:1.4rem}
+  .hero h1{max-width:18ch}
+  .hero .lede{margin-top:1.6rem;max-width:54ch}
+  .meta{font-family:var(--mono);font-size:.8rem;color:var(--ink-3);margin-top:2.2rem;letter-spacing:.04em}
+
+  /* ledger strip */
+  .ledger{display:grid;grid-template-columns:repeat(4,1fr);margin-top:3.4rem;border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+  .ledger div{padding:1.4rem 1.1rem;border-right:1px solid var(--rule)}
+  .ledger div:last-child{border-right:0}
+  .ledger .v{font-family:var(--mono);font-size:clamp(1.5rem,3vw,2.1rem);font-variant-numeric:tabular-nums;line-height:1;color:var(--ink)}
+  .ledger .v.ok{color:var(--green)}
+  .ledger .v.flag{color:var(--red)}
+  .ledger .l{font-size:.82rem;color:var(--ink-2);margin-top:.55rem;line-height:1.35}
+
+  /* sections */
+  section{padding:9vh 0}
+  section + section{border-top:1px solid var(--rule)}
+  .lead-row{display:flex;gap:1rem;align-items:baseline;margin-bottom:1.6rem}
+  .body-serif{font-family:var(--serif);font-size:1.16rem;line-height:1.62}
+
+  /* figures */
+  figure{margin:2.6rem 0 0}
+  .scan{background:var(--paper);border:1px solid var(--rule);border-radius:2px;
+        box-shadow:0 1px 0 var(--rule),0 18px 40px -28px oklch(0.3 0.02 268 / .5);overflow:hidden}
+  .scan img{display:block;width:100%;height:auto}
+  figcaption{font-family:var(--mono);font-size:.74rem;color:var(--ink-3);margin-top:.7rem;letter-spacing:.03em}
+  .tag{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;
+       background:var(--paper-3);color:var(--ink-2);padding:.18rem .5rem;border-radius:2px;margin-right:.5rem}
+
+  /* callout / reconciliation */
+  .recon{font-family:var(--mono);font-size:clamp(.95rem,2vw,1.18rem);font-variant-numeric:tabular-nums;
+         background:var(--paper-2);border:1px solid var(--rule);border-radius:3px;padding:1.3rem 1.5rem;margin:2rem 0;line-height:1.9}
+  .recon .eq{color:var(--ink-3)}
+  .recon b{color:var(--ink);font-weight:600}
+  .mark-red{color:var(--red);font-weight:600}
+  .mark-green{color:var(--green);font-weight:600}
+
+  .note{font-size:.95rem;color:var(--ink-2);border-top:1px solid var(--rule);padding-top:1rem;margin-top:2rem}
+  .note b{color:var(--ink)}
+
+  /* two-up */
+  .twoup{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:2.4rem}
+  @media(max-width:760px){.twoup{grid-template-columns:1fr}.ledger{grid-template-columns:1fr 1fr}.ledger div:nth-child(2){border-right:0}}
+
+  /* verdict */
+  .verdict{background:var(--ink);color:var(--paper);border-radius:4px;padding:clamp(2rem,5vw,3.6rem);margin-top:1rem}
+  .verdict h2{color:var(--paper)}
+  .verdict .body-serif{color:oklch(0.9 0.01 85)}
+  .signal{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid oklch(1 0 0 / .14);border-radius:3px;margin-top:2rem;overflow:hidden}
+  .signal div{padding:1.5rem 1.4rem}
+  .signal div:first-child{border-right:1px solid oklch(1 0 0 / .14)}
+  .signal .h{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:oklch(0.78 0.04 150)}
+  .signal .big{font-family:var(--mono);font-size:1.9rem;margin:.5rem 0 .3rem}
+  .signal .d{font-size:.92rem;color:oklch(0.82 0.01 85)}
+  @media(max-width:620px){.signal{grid-template-columns:1fr}.signal div:first-child{border-right:0;border-bottom:1px solid oklch(1 0 0 / .14)}}
+
+  footer{padding:6vh 0 9vh;color:var(--ink-3);font-size:.86rem;font-family:var(--mono)}
+  footer a{color:var(--ink-2)}
+
+  /* reveal */
+  [data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+  [data-reveal].in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<div class="progress" id="bar"></div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker" data-reveal>Appropriations Data Pipeline · Field Note</div>
+    <h1 data-reveal>Reading the unreadable, and proving we read it right.</h1>
+    <p class="lede" data-reveal>House appropriations committees publish their funding tables as scanned images, not data. We taught a vision model to read one, then built two independent checks that confirm every number, to the dollar.</p>
+    <div class="meta" data-reveal>Case study: H. Rept. 118&ndash;553 · Homeland Security · FY2025</div>
+    <div class="ledger" data-reveal>
+      <div><div class="v num">926</div><div class="l">line items extracted from 63 image pages, 0 page failures</div></div>
+      <div><div class="v ok num">436 / 436</div><div class="l">value-bearing comparative rows pass independent arithmetic checks</div></div>
+      <div><div class="v flag num">1</div><div class="l">genuine OCR error, caught and auto-repaired</div></div>
+      <div><div class="v num">2</div><div class="l">independent verification methods, both clean</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="col">
+      <div class="lead-row"><span class="step-no">01</span><span class="kicker">The problem</span></div>
+      <h2>The numbers arrive as a picture.</h2>
+      <p class="body-serif">A House appropriations report carries its detailed funding decisions in a <em>comparative statement</em>: a dense, five-column table of every account, program, and sub-program. In the published PDF that table is not text. It is a scanned image. Software opening the file sees pixels, not figures, so ordinary PDF tools extract nothing usable from the pages that matter most.</p>
+      <p>This report runs 175 pages. The comparative statement spans 63 of them, all image. The only way through is to actually read the picture, the way a person would, and then prove the reading is correct.</p>
+    </div>
+    <figure data-reveal>
+      <div class="scan"><img src="{{VOTEROSTER}}" alt="A scanned page from the report"></div>
+      <figcaption><span class="tag">scan</span>Every page is an image. There is no text layer to copy. The reader has to interpret the page itself.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="col">
+      <div class="lead-row"><span class="step-no">02</span><span class="kicker">Extraction</span></div>
+      <h2>One page at a time, into structure.</h2>
+      <p class="body-serif">We render each image page at high resolution and pass it to a vision model (Google's <span class="num">gemini&#8209;3.1&#8209;pro&#8209;preview</span>), with a prompt that asks for one structured row per line item: the account name, prior&#8209;year enacted, the budget request, the committee recommendation, and the two comparison columns.</p>
+      <p>The full run produced <strong>926 line items</strong> (796 data rows, 130 subtotals) across all 63 image pages, at roughly 16 seconds a page, with zero page failures.</p>
+      <div class="note"><b>A gotcha worth recording:</b> the model originally selected for this work was retired by the vendor mid&#8209;project and now returns a hard 404. We caught it on the first call, swapped to the current successor, and pinned it. Lesson logged for the other 200&#8209;plus reports.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="col">
+      <div class="lead-row"><span class="step-no">03</span><span class="kicker">First check, and a twist</span></div>
+      <h2>The same document, two different totals.</h2>
+      <p class="body-serif">Our first check was external. The report's narrative text states a handful of account totals in plain prose, and that text <em>is</em> machine&#8209;readable. We pulled those figures straight from the HTML and compared them to what the model read off the image tables. Forty&#8209;six of fifty&#8209;two matched to the dollar. Six did not, so we rendered the actual table pages and looked.</p>
+      <p>Every mismatch had the same root: the narrative reports <em>gross</em> appropriations, while the comparative table reports the <em>net</em> figure, after offsetting fees and collections. For a fee&#8209;funded agency like the TSA, those are simply different numbers. The table even prints both, and they reconcile exactly.</p>
+    </div>
+    <figure data-reveal>
+      <div class="scan"><img src="{{TSA}}" alt="TSA comparative statement showing net total with appropriations and offsetting collections sub-lines"></div>
+      <figcaption><span class="tag">H. Rept. 118&ndash;553 · p.141</span>Transportation Security Administration. Net total, with gross appropriations and offsetting collections printed beneath it.</figcaption>
+    </figure>
+    <div class="col">
+      <div class="recon" data-reveal>
+        <span class="eq">net total</span> <b>6,800,287</b> <span class="eq">+ offsetting</span> <b>3,770,000</b> <span class="eq">=</span> <span class="mark-green">10,570,287</span> <span class="eq">gross</span>
+      </div>
+      <p>The model read the net total correctly. The narrative quoted the gross. Neither was wrong, and a naive comparison would have cried foul on a perfect extraction. One account went further: for Customs and Border Protection, the report's own narrative and its own table disagree by 45 million dollars. The model matched the table; the document simply contradicts itself.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="col">
+      <div class="lead-row"><span class="step-no">04</span><span class="kicker">A bug in our own work</span></div>
+      <h2>Parentheses do not always mean negative.</h2>
+      <p class="body-serif">Verification cuts both ways. Reviewing our own output, we found a class of rows stored with the wrong sign. Our dollar parser followed the accounting convention that a number in parentheses is negative. In these tables, though, parentheses also mark a non&#8209;add memo line, the gross <span class="num">(Appropriations)</span> figure that sits under a net total. Those values are positive.</p>
+      <p>We made the rule explicit instead of assumed: parentheses negate only when an explicit minus sign is present. The Senate pipeline, which relies on the old convention, was left untouched, and its <span class="num">54</span> tests still pass. Re&#8209;parsing the stored text corrected <strong>424 values</strong> with no need to call the model again.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="col">
+      <div class="lead-row"><span class="step-no">05</span><span class="kicker">Second check</span></div>
+      <h2>Every row checks itself.</h2>
+      <p class="body-serif">The external check only reaches the few dozen totals stated in prose. To verify the other several hundred rows, we used the structure of the table against itself. Two of the five columns are not independent: the comparison columns are arithmetic of the first three.</p>
+      <div class="recon" data-reveal>
+        <span class="mark-green">recommended</span> <span class="eq">&minus;</span> enacted <span class="eq">=</span> Δ&nbsp;vs&nbsp;enacted<br>
+        <span class="mark-green">recommended</span> <span class="eq">&minus;</span> request <span class="eq">=</span> Δ&nbsp;vs&nbsp;request
+      </div>
+      <p>That redundancy is a built&#8209;in proof. If the model misreads a single digit in any of the four numbers, the arithmetic breaks. Checking these identities validates all four value columns of <em>every</em> row at once, not just the totals. On the comparative statement, <strong class="num">436 of 436</strong> value&#8209;bearing rows pass.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="col">
+      <div class="lead-row"><span class="step-no">06</span><span class="kicker">The catch</span></div>
+      <h2>It found the one real error.</h2>
+      <p class="body-serif">Across 926 rows, the arithmetic flagged exactly one genuine misread. On the National Exercise Program line, the model read the committee recommendation as <span class="num">20,836</span>. The table says <span class="num mark-red">20,636</span>.</p>
+    </div>
+    <figure data-reveal>
+      <div class="scan"><img src="{{NEP}}" alt="National Exercise Program row, recommendation 20,636 circled"></div>
+      <figcaption><span class="tag">H. Rept. 118&ndash;553 · p.157</span>The committee recommendation reads 20,636. Both comparison columns confirm it.</figcaption>
+    </figure>
+    <div class="col">
+      <div class="recon" data-reveal>
+        enacted <b>20,920</b> <span class="eq">&minus;</span> <b>284</b> <span class="eq">=</span> <span class="mark-green">20,636</span><span class="eq">&nbsp;&nbsp;·&nbsp;&nbsp;</span>request <b>20,745</b> <span class="eq">&minus;</span> <b>109</b> <span class="eq">=</span> <span class="mark-green">20,636</span>
+      </div>
+      <p>Two independent derivations agree on the same value, which makes the correct figure unambiguous and the misread isolated to one cell. The pipeline repaired it automatically and logged the change with its basis. No guesswork, no silent edit.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="col">
+      <div class="lead-row"><span class="step-no">07</span><span class="kicker">Quarantine</span></div>
+      <h2>It also knows what does not belong.</h2>
+      <p class="body-serif">The page detector is deliberately broad, so it also pulled in image pages that are not comparative statements at all: committee vote rosters, a budget&#8209;resolution comparison stated in millions, and a community&#8209;project&#8209;funding earmark list with an entirely different shape. The arithmetic check has no opinion to offer on these, so it never marks them verified.</p>
+      <p>All <strong>153</strong> such rows are flagged and held out automatically. Nothing foreign slips into the trusted set.</p>
+    </div>
+    <figure data-reveal>
+      <div class="scan"><img src="{{EARMARKS}}" alt="Community Project Funding earmark table, a different format"></div>
+      <figcaption><span class="tag">H. Rept. 118&ndash;553 · p.96</span>A community&#8209;project&#8209;funding table: different columns, different meaning. Swept in by the page scan, quarantined by verification.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="col">
+      <div class="lead-row"><span class="step-no">08</span><span class="kicker">Bottom line</span></div>
+    </div>
+    <div class="verdict" data-reveal>
+      <h2>The hard part works, and it is verified.</h2>
+      <p class="body-serif">Reading dense, image&#8209;based financial tables is the difficult part of this corpus, and it now works. More important, the output does not have to be taken on faith. Two fully independent signals agree, and the dataset labels its own trust.</p>
+      <div class="signal">
+        <div>
+          <div class="h">External &middot; source text</div>
+          <div class="big num">46 / 52</div>
+          <div class="d">account totals match the report's own prose, every exception explained as gross&#8209;vs&#8209;net basis, not error.</div>
+        </div>
+        <div>
+          <div class="h">Internal &middot; table arithmetic</div>
+          <div class="big num">436 / 436</div>
+          <div class="d">value&#8209;bearing comparative rows satisfy the table's own redundancy checks.</div>
+        </div>
+      </div>
+      <p style="margin-top:2rem">Every row carries a <span class="num">verified</span> flag. Filter to the <span class="num">436</span> verified rows and you have a clean, arithmetic&#8209;consistent, externally&#8209;corroborated dataset, ready to use.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="col">
+    Appropriations extraction pipeline · verification harness: <span>scripts/verify_house.py</span>, <span>scripts/verify_house_vs_html.py</span>.<br>
+    All figures and screenshots are drawn from the actual report and the actual verification run.
+  </div>
+</footer>
+
+<script>
+  var bar=document.getElementById('bar');
+  function onScroll(){
+    var h=document.documentElement,b=document.body;
+    var st=h.scrollTop||b.scrollTop, sh=(h.scrollHeight||b.scrollHeight)-h.clientHeight;
+    bar.style.width=(sh>0?(st/sh*100):0)+'%';
+  }
+  document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);} });
+  },{threshold:0.12,rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('[data-reveal]').forEach(function(el){io.observe(el);});
+</script>
+</body>
+</html>

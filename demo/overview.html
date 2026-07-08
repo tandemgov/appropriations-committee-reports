@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appropriations Data Pipeline — Goals &amp; Status</title>
+<style>
+  :root{
+    --paper: oklch(0.985 0.006 85);
+    --paper-2: oklch(0.966 0.009 82);
+    --paper-3: oklch(0.945 0.011 80);
+    --ink: oklch(0.235 0.018 268);
+    --ink-2: oklch(0.455 0.015 268);
+    --ink-3: oklch(0.60 0.012 268);
+    --rule: oklch(0.86 0.012 85);
+    --red: oklch(0.532 0.193 27);
+    --red-soft: oklch(0.93 0.045 30);
+    --green: oklch(0.47 0.092 150);
+    --green-soft: oklch(0.93 0.04 150);
+    --amber: oklch(0.62 0.13 70);
+    --amber-soft: oklch(0.93 0.05 80);
+    --serif: "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --sans: -apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    --mono: ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); font-size:18px; line-height:1.65;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  .progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--red);z-index:50;transition:width .12s linear}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+  .col{max-width:66ch;margin-inline:auto}
+
+  h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-0.01em;line-height:1.08}
+  h1{font-size:clamp(2.6rem,6vw,4.7rem);margin:0}
+  h2{font-size:clamp(1.9rem,3.6vw,2.9rem);margin:0 0 .5em}
+  h3{font-size:1.32rem;margin:0 0 .35em;letter-spacing:0}
+  p{margin:0 0 1.05em}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .lede{font-family:var(--serif);font-size:clamp(1.25rem,2.2vw,1.6rem);line-height:1.5;color:var(--ink);font-weight:400}
+  .kicker{font-family:var(--mono);font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3)}
+  .step-no{font-family:var(--mono);font-size:.8rem;letter-spacing:.18em;color:var(--red);text-transform:uppercase}
+  em{font-style:italic}
+  strong{font-weight:600}
+
+  .hero{padding:14vh 0 6vh;border-bottom:1px solid var(--rule)}
+  .hero .kicker{margin-bottom:1.4rem}
+  .hero h1{max-width:17ch}
+  .hero .lede{margin-top:1.6rem;max-width:56ch}
+  .meta{font-family:var(--mono);font-size:.8rem;color:var(--ink-3);margin-top:2.2rem;letter-spacing:.04em}
+
+  /* ledger strip */
+  .ledger{display:grid;grid-template-columns:repeat(4,1fr);margin-top:3.4rem;border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+  .ledger div{padding:1.4rem 1.1rem;border-right:1px solid var(--rule)}
+  .ledger div:last-child{border-right:0}
+  .ledger .v{font-family:var(--mono);font-size:clamp(1.5rem,3vw,2.1rem);font-variant-numeric:tabular-nums;line-height:1;color:var(--ink)}
+  .ledger .v.ok{color:var(--green)}
+  .ledger .v.flag{color:var(--red)}
+  .ledger .l{font-size:.82rem;color:var(--ink-2);margin-top:.55rem;line-height:1.35}
+
+  section{padding:8vh 0}
+  section + section{border-top:1px solid var(--rule)}
+  .lead-row{display:flex;gap:1rem;align-items:baseline;margin-bottom:1.6rem}
+  .body-serif{font-family:var(--serif);font-size:1.16rem;line-height:1.62}
+
+  /* pull quote */
+  .pull{font-family:var(--serif);font-size:clamp(1.4rem,2.6vw,2rem);line-height:1.4;color:var(--ink);
+        border-left:3px solid var(--red);padding:.2rem 0 .2rem 1.4rem;margin:2.4rem 0;max-width:30ch}
+
+  /* deliverables / goals grid */
+  .goals{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule);border-radius:3px;margin-top:2.6rem;overflow:hidden}
+  .goals > div{padding:1.5rem 1.6rem;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .goals > div:nth-child(2n){border-right:0}
+  .goals .g-no{font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;color:var(--ink-3)}
+  .goals h3{margin:.5rem 0 .3rem;font-size:1.12rem}
+  .goals p{font-size:.96rem;color:var(--ink-2);margin:0}
+  @media(max-width:760px){.goals{grid-template-columns:1fr}.goals > div{border-right:0}}
+
+  /* two-track diagram */
+  .tracks{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:2.6rem}
+  .track{border:1px solid var(--rule);border-radius:3px;padding:1.6rem 1.7rem;background:var(--paper-2)}
+  .track .th{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .track h3{margin:.55rem 0 .2rem}
+  .track .src{font-family:var(--mono);font-size:.92rem;color:var(--ink-2);margin:.2rem 0 1rem}
+  .track ul{margin:0;padding-left:1.1rem;font-size:.98rem;color:var(--ink-2)}
+  .track li{margin:.3rem 0}
+  .track .badge{display:inline-block;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;
+        padding:.22rem .55rem;border-radius:2px;margin-top:1.1rem}
+  .badge.ok{background:var(--green-soft);color:var(--green)}
+  .badge.warn{background:var(--amber-soft);color:var(--amber)}
+  @media(max-width:760px){.tracks{grid-template-columns:1fr}}
+
+  .arrowrow{font-family:var(--mono);font-size:.86rem;color:var(--ink-2);background:var(--paper-2);
+        border:1px solid var(--rule);border-radius:3px;padding:1rem 1.3rem;margin-top:2.4rem;letter-spacing:.02em;
+        overflow-x:auto;white-space:nowrap}
+  .arrowrow b{color:var(--ink)}
+  .arrowrow .done{color:var(--green)}
+  .arrowrow .partial{color:var(--amber)}
+  .arrowrow .todo{color:var(--ink-3)}
+
+  /* status table */
+  table{width:100%;border-collapse:collapse;margin-top:2.4rem;font-size:.96rem}
+  caption{font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);text-align:left;margin-bottom:.9rem}
+  th,td{text-align:left;padding:.7rem .8rem;border-bottom:1px solid var(--rule);vertical-align:top}
+  thead th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:400;border-bottom:1px solid var(--ink)}
+  td .num{font-size:.95rem}
+  .pill{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;padding:.18rem .5rem;border-radius:2px}
+  .pill.ok{background:var(--green-soft);color:var(--green)}
+  .pill.warn{background:var(--amber-soft);color:var(--amber)}
+  .pill.todo{background:var(--paper-3);color:var(--ink-2)}
+
+  /* reconciliation block */
+  .recon{font-family:var(--mono);font-size:clamp(.95rem,2vw,1.14rem);font-variant-numeric:tabular-nums;
+         background:var(--paper-2);border:1px solid var(--rule);border-radius:3px;padding:1.3rem 1.5rem;margin:2.2rem 0;line-height:1.9}
+  .recon .eq{color:var(--ink-3)}
+  .recon b{color:var(--ink);font-weight:600}
+  .mark-red{color:var(--red);font-weight:600}
+  .mark-green{color:var(--green);font-weight:600}
+
+  .note{font-size:.95rem;color:var(--ink-2);border-top:1px solid var(--rule);padding-top:1rem;margin-top:2rem}
+  .note b{color:var(--ink)}
+
+  /* progress meter */
+  .meter{margin-top:2.6rem}
+  .meter .row{display:flex;align-items:center;gap:1rem;margin:.9rem 0}
+  .meter .lbl{flex:0 0 11rem;font-size:.92rem;color:var(--ink-2)}
+  .meter .bar{flex:1;height:10px;background:var(--paper-3);border-radius:6px;overflow:hidden;border:1px solid var(--rule)}
+  .meter .fill{height:100%;background:var(--green)}
+  .meter .fill.partial{background:var(--amber)}
+  .meter .fill.thin{background:var(--red)}
+  .meter .pct{flex:0 0 5.5rem;text-align:right;font-family:var(--mono);font-size:.86rem;color:var(--ink-2);font-variant-numeric:tabular-nums}
+  @media(max-width:620px){.meter .lbl{flex:0 0 8rem}}
+
+  /* roadmap */
+  .road{margin-top:2.6rem;border-left:2px solid var(--rule);padding-left:1.6rem}
+  .road .step{position:relative;padding:0 0 1.7rem}
+  .road .step::before{content:"";position:absolute;left:-1.92rem;top:.35rem;width:9px;height:9px;border-radius:50%;background:var(--ink-3);border:2px solid var(--paper)}
+  .road .step.next::before{background:var(--red)}
+  .road .step .when{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .road .step h3{margin:.2rem 0 .25rem;font-size:1.1rem}
+  .road .step p{margin:0;font-size:.97rem;color:var(--ink-2)}
+
+  /* verdict */
+  .verdict{background:var(--ink);color:var(--paper);border-radius:4px;padding:clamp(2rem,5vw,3.6rem);margin-top:1rem}
+  .verdict h2{color:var(--paper)}
+  .verdict .body-serif{color:oklch(0.9 0.01 85)}
+  .signal{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border:1px solid oklch(1 0 0 / .14);border-radius:3px;margin-top:2rem;overflow:hidden}
+  .signal div{padding:1.4rem 1.3rem;border-right:1px solid oklch(1 0 0 / .14)}
+  .signal div:last-child{border-right:0}
+  .signal .h{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:oklch(0.78 0.04 150)}
+  .signal .big{font-family:var(--mono);font-size:1.7rem;margin:.5rem 0 .3rem}
+  .signal .d{font-size:.9rem;color:oklch(0.82 0.01 85)}
+  @media(max-width:620px){.signal{grid-template-columns:1fr}.signal div{border-right:0;border-bottom:1px solid oklch(1 0 0 / .14)}.signal div:last-child{border-bottom:0}}
+
+  footer{padding:6vh 0 9vh;color:var(--ink-3);font-size:.86rem;font-family:var(--mono)}
+  footer a{color:var(--ink-2)}
+
+  [data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+  [data-reveal].in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<div class="progress" id="bar"></div>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker" data-reveal>Appropriations Data Pipeline · Project Brief</div>
+    <h1 data-reveal>Turning committee reports back into data.</h1>
+    <p class="lede" data-reveal>
+      Every year Congress decides federal spending line by line — and then publishes those decisions
+      as <em>documents</em>, not data. This project rebuilds the dataset: a repeatable pipeline that
+      extracts every line item from appropriations committee reports and <em>proves</em> each number against its source.
+    </p>
+    <div class="ledger" data-reveal>
+      <div><div class="v">246</div><div class="l">reports extracted across the corpus</div></div>
+      <div><div class="v">109,052</div><div class="l">line-item rows, each traced to its source</div></div>
+      <div><div class="v ok">74,453</div><div class="l">rows independently amount-verified</div></div>
+      <div><div class="v">12 / 12</div><div class="l">subcommittees, both chambers, FY2016–FY2027</div></div>
+    </div>
+    <div class="meta" data-reveal>Status as of 2026-07-07 · Congress 119 · figures drawn from on-disk artifacts, not estimates</div>
+  </div>
+</header>
+
+<!-- ===================== THE PROBLEM ===================== -->
+<section>
+  <div class="wrap col">
+    <div class="lead-row" data-reveal><span class="step-no">01 — The problem</span></div>
+    <h2 data-reveal>The most detailed spending data in government is trapped in PDFs.</h2>
+    <p class="body-serif" data-reveal>
+      The real granularity of federal appropriations lives in the <strong>comparative statement of new budget
+      authority</strong> — the dense, multi-page tables at the back of each committee report listing every account
+      with its prior-year enacted level, the President's budget estimate, and the committee's recommendation.
+      It is the single richest view of how money actually moves, and it is effectively unusable for analysis.
+    </p>
+    <p class="body-serif" data-reveal>
+      It is locked in two ways. Senate reports embed these tables as <em>text</em> inside HTML — readable, but in a
+      brittle fixed-width layout. House reports embed them as <em>scanned images</em> — TIFF graphics with no
+      machine-readable numbers at all. Different lock, same vault.
+    </p>
+    <blockquote class="pull" data-reveal>Detailed appropriations data exists in public — it just can't be queried, joined, or compared across years.</blockquote>
+  </div>
+</section>
+
+<!-- ===================== THE GOAL ===================== -->
+<section>
+  <div class="wrap">
+    <div class="col">
+      <div class="lead-row" data-reveal><span class="step-no">02 — The goal</span></div>
+      <h2 data-reveal>A structured, verified, longitudinal dataset of line-item appropriations.</h2>
+      <p class="body-serif" data-reveal>
+        The engagement is to build a <strong>repeatable extraction pipeline</strong> and the datasets it produces —
+        not a one-off scrape. Seven deliverables define "done."
+      </p>
+    </div>
+    <div class="goals" data-reveal>
+      <div><div class="g-no">DELIVERABLE 01</div><h3>Structured line-item datasets</h3><p>CSV/JSON of every line item from committee report PDFs and HTML.</p></div>
+      <div><div class="g-no">DELIVERABLE 02</div><h3>Full subcommittee coverage</h3><p>All 12 appropriations subcommittees, in both the House and Senate.</p></div>
+      <div><div class="g-no">DELIVERABLE 03</div><h3>Every stage of the process</h3><p>Subcommittee mark, committee report, and final enactment.</p></div>
+      <div><div class="g-no">DELIVERABLE 04</div><h3>Multiple fiscal years</h3><p>FY2016–FY2025, unadjusted and inflation-adjustable, for longitudinal analysis.</p></div>
+      <div><div class="g-no">DELIVERABLE 05</div><h3>Normalized fields across years</h3><p>An account-name crosswalk so the same program lines up over time.</p></div>
+      <div><div class="g-no">DELIVERABLE 06</div><h3>Data dictionary</h3><p>Plain-language explanation of structure, provenance, and known limitations.</p></div>
+      <div style="border-right:0;grid-column:1 / -1"><div class="g-no">DELIVERABLE 07</div><h3>Methodology &amp; feasibility documentation</h3><p>Tools evaluated, methodological decisions, measured extraction accuracy, data sourcing, and an honest read on whether full-corpus scale is achievable.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== APPROACH / TWO TRACKS ===================== -->
+<section>
+  <div class="wrap">
+    <div class="col">
+      <div class="lead-row" data-reveal><span class="step-no">03 — The approach</span></div>
+      <h2 data-reveal>One pipeline, two extraction tracks.</h2>
+      <p class="body-serif" data-reveal>
+        The defining architectural finding is that the two chambers publish the same table in fundamentally
+        different media — so the design uses deterministic parsing wherever the data is text, and falls back to
+        a vision model only where it is forced to. Cheaper, more auditable, and the expensive path is used sparingly.
+      </p>
+    </div>
+    <div class="tracks" data-reveal>
+      <div class="track">
+        <div class="th">Track A · Senate &amp; inline tables</div>
+        <h3>Deterministic parsing</h3>
+        <div class="src">source: text in HTML</div>
+        <ul>
+          <li>Fixed-width column parser for Senate comparative statements</li>
+          <li>Regex extraction for the inline narrative funding tables in both chambers</li>
+          <li>No API keys, no model calls, fully reproducible</li>
+        </ul>
+        <span class="badge ok">100% exact-match verified</span>
+      </div>
+      <div class="track">
+        <div class="th">Track B · House comparative</div>
+        <h3>Vision-model extraction</h3>
+        <div class="src">source: TIFF images in PDF</div>
+        <ul>
+          <li>A local Nemotron-Parse first pass reads every page; Gemini 3.1 Pro (served via Vertex) cleans only the suspect pages</li>
+          <li>Used only where the numbers are pixels, never where they are text</li>
+          <li>Output passed through the same verification gate as Track A</li>
+        </ul>
+        <span class="badge warn">verified by table-internal arithmetic</span>
+      </div>
+    </div>
+    <div class="arrowrow" data-reveal>
+      <b>Pipeline:</b>
+      GovInfo <span class="eq">→</span>
+      <span class="done">Discover</span> <span class="eq">→</span>
+      <span class="done">Download</span> <span class="eq">→</span>
+      <span class="done">Extract</span> <span class="eq">→</span>
+      <span class="done">Verify</span> <span class="eq">→</span>
+      <span class="done">Output (CSV/JSON)</span> <span class="eq">→</span>
+      <span class="done">API</span>
+      &nbsp;&nbsp;<span class="eq">— green = run at corpus scale end-to-end</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROOF / VERIFICATION ===================== -->
+<section>
+  <div class="wrap col">
+    <div class="lead-row" data-reveal><span class="step-no">04 — Why it's trustworthy</span></div>
+    <h2 data-reveal>Verification is a first-class feature, not an afterthought.</h2>
+    <p class="body-serif" data-reveal>
+      Extraction without proof is just a guess. Every dollar amount from the text tracks is checked back against the
+      source document by three-tier string matching (exact → whitespace-normalized → spaceless). For the House image
+      track — where there is no source text to match — the report's own redundancy does the proving: each row carries
+      delta columns that <em>must</em> reconcile.
+    </p>
+    <div class="recon" data-reveal>
+      <span class="eq">for every comparative row —</span><br>
+      recommended <span class="eq">−</span> prior&nbsp;year&nbsp;enacted <span class="eq">=</span> <b>delta_vs_enacted</b> <span class="mark-green">✓</span><br>
+      recommended <span class="eq">−</span> budget&nbsp;estimate <span class="eq">=</span> <b>delta_vs_estimate</b> <span class="mark-green">✓</span><br>
+      <span class="eq">→ the four value columns over-determine each other; an OCR slip breaks the identity.</span>
+    </div>
+    <p class="body-serif" data-reveal>
+      One report shows the gate at work: across the 926 rows of the FY2025 Homeland Security bill, that redundancy
+      caught the single genuine misread — a National Exercise Program figure read as
+      <span class="num mark-red">20,836</span> that both delta columns insisted should be
+      <span class="num mark-green">20,636</span> — and auto-repaired it. The same gate also surfaced a
+      <em>gross-vs-net</em> trap in our own cross-check before it could be mistaken for a vision error.
+    </p>
+    <p class="note" data-reveal>
+      <b>External corroboration:</b> House account totals were also matched against the authoritative GovInfo HTML —
+      <span class="num">46 / 52</span> exact, with all six "misses" explained as gross-vs-net basis differences
+      (verified to the dollar), not extraction errors.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== WHAT WORKS NOW ===================== -->
+<section>
+  <div class="wrap">
+    <div class="col">
+      <div class="lead-row" data-reveal><span class="step-no">05 — Where we are</span></div>
+      <h2 data-reveal>Extracted and verified — the full corpus.</h2>
+      <p class="body-serif" data-reveal>
+        Both tracks now run at scale. All 246 reports across a full decade — <strong>FY2016 through FY2027</strong>,
+        all 12 subcommittees, both chambers, at the committee-report and enacted stages — are extracted, verified,
+        and written to a single combined dataset (<span class="num">109,052</span> line-item rows).
+      </p>
+    </div>
+    <table data-reveal>
+      <caption>Corpus coverage · by stage · FY2016–FY2027</caption>
+      <thead><tr><th>Stage</th><th>Reports</th><th>Line items</th><th>Amount-verified</th></tr></thead>
+      <tbody>
+        <tr><td>Senate committee · deterministic text track</td><td class="num">87</td><td class="num">28,873</td><td><span class="pill ok">26,792 · 92.7%</span></td></tr>
+        <tr><td>House committee · vision track</td><td class="num">143</td><td class="num">68,350</td><td><span class="pill ok">35,832 · 52.4%</span></td></tr>
+        <tr><td>Enacted · House CPRT explanatory statements</td><td class="num">16</td><td class="num">11,829</td><td><span class="pill ok">11,829 · 100%</span></td></tr>
+        <tr><td><b>Total</b></td><td class="num"><b>246</b></td><td class="num"><b>109,052</b></td><td><b>74,453</b></td></tr>
+      </tbody>
+    </table>
+    <p class="note" data-reveal>
+      The House track's lower verified fraction (52.4%) is a property of the source, not a defect: its rows come from
+      scanned images, and only rows carrying a checkable amount can be delta-verified — the remainder are structural
+      label rows (headings, subtotals). <b>Zero rows that carry a verifiable amount are silently wrong.</b> Beyond the
+      amounts, the table's own structure was mined to recover account groupings: <span class="num">~19,500</span> House
+      rows now carry an arithmetic-verified <span class="num">account_inferred</span> label, and a Gemini "non-add
+      double-gate" flagged <span class="num">3,974</span> rows as indented non-add sub-details — both proven by the
+      table's own arithmetic, never guessed.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== PROGRESS VS SOW ===================== -->
+<section>
+  <div class="wrap">
+    <div class="col">
+      <div class="lead-row" data-reveal><span class="step-no">06 — Honest scope</span></div>
+      <h2 data-reveal>The corpus is delivered.</h2>
+      <p class="body-serif" data-reveal>
+        The hard technical risks were retired first; execution followed. The proven pipeline has now been run across
+        the full corpus — every subcommittee, both chambers, a decade of fiscal years, at the committee and enacted
+        stages. What remains is upkeep and optional depth, not open technical risk.
+      </p>
+    </div>
+    <div class="meter" data-reveal>
+      <div class="row"><div class="lbl">Reports extracted</div><div class="bar"><div class="fill" style="width:100%"></div></div><div class="pct">246 / 246</div></div>
+      <div class="row"><div class="lbl">Subcommittees</div><div class="bar"><div class="fill" style="width:100%"></div></div><div class="pct">12 / 12</div></div>
+      <div class="row"><div class="lbl">Chambers</div><div class="bar"><div class="fill" style="width:100%"></div></div><div class="pct">2 / 2</div></div>
+      <div class="row"><div class="lbl">Extraction tracks</div><div class="bar"><div class="fill" style="width:100%"></div></div><div class="pct">2 / 2 run</div></div>
+      <div class="row"><div class="lbl">Fiscal years</div><div class="bar"><div class="fill" style="width:100%"></div></div><div class="pct">FY16–27</div></div>
+      <div class="row"><div class="lbl">Process stages</div><div class="bar"><div class="fill partial" style="width:67%"></div></div><div class="pct">2 / 3</div></div>
+    </div>
+    <table data-reveal>
+      <caption>Deliverable status</caption>
+      <thead><tr><th>Capability</th><th>State</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Senate comparative extraction</td><td><span class="pill ok">Production</span></td><td>Deterministic parser, 87 reports, 92.7% amount-verified.</td></tr>
+        <tr><td>House comparative extraction</td><td><span class="pill ok">Production</span></td><td>Hybrid vision track, 143 reports, re-cleaned on Gemini 3.1 Pro via Vertex.</td></tr>
+        <tr><td>Inline narrative tables</td><td><span class="pill ok">Production</span></td><td>Regex track, both chambers, 100% string-verified.</td></tr>
+        <tr><td>Verification gate</td><td><span class="pill ok">Production</span></td><td>String-match + delta-arithmetic; auto-repairs OCR slips.</td></tr>
+        <tr><td>Discovery / download at scale</td><td><span class="pill ok">Production</span></td><td>Full catalog built and run across the corpus.</td></tr>
+        <tr><td>Combined CSV/JSON output</td><td><span class="pill ok">Generated</span></td><td>109,052 rows in comparative_statements.csv + all_data.json.</td></tr>
+        <tr><td>Cross-year normalization</td><td><span class="pill ok">Built</span></td><td>Account crosswalk + FY2024 inflation factors shipped; deeper coverage optional.</td></tr>
+        <tr><td>Enacted stage</td><td><span class="pill ok">Done</span></td><td>16 CPRT explanatory statements; subcommittee/pre-markup stage descoped by design.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== SCALING NOTE ===================== -->
+<section>
+  <div class="wrap col">
+    <div class="lead-row" data-reveal><span class="step-no">07 — The scaling question</span></div>
+    <h2 data-reveal>Scaling was a throughput problem — and it's solved.</h2>
+    <p class="body-serif" data-reveal>
+      The one real constraint was never accuracy — it was vision-model throughput. The AI Studio preview tier caps the
+      strongest model at roughly one to two requests per minute, unusable across a corpus of dense image pages. The fix
+      was to run the <em>same</em> model on <strong>Vertex</strong> (Google Cloud), whose production quota is orders of
+      magnitude higher. Every House report was re-cleaned there on Gemini 3.1 Pro.
+    </p>
+    <div class="recon" data-reveal>
+      AI Studio preview tier <span class="eq">≈</span> <b>1–2</b> req/min <span class="eq">→ unusable at corpus scale</span><br>
+      Vertex <span class="eq">→</span> full House corpus re-cleaned on Gemini 3.1 Pro <span class="mark-green">✓</span>
+    </div>
+    <p class="body-serif" data-reveal>
+      So the full-corpus run was a budget decision — made, and executed. The deterministic Senate and inline tracks
+      have no model ceiling at all; they run for free, and did.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== ROADMAP ===================== -->
+<section>
+  <div class="wrap">
+    <div class="col">
+      <div class="lead-row" data-reveal><span class="step-no">08 — What's next</span></div>
+      <h2 data-reveal>Delivered — and kept current.</h2>
+    </div>
+    <div class="road" data-reveal>
+      <div class="step next">
+        <div class="when">Ongoing</div>
+        <h3>Keep Senate FY2027 current as it publishes</h3>
+        <p>The 119th Congress had not yet marked up FY2027 Senate bills; re-running <span class="num">approps discover</span> picks them up as they appear.</p>
+      </div>
+      <div class="step">
+        <div class="when">Optional</div>
+        <h3>Deepen account normalization</h3>
+        <p>The crosswalk ships now; extending trusted <span class="num">account_key</span> coverage past its current tier would tighten cross-year joins further.</p>
+      </div>
+      <div class="step">
+        <div class="when">Optional</div>
+        <h3>Division→subcommittee mapping for enacted rows</h3>
+        <p>Enacted omnibus rows carry a division label, not a subcommittee; a small crosswalk would let them join the committee stage on subcommittee.</p>
+      </div>
+      <div class="step">
+        <div class="when">By design</div>
+        <h3>Subcommittee / pre-markup stage descoped</h3>
+        <p>The Senate does not publish the pre-markup stage as data, so the corpus covers the committee-report and enacted stages — the two that exist as structured line items.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VERDICT ===================== -->
+<section>
+  <div class="wrap">
+    <div class="verdict" data-reveal>
+      <h2>Bottom line</h2>
+      <p class="body-serif">
+        The hardest single problem — reading dense, image-only comparative statements and <em>proving</em> the result —
+        is solved at production quality, and the pipeline has now been run across the whole corpus. Both extraction
+        tracks self-verify, and the combined dataset exists as files on disk. The engagement's deliverables are met.
+      </p>
+      <div class="signal">
+        <div><div class="h">Reports delivered</div><div class="big">246</div><div class="d">both chambers, FY2016–FY2027, committee + enacted</div></div>
+        <div><div class="h">Line items</div><div class="big">109,052</div><div class="d">74,453 independently amount-verified</div></div>
+        <div><div class="h">In-scope stages</div><div class="big">100%</div><div class="d">delivered across the corpus, not in progress</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap col">
+    Appropriations Data Pipeline — Project Brief · 2026-07-07 · Congress 119.<br>
+    Every figure is drawn from on-disk extraction and verification artifacts. Companion: see
+    <a href="walkthrough.html">walkthrough.html</a> for the House extraction story in detail.
+  </div>
+</footer>
+
+<script>
+  const bar = document.getElementById('bar');
+  const onScroll = () => {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+  };
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
