@@ -116,8 +116,15 @@ consistent column, or extract them with a layout-aware parser; then re-verify.
 
 ## 4. Enacted-stage amounts were 1000x too large — FIXED
 
-**Status:** **fixed.** 4,922 amounts corrected; the 16 CPRT prints were re-extracted and the row set is unchanged (11,829).
-**Scope (was):** every `stage = enacted` row — 11,829 rows (10.8% of the dataset), 16 CPRT prints.
+**Status:** **fixed.** The 16 CPRT prints were re-extracted; the row set is unchanged (11,829).
+**Scope (was):** **4,922 of the 11,829 `stage = enacted` rows (41.6%)** across 16 CPRT prints. The
+other 6,907 sat on pages that genuinely *were* in thousands, where the x1000 happened to be right.
+
+The original diagnosis said "every enacted row", inferred from finding no unit header in the first
+40 pages of four prints. That was wrong: headers do exist, deep in the documents (pages 258+, 407+,
+1022+) and in spellings the regex did not recognize. The defect was real; its scope was 41.6%, not
+100%. The lesson is the obvious one — a scope claim from a first-40-pages sample is a guess, and
+should have been labelled one.
 
 ### What's wrong
 `comparative_enacted.py` sets `in_thousands = True` as a per-page default and only corrects it
@@ -130,10 +137,13 @@ if _THOUSANDS.search(s) and len(s) < 45:
     in_thousands = "thousand" in s.lower()     # only runs when a marker is found
 ```
 
-The CPRT explanatory-statement prints **publish whole dollars and carry no such marker** (0
-matches for "in thousands" across the first 40 pages of `CPRT-114HPRT98155`,
-`CPRT-114HPRT98369`, `CPRT-115HPRT25289`, `CPRT-115HPRT29456`). The default therefore stands and
-`_to_dollars` multiplies by 1,000.
+Note the second line can only ever assign `True` — `_THOUSANDS` matches "in thousands of dollars",
+so `"thousand" in s.lower()` is necessarily true when it is reached. `in_thousands` had **no path to
+`False` at all**.
+
+These prints mix both conventions. 7,065 of their 11,987 extracted amounts (59%) sit on pages
+carrying a unit header and genuinely are in thousands; the remaining 4,922 (41%) sit on unmarked
+pages and are whole dollars. With the default at `True`, that 41% was multiplied by 1,000.
 
 | Source `raw_text` | Stored `value` | Should be |
 |---|---|---|
