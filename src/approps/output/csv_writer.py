@@ -4,9 +4,12 @@ from __future__ import annotations
 
 import logging
 import re
+import types
 from pathlib import Path
+from typing import Union, get_args, get_origin
 
 import pandas as pd
+from pydantic import BaseModel
 
 from approps.config import OUTPUT_DIR
 from approps.normalization.account_names import clean_account_label
@@ -23,6 +26,38 @@ from approps.output.schemas import (
 logger = logging.getLogger(__name__)
 
 _REAL_BASE_YEAR = 2024
+
+
+def _int_fields(model: type[BaseModel]) -> list[str]:
+    """Field names the schema declares as `int` or `int | None`.
+
+    `bool` is excluded: its annotation is `bool`, not `int`, even though bool subclasses
+    int at runtime. Both union spellings are handled — `int | None` resolves to
+    `types.UnionType`, `Optional[int]` to `typing.Union`.
+    """
+    names = []
+    for name, field in model.model_fields.items():
+        ann = field.annotation
+        if get_origin(ann) in (Union, types.UnionType):
+            args = tuple(a for a in get_args(ann) if a is not type(None))
+        else:
+            args = (ann,)
+        if args == (int,):
+            names.append(name)
+    return names
+
+
+def _coerce_int_columns(df: pd.DataFrame, model: type[BaseModel]) -> pd.DataFrame:
+    """Restore integer dtypes the schema declares.
+
+    A nullable int column arrives here as float64 (pandas upcasts to hold NaN), so a year
+    serializes as `2016.0` and an amount as `649.0`. Cast to the nullable Int64 extension
+    dtype so both round-trip as integers. Non-integral values raise rather than truncate.
+    """
+    for col in _int_fields(model):
+        if col in df.columns:
+            df[col] = df[col].astype("Int64")
+    return df
 
 # Account-name tokens used to gate inline corroboration: an inline record must share a
 # meaningful word with the comparative row, not merely a coincidental amount. Generic
@@ -297,7 +332,7 @@ def write_comparative_csv(
     for line, row in zip(lines, rows, strict=True):
         row["verification_tier"] = _verification_tier(line, inline_index)
         row["column_layout"] = _column_layout(line)
-    df = pd.DataFrame(rows)
+    df = _coerce_int_columns(pd.DataFrame(rows), ComparativeStatementRow)
     df.to_csv(output_path, index=False)
     logger.info(f"Wrote {len(rows)} rows to {output_path}")
     return output_path
@@ -312,7 +347,7 @@ def write_inline_csv(
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     rows = [_inline_table_to_row(t).model_dump() for t in tables]
-    df = pd.DataFrame(rows)
+    df = _coerce_int_columns(pd.DataFrame(rows), InlineFundingRow)
     df.to_csv(output_path, index=False)
     logger.info(f"Wrote {len(rows)} rows to {output_path}")
     return output_path

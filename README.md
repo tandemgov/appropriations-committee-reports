@@ -6,6 +6,8 @@ Extract line-item appropriations data from Congressional committee reports into 
 
 Congressional appropriations data is locked inside committee report PDFs and HTML documents. This tool extracts it into structured CSV/JSON, enabling longitudinal analysis of federal spending decisions.
 
+> **Just want the data?** Download it from the [latest release](https://github.com/tandemgov/appropriations-committee-reports/releases/latest) — 109,052 line items, FY2016–FY2027, CC0. **Read [DATA.md](DATA.md) first:** 26% of rows carry no independent corroboration and are flagged as such, so filter before you cite a number.
+
 **Extracted data includes:**
 - Comparative statements of new budget authority (the dense multi-page tables at the back of each report showing every line item with prior year enacted, budget estimate, and committee recommendation)
 - Inline narrative funding tables (the 3-line funding summaries throughout the report body)

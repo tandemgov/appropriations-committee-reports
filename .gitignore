@@ -28,6 +28,7 @@ data/verified/
 
 # Generated outputs and local archive
 data/output/
+data/release/
 data/_archive_flat_extracted/
 
 # Generated crosswalk review queue (regenerable via `approps crosswalk`)
