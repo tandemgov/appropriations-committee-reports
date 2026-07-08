@@ -25,6 +25,8 @@ dependencies = [
     "marker-pdf>=1.10.2",
     "pypdf>=6.9.1",
     "google-genai>=1.68.0",
+    "pyarrow>=17",
+    "openpyxl>=3.1",
 ]
 
 [project.scripts]

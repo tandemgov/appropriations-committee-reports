@@ -1,8 +1,8 @@
-"""Corroboration tiers: delta > block > inline > none.
+"""What `verification_tier` says a row's amount rests on.
 
-`verification_tier` records how a comparative row's amount is independently supported
-when its own delta-column arithmetic doesn't close — so block-reconciled and
-inline-corroborated rows are distinguishable from genuinely-unsupported ones.
+When the row passed its track's primary gate, the tier names *that gate* — never a uniform
+`delta`, which was true only of the House vision rows and false of the other 52%. Otherwise it
+names a second witness found elsewhere in the document: block > inline > none.
 """
 
 from __future__ import annotations
@@ -13,6 +13,7 @@ from approps.output.schemas import (
     ComparativeStatementLine,
     DollarAmount,
     InlineFundingTable,
+    VerificationMethod,
 )
 
 
@@ -20,7 +21,14 @@ def _amt(v):
     return DollarAmount(value=v, raw_text=str(v), in_thousands=True)
 
 
-def _line(text, rec=None, verified=False, account_inferred=None, report_id="R1"):
+def _line(
+    text,
+    rec=None,
+    verified=False,
+    account_inferred=None,
+    report_id="R1",
+    method=VerificationMethod.NONE,
+):
     return ComparativeStatementLine(
         report_id=report_id,
         congress=119,
@@ -28,6 +36,7 @@ def _line(text, rec=None, verified=False, account_inferred=None, report_id="R1")
         line_item_text=text,
         committee_recommendation=_amt(rec) if rec is not None else None,
         verified=verified,
+        verification_method=method,
         account_inferred=account_inferred,
     )
 
@@ -45,9 +54,29 @@ def _inline(text, rec, report_id="R1"):
     )
 
 
-def test_delta_wins_when_verified():
-    line = _line("Coast Guard Operations", rec=100, verified=True, account_inferred="X")
-    assert _verification_tier(line, {}) == "delta"
+def test_a_verified_row_reports_the_gate_that_actually_passed():
+    """The regression this column exists to prevent: three different checks, three names."""
+    for method in (
+        VerificationMethod.DELTA_ARITHMETIC,
+        VerificationMethod.STRING_MATCH,
+        VerificationMethod.VERBATIM_PAGE,
+    ):
+        line = _line("Coast Guard Operations", rec=100, verified=True, method=method,
+                     account_inferred="X")
+        assert _verification_tier(line, {}) == method.value
+
+    # A string-matched Senate row must never be labelled `delta`. It was, for the life of the
+    # project, and the label hid a sign defect on 9,629 amounts.
+    senate = _line("Rangeland management", rec=100, verified=True,
+                   method=VerificationMethod.STRING_MATCH)
+    assert _verification_tier(senate, {}) != "delta"
+
+
+def test_the_method_and_the_verified_flag_cannot_disagree():
+    assert VerificationMethod.when(True, VerificationMethod.STRING_MATCH) is (
+        VerificationMethod.STRING_MATCH
+    )
+    assert VerificationMethod.when(False, VerificationMethod.STRING_MATCH) is VerificationMethod.NONE
 
 
 def test_block_when_in_reconciling_subtotal_block():

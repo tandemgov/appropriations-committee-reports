@@ -180,7 +180,7 @@ def _load_from_csv() -> list[dict]:
                 "agency": _norm(r.get("agency")),
                 "account": _norm(r.get("account")),
                 "account_inferred": _norm(r.get("account_inferred")),
-                "non_add_inferred": str(r.get("non_add_inferred")).strip().lower() == "true",
+                "is_memo": str(r.get("is_memo")).strip().lower() == "true",
                 "program": _norm(r.get("program")),
                 "line_item_text": _norm(r.get("line_item_text")),
                 "prior_year_enacted": _to_int(r.get("prior_year_enacted")),
@@ -192,6 +192,7 @@ def _load_from_csv() -> list[dict]:
                 "hierarchy_depth": _to_int(r.get("hierarchy_depth")) or 0,
                 "verified": str(r.get("verified")).strip().lower() == "true",
                 "verification_tier": _norm(r.get("verification_tier")) or "none",
+                "verification_method": _norm(r.get("verification_method")) or "none",
                 "column_layout": _norm(r.get("column_layout")) or "standard",
                 "extraction_method": _norm(r.get("extraction_method")),
                 # Account crosswalk enrichment
@@ -236,7 +237,7 @@ def _load_from_json_tree() -> list[dict]:
                 "agency": ln.get("agency"),
                 "account": ln.get("account"),
                 "account_inferred": ln.get("account_inferred"),
-                "non_add_inferred": bool(ln.get("non_add_inferred")),
+                "is_memo": bool(ln.get("is_memo")),
                 "program": ln.get("program"),
                 "line_item_text": ln.get("line_item_text"),
                 "prior_year_enacted": amt("prior_year_enacted"),
@@ -248,12 +249,14 @@ def _load_from_json_tree() -> list[dict]:
                 "hierarchy_depth": ln.get("hierarchy_depth") or 0,
                 "verified": bool(ln.get("verified")),
                 # Fallback tier without the CSV build: inline corroboration is unavailable
-                # here, so only delta/block/none are distinguishable from the raw JSON.
+                # here, so a verified row reports the gate that passed and everything else is
+                # block/none. Never fabricate `delta` — the JSON records which gate ran.
                 "verification_tier": (
-                    "delta" if ln.get("verified")
+                    (ln.get("verification_method") or "none") if ln.get("verified")
                     else "block" if (ln.get("account_inferred") or "").strip()
                     else "none"
                 ),
+                "verification_method": ln.get("verification_method") or "none",
                 "extraction_method": ln.get("extraction_method"),
                 "account_key": None,
                 "account_key_title": None,

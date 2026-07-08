@@ -267,7 +267,9 @@ def _parse_block(
         indent = len(match.group("indent"))
         label = match.group("label")
         amount_text = match.group("amount")
-        amount = parse_dollar(amount_text)
+        # Inline narrative tables convey sign with an explicit minus (`-$1,815,000`); no amount
+        # in the corpus is parenthesized, so this matches the comparative-statement convention.
+        amount = parse_dollar(amount_text, paren_negative=False)
 
         if in_compared_section:
             delta_type = _is_delta_line(label, indent)

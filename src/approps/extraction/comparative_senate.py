@@ -25,7 +25,7 @@ from __future__ import annotations
 
 import re
 
-from approps.extraction.dollar_parser import parse_dollar
+from approps.extraction.dollar_parser import is_paren_memo, parse_dollar
 from approps.extraction.hierarchy import is_subtotal_line
 from approps.output.schemas import (
     Chamber,
@@ -316,8 +316,21 @@ def extract_senate_comparative(
             while len(num_tokens) < 5:
                 num_tokens.append("")
 
-            # Parse each column
-            amounts = [parse_dollar(t, in_thousands=in_thousands) for t in num_tokens[:5]]
+            # Parse each column. Parentheses in a comparative statement mark a non-add memo --
+            # a limitation, a transfer authority, an "of which" breakout -- which is positive
+            # and already counted inside a sibling line. They are NOT the accounting
+            # convention for a negative: real negatives print an explicit minus (`-2,000`),
+            # and the token regex above hands those to parse_dollar without their parens. So
+            # paren_negative=False, exactly as the House comparative statements do.
+            #
+            # Reading `(35,000)` as -35,000 is invisible to both of the row-local gates -- the
+            # raw text still string-matches the source, and negating every column preserves the
+            # delta identity -- and surfaces only against the printed subtotal. See
+            # verification.reconcile and tests/test_comparative_senate.py.
+            amounts = [
+                parse_dollar(t, in_thousands=in_thousands, paren_negative=False)
+                for t in num_tokens[:5]
+            ]
 
             # Determine hierarchy
             level, is_sub = _parse_hierarchy_context(item_text, indent)
@@ -358,6 +371,9 @@ def extract_senate_comparative(
                 delta_vs_enacted=amounts[3] if len(amounts) > 3 else None,
                 delta_vs_estimate=amounts[4] if len(amounts) > 4 else None,
                 is_subtotal=is_sub,
+                # Flag the memo rows here rather than at output time, so the extracted JSON and
+                # the released CSV carry the same claim and reconciliation can run on either.
+                is_memo=is_paren_memo(amounts[2] if len(amounts) > 2 else None),
                 in_thousands=in_thousands,
                 line_number=i + 1,
             ))

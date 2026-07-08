@@ -556,14 +556,20 @@ def verify(
     """Run verification checks on extracted data and persist verified flags.
 
     Each line item is marked verified=true when every dollar amount it carries matches
-    the source HTML (three-tier string match). Results are written back into the
-    extracted JSON unless --dry-run is given. The string-match check applies to the text
-    tracks (Senate comparative, inline tables); House comparative tables extracted from
-    images are verified separately (scripts/verify_house.py) and are skipped here when no
-    source HTML exists, so their verification is never clobbered.
+    the source HTML (three-tier string match), and verification_method=string_match.
+    Results are written back into the extracted JSON unless --dry-run is given.
+
+    This gate applies only to the tracks whose tables are text in the source HTML: the Senate
+    comparative statements and both chambers' inline funding tables. House comparative rows are
+    skipped unconditionally — they come from images or a typeset PDF and carry their own gates
+    (scripts/verify_house.py, comparative_house_text.py), which this must never overwrite.
+
+    Note what a string match does and does not prove. It compares the amount's *raw text* to the
+    document, so it confirms transcription and says nothing about how the text was parsed. Use
+    `approps reconcile` for the check that can see a misread convention.
     """
     from approps.config import EXTRACTED_DIR, RAW_DIR
-    from approps.output.schemas import DollarAmount
+    from approps.output.schemas import Chamber, DollarAmount, VerificationMethod
     from approps.verification.amount_verifier import verify_amount
     from approps.verification.audit_report import build_audit_report, format_audit_report
 
@@ -636,14 +642,25 @@ def verify(
                 item["verified"] = ok
                 changed += 1
 
+        # Only the Senate comparative statements are string-matchable: their tables are text in
+        # the source HTML. House comparative rows are read from images or from a typeset PDF and
+        # are verified by their own gates; string-matching them against whatever companion HTML
+        # a report happens to have would overwrite those flags with a meaningless result. This
+        # is not hypothetical — an unscoped run of this command once clobbered 25,329 House rows.
         for item in data.get("comparative_lines", []):
+            if item.get("chamber") != Chamber.SENATE.value:
+                continue
             ok = _verify_item(
                 item,
                 ["prior_year_enacted", "budget_estimate", "committee_recommendation"],
                 results,
             )
-            if ok is not None and item.get("verified") != ok:
+            if ok is None:
+                continue
+            method = VerificationMethod.STRING_MATCH if ok else VerificationMethod.NONE
+            if item.get("verified") != ok or item.get("verification_method") != method.value:
                 item["verified"] = ok
+                item["verification_method"] = method.value
                 changed += 1
 
         report = build_audit_report(report_id, results)
@@ -871,3 +888,195 @@ def trace(metric: str, min_years: int, reword_only: bool) -> None:
     for kind, n in kinds.most_common():
         click.echo(f"  {kind:7}: {n}")
     click.echo(f"Title-change rows written: {rows_written} -> {out_path}")
+
+
+@cli.command()
+@click.option(
+    "--source",
+    type=click.Path(exists=True),
+    default=None,
+    help="Dataset to check (default: data/release/comparative_statements.parquet)",
+)
+@click.option("--report-id", "-p", default=None, help="Reconcile a single report")
+@click.option(
+    "--fail-under",
+    type=float,
+    default=None,
+    help="Exit non-zero if the strict pass rate falls below this (e.g. 0.95). The release gate.",
+)
+@click.option("--worst", type=int, default=10, help="Show N reports with the most genuine failures")
+@click.option("--json", "json_out", type=click.Path(), default=None, help="Write the full ledger as JSON")
+def reconcile(
+    source: str | None, report_id: str | None, fail_under: float | None, worst: int, json_out: str | None
+) -> None:
+    """Check that line items sum to the totals the reports actually printed.
+
+    Every other gate compares a row to itself or to the string it came from. This one compares
+    the extracted line items to an independent witness -- the subtotal the committee set in
+    type -- and so is the only check that can catch a misinterpretation of the source rather
+    than a mistranscription of it. It is also the check appropriations staff do by hand.
+
+    Reports two rates. `pass` counts every checkable total. `strict` excludes overlapping-view
+    totals (advance appropriations and forward funding), which re-aggregate rows already
+    counted elsewhere and are therefore not the sum of any contiguous block by construction.
+    Use `strict` as the gate: it is the share of totals a sum check can actually adjudicate.
+    """
+    import json as _json
+    from collections import defaultdict
+
+    from approps.verification.reconcile import Status, reconcile_report, summarize
+    from approps.verification.reconcile_source import load_release
+
+    rows_by_report, track_by_report = load_release(Path(source) if source else None)
+    if report_id:
+        if report_id not in rows_by_report:
+            click.echo(f"{report_id} not found in the dataset", err=True)
+            sys.exit(1)
+        rows_by_report = {report_id: rows_by_report[report_id]}
+
+    results = [reconcile_report(rid, rows) for rid, rows in rows_by_report.items()]
+    by_report = {r.report_id: r for r in results}
+
+    by_track: dict[str, list] = defaultdict(list)
+    for result in results:
+        by_track[track_by_report[result.report_id]].append(result)
+
+    click.echo("=" * 78)
+    click.echo("RECONCILIATION — do the line items add up to the printed totals?")
+    click.echo(f"{'track':9} {'reports':>7} {'totals':>7} {'checkable':>9} {'pass':>7} {'strict':>7} {'genuine':>8}")
+    click.echo("-" * 78)
+    for track, group in sorted(by_track.items()):
+        stats = summarize(group)
+        click.echo(
+            f"{track:9} {stats['reports']:>7} {stats['totals']:>7} {stats['checkable']:>9} "
+            f"{(stats['pass_rate'] or 0):>6.1%} {(stats['strict_pass_rate'] or 0):>6.1%} "
+            f"{stats['genuine_failures']:>8}"
+        )
+    overall = summarize(results)
+    click.echo("-" * 78)
+    click.echo(
+        f"{'ALL':9} {overall['reports']:>7} {overall['totals']:>7} {overall['checkable']:>9} "
+        f"{(overall['pass_rate'] or 0):>6.1%} {(overall['strict_pass_rate'] or 0):>6.1%} "
+        f"{overall['genuine_failures']:>8}"
+    )
+    click.echo("\nby status: " + "  ".join(f"{k}={v}" for k, v in overall["by_status"].items() if v))
+
+    queue = sorted(
+        (r for r in results if r.n_genuine_failures), key=lambda r: -r.n_genuine_failures
+    )[:worst]
+    if queue:
+        click.echo("\n" + "=" * 78)
+        click.echo(f"REVIEW QUEUE — {worst} reports with the most genuine failures")
+        click.echo(f"{'report':22} {'track':8} {'totals':>6} {'ok':>5} {'genuine':>8}")
+        for result in queue:
+            click.echo(
+                f"{result.report_id:22} {track_by_report[result.report_id]:8} "
+                f"{len(result.checks):>6} {result.n_ok:>5} {result.n_genuine_failures:>8}"
+            )
+
+    if report_id:
+        result = by_report[report_id]
+        click.echo("\n" + "=" * 78)
+        click.echo(f"{report_id}: every printed total")
+        for check in result.checks:
+            mark = "OK " if check.status is Status.OK else "-> "
+            delta = "" if check.delta in (0, None) else f"  off by {check.delta:+,}"
+            click.echo(
+                f"  {mark}{check.label[:44]:44} {str(check.status.value):17} "
+                f"n={len(check.child_indices):>3}{delta}"
+            )
+
+    if json_out:
+        payload = [
+            {
+                "report_id": r.report_id,
+                "track": track_by_report[r.report_id],
+                "pass_rate": r.pass_rate,
+                "strict_pass_rate": r.strict_pass_rate,
+                "totals": [
+                    {
+                        "index": c.index,
+                        "label": c.label,
+                        "status": c.status.value,
+                        "memo_mode": c.memo_mode.value,
+                        "children": list(c.child_indices),
+                        "columns": {
+                            name: {
+                                "printed": col.printed,
+                                "computed": col.computed,
+                                "delta": col.delta,
+                                "complete": col.complete,
+                            }
+                            for name, col in c.columns.items()
+                        },
+                    }
+                    for c in r.checks
+                ],
+            }
+            for r in results
+        ]
+        Path(json_out).write_text(_json.dumps({"summary": overall, "reports": payload}, indent=2))
+        click.echo(f"\nLedger written to {json_out}")
+
+    if fail_under is not None:
+        strict = overall["strict_pass_rate"] or 0.0
+        if strict < fail_under:
+            click.echo(f"\nFAIL: strict pass rate {strict:.1%} is below the {fail_under:.1%} gate", err=True)
+            sys.exit(1)
+        click.echo(f"\nPASS: strict pass rate {strict:.1%} meets the {fail_under:.1%} gate")
+
+
+@cli.command()
+@click.option(
+    "--source",
+    type=click.Path(exists=True),
+    default=None,
+    help="Dataset to export (default: data/release/comparative_statements.parquet)",
+)
+@click.option("--report-id", "-p", default=None, help="Export a single report")
+@click.option("--all", "export_all", is_flag=True, help="Export every report in the dataset")
+@click.option(
+    "--out",
+    "-o",
+    type=click.Path(),
+    default="data/output/workbooks",
+    help="Directory to write .xlsx files into",
+)
+def workbook(source: str | None, report_id: str | None, export_all: bool, out: str) -> None:
+    """Write per-report Excel workbooks that prove the line items sum to the printed totals.
+
+    Each workbook computes its totals with live =SUM() formulas over the exact cells that
+    each printed total consumed -- nothing is precomputed. A staffer can select the leaf
+    cells and read the sum off Excel's own status bar, which is the check they would
+    otherwise do against the source PDF. Non-add memo rows are greyed and deliberately
+    parked in a column no SUM reaches.
+    """
+    from approps.output.xlsx_writer import write_report_workbook
+    from approps.verification.reconcile import reconcile_report
+    from approps.verification.reconcile_source import load_release
+
+    if not report_id and not export_all:
+        click.echo("Specify --report-id or --all", err=True)
+        sys.exit(1)
+
+    rows_by_report, _ = load_release(Path(source) if source else None)
+    if report_id:
+        if report_id not in rows_by_report:
+            click.echo(f"{report_id} not found in the dataset", err=True)
+            sys.exit(1)
+        rows_by_report = {report_id: rows_by_report[report_id]}
+
+    out_dir = Path(out)
+    written = failed = 0
+    for rid, rows in rows_by_report.items():
+        result = reconcile_report(rid, rows)
+        write_report_workbook(out_dir / f"{rid}.xlsx", rows, result)
+        written += 1
+        failed += result.n_genuine_failures
+        if report_id or written % 25 == 0:
+            rate = result.strict_pass_rate
+            shown = f"{rate:.0%}" if rate is not None else "n/a"
+            click.echo(f"  {rid:22} totals={len(result.checks):>4} strict={shown:>5}")
+
+    click.echo(f"\nWrote {written} workbook(s) to {out_dir}")
+    click.echo(f"Totals with a genuine failure across the export: {failed}")

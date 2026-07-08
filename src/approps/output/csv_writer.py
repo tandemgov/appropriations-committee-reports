@@ -12,6 +12,7 @@ import pandas as pd
 from pydantic import BaseModel
 
 from approps.config import OUTPUT_DIR
+from approps.extraction.dollar_parser import is_paren_memo
 from approps.normalization.account_names import clean_account_label
 from approps.normalization.crosswalk import match_account
 from approps.normalization.inflation import load_deflators
@@ -97,12 +98,20 @@ def _build_inline_index(tables: list) -> dict[str, list[tuple[set[int], set[str]
 def _verification_tier(
     line: ComparativeStatementLine, inline_index: dict[str, list[tuple[set[int], set[str]]]]
 ) -> str:
-    """How this row's amount is independently supported, strongest first: delta > block >
-    inline > none. See ComparativeStatementRow.verification_tier. block/inline require the
-    row to actually carry an amount — a label-only leaf inside a reconciling block has no
-    amount to corroborate and stays `none`."""
+    """How this row's amount is supported. See ComparativeStatementRow.verification_tier.
+
+    When the row passed its track's primary gate, the tier names *that gate* rather than
+    asserting a uniform one. It used to return `delta` for every verified row on all three
+    tracks, which was true of the House vision rows and false of the other 52% — Senate rows
+    are string-matched and enacted rows are checked verbatim-on-page. The label implied an
+    arithmetic check that had never run, and it masked a real defect for the life of the
+    project (docs/KNOWN_ISSUES.md #6).
+
+    Otherwise the tier names a *second witness* found elsewhere in the document. block/inline
+    require the row to actually carry an amount — a label-only leaf inside a reconciling block
+    has no amount to corroborate and stays `none`."""
     if line.verified:
-        return "delta"
+        return line.verification_method.value
     amts = {
         a.value
         for a in (line.committee_recommendation, line.budget_estimate, line.prior_year_enacted)
@@ -193,16 +202,16 @@ def _column_layout(line: ComparativeStatementLine) -> str:
     return "standard"
 
 
-def _is_paren_nonadd(line: ComparativeStatementLine) -> bool:
+def _is_paren_memo(line: ComparativeStatementLine) -> bool:
     """Whether the row's recommendation is a parenthesized non-add memo — a limitation,
     transfer authority, GWOT/"of which" breakout — which by appropriations convention is
-    NOT summed into the account total. Parens with an explicit minus (e.g. `(-2,491)`) are
-    real negatives (rescissions), so require a positive value with no inner sign."""
-    a = line.committee_recommendation
-    if a is None or a.value is None or a.value <= 0:
-        return False
-    raw = (a.raw_text or "").strip()
-    return raw.startswith("(") and "-" not in raw
+    NOT summed into the account total.
+
+    The rule itself lives in ``dollar_parser.is_paren_memo`` so that extraction and output
+    cannot drift apart on it. Senate extraction already sets ``is_memo``; this stays
+    as the belt-and-braces pass for the House vision rows, whose flag is otherwise set only by
+    the indent-recovery double-gate."""
+    return is_paren_memo(line.committee_recommendation)
 
 
 def _line_has_amount(line: ComparativeStatementLine) -> bool:
@@ -273,7 +282,7 @@ def _comparative_line_to_row(line: ComparativeStatementLine) -> ComparativeState
         agency=line.agency,
         account=line.account,
         account_inferred=line.account_inferred,
-        non_add_inferred=line.non_add_inferred or _is_paren_nonadd(line),
+        is_memo=line.is_memo or _is_paren_memo(line),
         program=line.program,
         line_item_text=line.line_item_text,
         prior_year_enacted=line.prior_year_enacted.value if line.prior_year_enacted else None,
@@ -288,6 +297,7 @@ def _comparative_line_to_row(line: ComparativeStatementLine) -> ComparativeState
         in_thousands=line.in_thousands,
         extraction_method=line.extraction_method.value,
         verified=line.verified,
+        verification_method=line.verification_method.value,
     )
 
 

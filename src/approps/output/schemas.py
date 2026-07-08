@@ -25,6 +25,34 @@ class ExtractionMethod(str, Enum):
     LLM = "llm"
 
 
+class VerificationMethod(str, Enum):
+    """What was actually checked when a row was marked `verified`.
+
+    These are three genuinely different claims, and conflating them cost this project a
+    shipped sign defect on 9,629 amounts (docs/KNOWN_ISSUES.md #6). Both `string_match` and
+    `delta_arithmetic` compare a row only to itself, so neither can catch a *misinterpretation*
+    of the source as opposed to a *mistranscription* of it. Only a witness outside the row --
+    `block`, or the standalone `approps reconcile` -- can.
+    """
+
+    DELTA_ARITHMETIC = "delta_arithmetic"
+    """The row's own delta identities close. Invariant to a sign flip across its columns."""
+
+    STRING_MATCH = "string_match"
+    """The amount's raw text appears in the source HTML. Says nothing about how it was parsed."""
+
+    VERBATIM_PAGE = "verbatim_page"
+    """The amount appears verbatim on its source PDF page."""
+
+    NONE = "none"
+    """Not verified by any primary gate."""
+
+    @classmethod
+    def when(cls, passed: bool, method: VerificationMethod) -> VerificationMethod:
+        """`method` if the gate passed, else NONE — so the two can never disagree."""
+        return method if passed else cls.NONE
+
+
 class HierarchyLevel(int, Enum):
     TITLE = 0
     DEPARTMENT = 1
@@ -119,15 +147,22 @@ class ComparativeStatementLine(BaseModel):
             "never guessed. Additive: `account` is left untouched."
         ),
     )
-    non_add_inferred: bool = Field(
+    is_memo: bool = Field(
         default=False,
         description=(
-            "True when the Gemini non-add double-gate identified this row as a non-add "
-            "sub-detail (a transfer, limitation, or 'of which' breakout) whose amount was "
-            "wrongly summed into its subtotal by the flattened vision extraction. Set only "
-            "when excluding exactly the flagged rows makes the block reconcile, so it is "
-            "arithmetic-verified. Such a row's amount should not be added into its account "
-            "total. Additive: the amount fields are left untouched."
+            "True when this row is a memo line rather than an ordinary additive line item: a "
+            "limitation, a transfer authority, an 'of which' breakout. Set by either signal — "
+            "a parenthesized amount (the comparative-statement convention; see "
+            "dollar_parser.is_paren_memo), or the Gemini non-add double-gate, which flags a "
+            "sub-detail the flattened vision extraction wrongly summed into its subtotal and "
+            "is arithmetic-verified (excluding exactly the flagged rows makes the block "
+            "reconcile). Additive: the amount fields are left untouched.\n\n"
+            "This says what the row IS, not whether it sums. A memo is non-add with respect to "
+            "*some* total, but ~20% are added in by the total that immediately encloses them — "
+            "a transfer that is real budget authority at the account level and double-counting "
+            "at the title level. The printed total adjudicates; verification.reconcile does so "
+            "per total and reports the verdict as `memo_mode`. Do not blanket-filter this "
+            "column before summing: it will understate those account totals."
         ),
     )
     program: str | None = None
@@ -145,6 +180,15 @@ class ComparativeStatementLine(BaseModel):
     in_thousands: bool = True  # Comparative statements are typically in thousands
     line_number: int = 0
     verified: bool = False
+    verification_method: VerificationMethod = Field(
+        default=VerificationMethod.NONE,
+        description=(
+            "Which gate set `verified`. Recorded by the producer, because it cannot be "
+            "inferred downstream: the House track alone uses two (vision rows are checked by "
+            "delta arithmetic, typeset-print rows by verbatim-on-page). Before this existed, "
+            "every verified row was labelled `delta` regardless of what was actually checked."
+        ),
+    )
     extraction_method: ExtractionMethod = ExtractionMethod.RULE_BASED
 
 
@@ -210,7 +254,7 @@ class ComparativeStatementRow(BaseModel):
     agency: str | None
     account: str | None
     account_inferred: str | None
-    non_add_inferred: bool
+    is_memo: bool
     program: str | None
     line_item_text: str
     prior_year_enacted: int | None
@@ -223,11 +267,18 @@ class ComparativeStatementRow(BaseModel):
     in_thousands: bool
     extraction_method: str
     verified: bool
-    # Corroboration tier (assigned by the output build): how the row's amount is
-    # independently supported — `delta` (its own delta-column arithmetic closes, i.e.
-    # verified=True), `block` (a member of a subtotal block whose amounts reconcile
-    # exactly), `inline` (its amount + account restated in the report's string-verified
-    # inline funding tables), or `none` (no in-document second witness).
+    # What was actually checked to set `verified`, carried through from extraction. See
+    # VerificationMethod: `delta_arithmetic`, `string_match`, `verbatim_page`, or `none`.
+    verification_method: str = "none"
+    # How the row's amount is supported (assigned by the output build). When `verified`, this
+    # is the primary gate that passed — the same value as `verification_method`, surfaced here
+    # so a single column answers "how do I know this number?". Otherwise it is a *second
+    # witness* found elsewhere in the document: `block` (a member of a subtotal block whose
+    # amounts reconcile exactly), `inline` (its amount + account restated in the report's
+    # string-verified inline funding tables), or `none` (no in-document corroboration).
+    #
+    # This column used to report `delta` for every verified row, on all three tracks. It was a
+    # misnomer on 52% of them, and it hid a real defect — see docs/KNOWN_ISSUES.md #6.
     verification_tier: str = "none"
     # Column layout: `standard` (the usual prior-year / request / recommendation / delta
     # shape) or `category_split` — a nonstandard table (e.g. Energy-Water Reclamation/Corps

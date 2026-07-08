@@ -13,7 +13,7 @@ This module recovers it with a DOUBLE GATE that never guesses:
      are non-add sub-details (the semantic question it answers reliably — unlike a numeric
      indent level, which drifts run to run).
   2. The block is only accepted — its leaves labeled with ``account_inferred`` and the
-     flagged lines marked ``non_add_inferred`` — when excluding *exactly* Gemini's flagged
+     flagged lines marked ``is_memo`` — when excluding *exactly* Gemini's flagged
      lines makes the block reconcile to the subtotal on some shared column.
 
 Neither signal is trusted alone: the arithmetic kills Gemini's hallucinations, and Gemini
@@ -194,7 +194,7 @@ def recover_indent(pdf_path, lines: list[dict]) -> dict:
     Mutates ``lines`` in place: on a block that reconciles once Gemini's flagged lines are
     excluded, sets ``account_inferred`` on the surviving leaves (never overwriting an
     existing ``account``/``account_inferred``) and marks each excluded line
-    ``non_add_inferred = True``. Returns stats.
+    ``is_memo = True``. Returns stats.
     """
     import pdfplumber
 
@@ -246,6 +246,6 @@ def recover_indent(pdf_path, lines: list[dict]) -> dict:
                     ln["account_inferred"] = blk["subtotal_name"]
                     stats["rows_labeled"] += 1
             for leaf in dropped:
-                leaf["line"]["non_add_inferred"] = True
+                leaf["line"]["is_memo"] = True
                 stats["lines_marked_nonadd"] += 1
     return stats

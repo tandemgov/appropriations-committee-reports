@@ -92,6 +92,7 @@ def verify(lines: list[dict]) -> dict:
     for ln in lines:
         st = row_status(ln)
         ln["verified"] = st == "pass"
+        ln["verification_method"] = "delta_arithmetic" if st == "pass" else "none"
         if st == "pass":
             passed += 1
         elif st == "fail":

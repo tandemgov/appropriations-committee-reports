@@ -27,7 +27,7 @@ def test_int_fields_finds_optional_and_plain_ints():
 def test_int_fields_excludes_bool_float_and_str():
     fields = set(_int_fields(ComparativeStatementRow))
     # bool subclasses int at runtime, but its annotation is `bool` — must not be caught.
-    assert not fields & {"verified", "is_subtotal", "in_thousands", "non_add_inferred"}
+    assert not fields & {"verified", "is_subtotal", "in_thousands", "is_memo"}
     assert "real_factor_2024" not in fields  # float | None
     assert "report_id" not in fields  # str
 

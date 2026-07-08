@@ -22,6 +22,13 @@ EXTRACTED = Path("data/extracted")
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="report counts, do not write")
+    ap.add_argument(
+        "--track",
+        choices=("house", "senate", "enacted"),
+        default=None,
+        help="Repair only one track. Use when re-extracting a single track, so its repairs are "
+        "not conflated with pending repairs on the others.",
+    )
     args = ap.parse_args()
 
     by_track = defaultdict(lambda: {"reports": 0, "touched": 0, "recovered": 0, "corrected": 0})
@@ -30,6 +37,8 @@ def main() -> None:
         if len(parts) < 3:
             continue
         track = parts[1]
+        if args.track and track != args.track:
+            continue
         data = json.loads(path.read_text())
         c = repair_report(data)
         t = by_track[track]

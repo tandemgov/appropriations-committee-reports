@@ -49,6 +49,7 @@ from approps.output.schemas import (
     ExtractionMethod,
     HierarchyLevel,
     Stage,
+    VerificationMethod,
 )
 
 _MINUS = {"¥": "-", "Ø": "-", "−": "-"}
@@ -430,6 +431,9 @@ def extract_house_text(
                 budget_estimate=est, committee_recommendation=rec, delta_vs_estimate=dlt,
                 is_subtotal=False, in_thousands=True, line_number=line_no,
                 verified=rec_ok and est_ok and dlt_ok,
+                verification_method=VerificationMethod.when(
+                    rec_ok and est_ok and dlt_ok, VerificationMethod.VERBATIM_PAGE
+                ),
                 extraction_method=ExtractionMethod.RULE_BASED,
             ))
         # The account's grand total (last TOTAL in its span) as a subtotal line.
@@ -447,6 +451,9 @@ def extract_house_text(
                 budget_estimate=est, committee_recommendation=rec, delta_vs_estimate=dlt,
                 is_subtotal=True, in_thousands=True, line_number=line_no,
                 verified=rec_ok and est_ok and dlt_ok,
+                verification_method=VerificationMethod.when(
+                    rec_ok and est_ok and dlt_ok, VerificationMethod.VERBATIM_PAGE
+                ),
                 extraction_method=ExtractionMethod.RULE_BASED,
             ))
 
@@ -466,6 +473,9 @@ def extract_house_text(
             budget_estimate=est, committee_recommendation=rec, delta_vs_estimate=dlt,
             is_subtotal=False, in_thousands=True, line_number=line_no,
             verified=rec_ok and est_ok and dlt_ok,
+            verification_method=VerificationMethod.when(
+                rec_ok and est_ok and dlt_ok, VerificationMethod.VERBATIM_PAGE
+            ),
             extraction_method=ExtractionMethod.RULE_BASED,
         ))
 
@@ -481,6 +491,10 @@ def extract_house_text(
             hierarchy_depth=HierarchyLevel.TITLE.value, line_item_text=rc["name"],
             budget_estimate=est, committee_recommendation=rec,
             is_subtotal=True, in_thousands=True, line_number=line_no,
-            verified=rec_ok and est_ok, extraction_method=ExtractionMethod.RULE_BASED,
+            verified=rec_ok and est_ok,
+            verification_method=VerificationMethod.when(
+                rec_ok and est_ok, VerificationMethod.VERBATIM_PAGE
+            ),
+            extraction_method=ExtractionMethod.RULE_BASED,
         ))
     return out

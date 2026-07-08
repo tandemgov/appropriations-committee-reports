@@ -37,6 +37,7 @@ from approps.output.schemas import (
     DollarAmount,
     ExtractionMethod,
     Stage,
+    VerificationMethod,
 )
 
 # Single-column dot-leader row: label, dot leaders, optional $, comma-grouped amount.
@@ -196,6 +197,9 @@ def extract_enacted_pages(
                         in_thousands=in_thousands,
                         line_number=line_no,
                         verified=rec_ok and est_ok,
+                        verification_method=VerificationMethod.when(
+                            rec_ok and est_ok, VerificationMethod.VERBATIM_PAGE
+                        ),
                         extraction_method=ExtractionMethod.RULE_BASED,
                     )
                 )

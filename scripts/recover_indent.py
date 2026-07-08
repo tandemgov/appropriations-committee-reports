@@ -6,7 +6,7 @@ block only when excluding exactly those lines makes it reconcile (see
 approps.normalization.indent_recovery). Reports a per-report and aggregate recovery rate.
 
 Dry-run by default (does not persist). Pass --write to save the additive
-``account_inferred`` / ``non_add_inferred`` fields back into the canonical JSON.
+``account_inferred`` / ``is_memo`` fields back into the canonical JSON.
 
 Usage:
   uv run python scripts/recover_indent.py CRPT-114hrpt129 CRPT-114hrpt195

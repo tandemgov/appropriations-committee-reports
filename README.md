@@ -29,13 +29,15 @@ GovInfo (HTML/PDF) → Discovery → Download → Extraction → Verification �
 
 ### Extraction approaches by data source
 
-| Source | Format | Method | Accuracy |
+| Source | Format | Method | Primary gate |
 |--------|--------|--------|----------|
 | Senate comparative statements | Text in HTML | Deterministic fixed-width parser | 100% string-match |
 | Inline narrative tables (both chambers) | Text in HTML | Regex-based extraction | 100% string-match |
 | House comparative statements | TIFF images in PDF | Hybrid: Nemotron-Parse bulk + Gemini cleanup | Delta-arithmetic gate |
 | House typeset committee prints | Born-digital PDF text | Deterministic text parser | Reconciles to RECAPITULATION totals |
 | Enacted line items | Born-digital PDF text (CPRT) | Regex parser, self-verifying | 100% verbatim-on-page |
+
+The gate is not the accuracy. A 100% string match proves every amount was *transcribed* correctly; it says nothing about whether it was *interpreted* correctly, and the Senate track scored 100% on it while misreading a source convention on 3,970 rows. Only [reconciliation](#reconciliation--the-gate-that-checks-the-others) checks a row against something other than itself.
 
 ### Key finding
 
@@ -82,6 +84,8 @@ GOVINFO_API_KEY=your-key
 | `approps extract-file <path>` | Extract from a local file (no catalog needed) |
 | `approps extract-house-pdf <path>` | Extract House comparative tables from a local PDF (vision) |
 | `approps verify` | Run verification checks |
+| `approps reconcile` | Check that line items sum to the totals the reports printed |
+| `approps workbook` | Write per-report Excel workbooks that prove the sums, with live formulas |
 | `approps crosswalk` | Build the authoritative account crosswalk + human-review queue |
 | `approps trace` | Follow crosswalk-keyed accounts across fiscal years; report title changes |
 | `approps output` | Generate combined CSV/JSON datasets |
@@ -121,13 +125,16 @@ src/approps/
 │   └── hierarchy.py            # Hierarchy detection (Title/Dept/Agency/Account)
 ├── verification/
 │   ├── amount_verifier.py      # Three-tier string matching (exact/normalized/spaceless)
-│   ├── cross_check.py          # Subtotal arithmetic validation
+│   ├── reconcile.py            # Line items vs the totals the committee printed
+│   ├── reconcile_source.py     # Loads the shipped release into the reconciler
+│   ├── cross_check.py          # Per-row delta identities
 │   └── audit_report.py         # Verification summary statistics
 ├── normalization/              # Account crosswalk (USASpending-anchored), CPI-U inflation, account-name hygiene
 │   └── account_authority.py    # Cross-year account tracing: money series, label timeline, title changes
 ├── output/
 │   ├── schemas.py              # Pydantic models for all data types
 │   ├── csv_writer.py           # CSV generation
+│   ├── xlsx_writer.py          # Per-report Excel workbooks with live =SUM() proofs
 │   └── metadata.py             # Provenance tracking
 └── api/                        # FastAPI application
 ```
@@ -140,17 +147,35 @@ Every extracted dollar amount is verified against the source text using three-ti
 2. **Normalized match**: after collapsing whitespace
 3. **Spaceless match**: after removing all whitespace
 
-Senate and inline extractions verify by string match; House vision extractions verify by a delta-arithmetic gate (the two derived delta columns cross-check all four value columns at once); enacted lines self-verify (each amount must appear verbatim on its source page). See [docs/DELIVERABLES.md](docs/DELIVERABLES.md#what-verified-means) for the full semantics.
+Each track has one primary gate, and `verification_tier` names it per row: Senate and inline extractions verify by `string_match`; House vision extractions by `delta_arithmetic` (the two derived delta columns cross-check all four value columns at once); enacted statements and House typeset prints by `verbatim_page`. See [docs/DELIVERABLES.md](docs/DELIVERABLES.md#what-verified-means) for the full semantics.
+
+### Reconciliation — the gate that checks the others
+
+Every check above compares a row to *itself* or to the string it came from, so none of them can catch a misreading of the source's conventions. A string match still passes when `(24,000)` is transcribed perfectly and then interpreted as −24,000. The delta identity still closes when a row's columns are all negated together.
+
+The printed subtotal is an independent witness. `approps reconcile` checks the line items against it, which is also the check appropriations staff perform by hand:
+
+```bash
+approps reconcile                       # corpus report + review queue
+approps reconcile -p CRPT-118srpt83     # every printed total in one report
+approps reconcile --fail-under 0.75     # release gate; exits non-zero below the bar
+approps workbook -p CRPT-118srpt83      # an .xlsx a staffer can audit in Excel
+```
+
+This gate found a sign defect that had shipped in every prior release, on 9,629 Senate amounts that were all marked `verified` at the strongest tier. See [DATA.md](DATA.md#correction--senate-parentheses).
 
 ## Current results
 
-**246 report-stages, 109,052 comparative line items (74,453 delta-verified), 13,853 inline funding records**, spanning committee (both chambers) and enacted stages, FY2016–FY2027. Full breakdown by stage × chamber × fiscal year in **[docs/COVERAGE.md](docs/COVERAGE.md)**.
+**246 report-stages, 109,052 comparative line items (74,453 passing a primary gate), 13,853 inline funding records**, spanning committee (both chambers) and enacted stages, FY2016–FY2027. Full breakdown by stage × chamber × fiscal year in **[docs/COVERAGE.md](docs/COVERAGE.md)**.
 
-| Stage | Reports | Rows | Delta-verified |
-|---|---:|---:|---:|
-| Senate committee (HTML text) | 87 | 28,873 | 26,792 |
-| House committee (vision + typeset text) | 143 | 68,350 | 35,832 |
-| Enacted (House CPRT explanatory statements) | 16 | 11,829 | 11,829 |
+| Stage | Reports | Rows | Primary gate | Rows passing it | Printed totals that reconcile¹ |
+|---|---:|---:|---|---:|---:|
+| Senate committee (HTML text) | 87 | 28,873 | `string_match` | 26,792 | 81.4% |
+| House committee (vision) | 143 | 65,909 | `delta_arithmetic` | 33,391 | 74.8% |
+| House committee (typeset text) | — | 2,441 | `verbatim_page` | 2,441 | — |
+| Enacted (House CPRT explanatory statements) | 16 | 11,829 | `verbatim_page` | 11,829 | 60.3% |
+
+¹ `approps reconcile`, strict rate — the share of printed subtotals whose line items sum to them exactly, excluding advance-appropriation totals that are not the sum of any contiguous block by construction. A total that reconciles independently corroborates every line item beneath it.
 
 ## Related work
 

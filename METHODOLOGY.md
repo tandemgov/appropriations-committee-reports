@@ -169,9 +169,49 @@ Since House comparative statements are extracted via vision model (non-determini
 | United States Secret Service | $3,158,110,000 | $3,158,110,000 | Exact match |
 | Federal Emergency Management Agency | $28,145,913,000 | $28,145,913,000 | Exact match |
 
-### Subtotal arithmetic
+### Reconciliation — the only gate that looks outside the row
 
-For comparative statement extractions, subtotal lines are checked against the sum of their child line items. Delta columns are verified: `committee_recommendation - prior_year_enacted` should equal `delta_vs_enacted`.
+The two gates above share a blind spot, and it is structural rather than incidental. Both compare a row to *itself*: string matching compares an amount to the text it was read from, and the delta identity compares a row's columns to each other. Neither can detect a **misinterpretation** of the source, as opposed to a **mistranscription** of it.
+
+Concretely: if `(24,000)` is transcribed perfectly and then read as −24,000, the string match still passes, because the raw text really does say `(24,000)`. And the delta identity is invariant to a sign flip applied across a row's columns — negate `recommendation`, `prior`, and `estimate` together and `rec − prior == delta_vs_enacted` still holds exactly. This is not a hypothetical; it shipped in every release before this one (see [KNOWN_ISSUES #6](docs/KNOWN_ISSUES.md)).
+
+The subtotal a committee sets in type is an **independent witness**. It is not derived from the columns we parsed, and it constrains the rows above it. Checking the line items against it is therefore the only gate here that can catch a wrong reading of the document — and it is also, not coincidentally, the check appropriations staff perform by hand: highlight the account rows, compare the sum to the recap.
+
+`approps reconcile` (`verification.reconcile`) does this over the shipped release. Two design decisions carry it:
+
+**Nesting is recovered from document order, not indentation.** Total rows are frequently typeset further right than the children they summarize, and the enacted explanatory statements flatten every account to depth 0. So each total consumes the shortest contiguous run of preceding unconsumed nodes that sums to it, and is then pushed back as a single node — letting a parent total roll up its child totals without ever consulting a depth label. A total that fails still consumes its block (the closest-summing run), so one bad total cannot cascade into every ancestor above it.
+
+**Whether a memo is summed is decided by the total, not by the parentheses.** `is_memo` is treated as a hypothesis. For each total the reconciler sums the children both ways — memos excluded, then included — and lets the printed figure adjudicate, recording the verdict as `memo_mode`. Exclusion is tried first, as the documented convention. This is the same arithmetic double-gate the House indent recovery uses: a grouping is accepted because the sum closes, never because the shape looked right. It is necessary because the same parenthesized row can be additive at one level and non-add at the next — in `CRPT-114srpt68`, `Operating expenses 134,488` plus `(By transfer from Disaster Relief) (24,000)` is exactly the printed `Total, Office of Inspector General 158,488`, while `Total, title I` one line below excludes that same 24,000.
+
+Crucially, this cannot launder a sign error: a row whose `(35,000)` was parsed as −35,000 is not flagged as a memo at all, so it is a mandatory child under both readings and the total still fails.
+
+Totals are classified rather than merely passed or failed:
+
+| Status | Meaning |
+|---|---|
+| `ok` | The children sum to the printed total, exactly, to the dollar |
+| `off_by_small` | Missed by ≤2% — one line dropped or misread. Genuine |
+| `partial_read` | A child carries amounts in other columns but not the primary one. Genuine |
+| `overlapping_view` | An advance-appropriation or forward-funding total, which re-aggregates rows already counted under another view. **Not the sum of any contiguous block by construction** — unmeasurable, not an error |
+| `unreconciled` | Children do not sum, and none of the above explains it |
+| `unchecked` | The total printed a dot leader, so there is nothing to check against |
+
+The **strict pass rate** excludes `overlapping_view`, and is the honest denominator: the share of totals a sum check can actually adjudicate.
+
+| Track | Checkable | Tie exactly | Strict |
+|---|---:|---:|---:|
+| house | 9,871 | 73.0% | 74.8% |
+| senate | 4,833 | 78.8% | 81.4% |
+| enacted | 1,138 | 59.1% | 60.3% |
+| **all** | **15,842** | **73.7%** | **75.7%** |
+
+A total that reconciles corroborates every line item beneath it. A total that does *not* reconcile is a review item, not a proven error — the reconciler infers nesting, and unusual table shapes defeat it.
+
+### Handing the check to the reader
+
+`approps workbook` writes one Excel file per report in which every total's `computed` cell is a live `=SUM()` over the exact cells that total consumed. Nothing is precomputed; Excel does the adding. Leaves and rollups occupy separate columns so a parent can sum its child subtotals without double-counting the leaves they already absorbed, and a memo the printed total did *not* endorse sits in no summable column at all — its exclusion is visible on the page rather than hidden in a filter. A staffer who distrusts the `check` column can select the leaf cells and read the sum off Excel's own status bar.
+
+This is the point of the whole exercise. A parsed dataset earns adoption not by asserting that it verified itself, but by making its arithmetic cheap to re-perform with the tool already on the reader's desk.
 
 ## PDF parsing tools evaluated
 

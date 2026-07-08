@@ -9,7 +9,7 @@ constant and
 
 still holds exactly. A units bug therefore sails through verification wearing the strongest
 corroboration tier the pipeline can award. That is not hypothetical: the enacted extractor
-multiplied 11,829 rows by 1,000 and every single one came out `verified=True, tier=delta`
+multiplied 11,829 rows by 1,000 and every single one came out `verified=True, tier=verbatim_page`
 (docs/KNOWN_ISSUES.md #4).
 
 Catching a uniform rescale requires comparing against something *outside* the row. The only

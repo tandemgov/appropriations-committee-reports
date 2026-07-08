@@ -13,29 +13,80 @@ import pandas as pd
 
 df = pd.read_parquet("comparative_statements.parquet")
 
-# The subset with a corroborated amount in a standard column layout: 80,429 rows (73.8%).
+# The subset with a corroborated amount in a standard column layout: 80,435 rows (73.8%).
 strict = df[(df.column_layout == "standard") & (df.verification_tier != "none")]
 ```
 
 That is the honest default. The other 26% are not junk — they are mostly correct — but nothing in the document independently confirms them, so they should not be quoted without checking the source PDF.
 
-### `verification_tier` — how the amount is corroborated
+### `verification_tier` — what the amount rests on
 
-| Tier | Rows | Meaning |
-|---|---:|---|
-| `delta` | 74,453 (68.3%) | The row's own delta arithmetic closes. Strongest. |
-| `block` | 5,616 (5.1%) | Member of a subtotal block whose amounts sum exactly. |
-| `inline` | 491 (0.5%) | Amount + account restated in the report's string-verified prose. |
-| `none` | 28,492 (26.1%) | **No second witness in the document.** Treat as unconfirmed. |
+Each row names the gate that actually checked it. `verification_method` carries the same value for verified rows; the tier column exists so a single field answers "how do I know this number?", including for rows no primary gate reached.
+
+| Tier | Rows | What was checked | Can it see a misread convention? |
+|---|---:|---|---|
+| `delta_arithmetic` | 33,391 (30.6%) | House vision rows: `recommendation − prior = delta_vs_enacted`, and likewise for the estimate. | **No** — invariant to a sign flip across the row's columns. |
+| `string_match` | 26,792 (24.6%) | Senate rows: the amount's *raw text* appears in the source HTML. | **No** — proves transcription, says nothing about parsing. |
+| `verbatim_page` | 14,270 (13.1%) | Enacted statements and House typeset prints: the amount appears verbatim on its source PDF page. | **No** — same reason. |
+| `block` | 5,616 (5.1%) | Member of a subtotal block whose amounts sum exactly. | **Yes** — a witness outside the row. |
+| `inline` | 491 (0.5%) | Amount + account restated in the report's string-verified prose. | Partly. |
+| `none` | 28,492 (26.1%) | **No witness at all.** Treat as unconfirmed. | — |
 
 The `none` rows are overwhelmingly House. The House comparative statements are *scanned images* in the source PDFs and are read by a vision model; the Senate reports are born-digital HTML and are parsed deterministically. That asymmetry is the single biggest driver of data quality here.
+
+#### Why the first three tiers cannot protect you alone
+
+`delta_arithmetic`, `string_match`, and `verbatim_page` all compare a row to *itself*, or to the string it was read from. None can detect a **misinterpretation** of the source as opposed to a **mistranscription** of it:
+
+- A string match compares the *raw text* to the document. If `(24,000)` is transcribed perfectly and then interpreted as −24,000, the raw text still matches.
+- The delta identity is invariant to a sign flip applied across a row's columns: negate `recommendation`, `prior`, and `estimate` together and `rec − prior` still equals the printed delta.
+
+This is not hypothetical — it shipped, on 9,629 amounts, every one of them `verified`. See [Correction — Senate parentheses](#correction--senate-parentheses).
+
+Until this release, all 74,453 of those rows were labelled `delta`, on every track. The label asserted an arithmetic check that had never run on 52% of them. It has been split into the three names above, because a column that describes three different claims with one word is not a corroboration column, it is a reassurance.
+
+The check that *can* see a misread convention compares the line items to a witness outside the row — the total the committee printed. That is `approps reconcile`, and you should weigh a row's reconciliation standing at least as heavily as its tier.
+
+### Does it add up?
+
+Run `approps reconcile` to check every printed subtotal against the line items above it.
+
+| Track | Checkable totals | Tie exactly | Strict¹ |
+|---|---:|---:|---:|
+| house | 9,871 | 73.0% | 74.8% |
+| senate | 4,833 | 78.8% | 81.4% |
+| enacted | 1,138 | 59.1% | 60.3% |
+| **all** | **15,842** | **73.7%** | **75.7%** |
+
+¹ Excludes `overlapping_view` totals — advance-appropriation and forward-funding lines that re-aggregate rows already counted under another view, and so are not the sum of any contiguous block by construction.
+
+Roughly a quarter of printed totals do not currently reconcile. Most of that is House vision noise and the enacted explanatory statements' flattened hierarchy. **A total that does not reconcile is not proof its line items are wrong** — the reconciler recovers nesting from document order, and unusual table shapes defeat it. But a total that *does* reconcile is a strong, independent corroboration of every line item beneath it.
+
+### Correction — Senate parentheses
+
+Releases before this one stored **9,629 Senate amounts with the wrong sign**, across 3,970 rows.
+
+In a comparative statement, parentheses mark a **non-add memo** — a limitation, a transfer authority, an "of which" breakout. They are not the accounting convention for a negative; real negatives print an explicit minus (`-2,000`). The Senate parser applied the accounting reading, so `(By transfer from Disaster Relief)` shipped as −$24,000,000 and a bureau's gross `Appropriations` line shipped as −$8,776,051,000.
+
+Every one of those rows was marked `verified = true`, at what was then labelled tier `delta` — a label that, on the Senate track, meant only that the raw text `(24,000)` had been found in the HTML. Both gates were structurally blind to the defect, for the reasons above. It surfaced only when the line items were checked against the printed subtotals: Senate reconciliation was 65.1%, and rose to 78.8% once the signs were corrected.
+
+If you have a copy of an earlier release, re-download it, or filter `chamber == "senate" & committee_recommendation < 0` and re-check those rows against the source.
+
+### Breaking schema changes in this release
+
+Two columns were renamed, both because the old name asserted something that was not true of every row it covered. Values did not move.
+
+| Was | Now | Why |
+|---|---|---|
+| `verification_tier == "delta"` | `delta_arithmetic` / `string_match` / `verbatim_page` | One label for three different checks. 52% of `delta` rows were never delta-checked. Also added: `verification_method`, carrying the same value. |
+| `non_add_inferred` | `is_memo` | It named a conclusion about arithmetic ("does not add") that is false for 20% of the rows it flags. `is_memo` names what the row *is*; `approps reconcile`'s `memo_mode` names what the total *did* with it. |
 
 ### `column_layout` — whether the columns mean what they're named
 
 | Layout | Rows | Meaning |
 |---|---:|---|
-| `standard` | 108,570 | Normal shape: prior-year enacted / request / recommendation / two deltas. |
-| `category_split` | 297 | **`committee_recommendation` is correct; the other amount columns are mislabeled funding categories.** |
+| `standard` | 108,576 | Normal shape: prior-year enacted / request / recommendation / two deltas. |
+| `category_split` | 291 | **`committee_recommendation` is correct; the other amount columns are mislabeled funding categories.** |
 | `procurement_qty` | 185 | Defense procurement tables. The program name was lost and amounts are shifted. |
 
 See [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) for exactly what goes wrong in each and why the fix is deferred.
@@ -62,6 +113,22 @@ df = pd.read_csv(
     low_memory=False,
 )
 ```
+
+## Parentheses, and when a memo is actually added
+
+`(35,000)` in a comparative statement is **positive**. It is a memo — a limitation, a transfer authority, an "of which" breakout. Negatives print a minus sign.
+
+`is_memo` flags 11,562 such rows — parenthesized amounts, plus 3,166 House rows the vision non-add double-gate identified without any parentheses. It says what the row **is**, not whether it sums, because **whether a memo is summed is decided by the printed total, not by the parentheses.** In `CRPT-114srpt68`:
+
+```
+Operating expenses ...............................  134,488
+    (By transfer from Disaster Relief) ...........  (24,000)
+  Total, Office of Inspector General .............  158,488     <- 134,488 + 24,000
+```
+
+The transfer is added here. One line further down, `Total, title I` excludes that same 24,000 — the money was appropriated under Disaster Relief, and counting it twice would inflate the bill.
+
+Across the corpus, **1,099 printed totals close only when their memo is added in**, covering 2,350 flagged rows (20.3%). So blanket-filtering `is_memo` before summing will understate those account totals. `approps reconcile` resolves the question per total, by arithmetic, and records the answer as `memo_mode`.
 
 ## Amounts are in whole dollars
 

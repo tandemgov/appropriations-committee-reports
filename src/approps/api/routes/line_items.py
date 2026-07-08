@@ -6,7 +6,7 @@ from collections import defaultdict
 
 from fastapi import APIRouter, HTTPException, Query
 
-from approps.api.data import METRICS, filter_items, load_line_items
+from approps.api.data import METRICS, filter_items
 
 router = APIRouter(prefix="/api/line_items", tags=["line_items"])
 
@@ -14,11 +14,12 @@ router = APIRouter(prefix="/api/line_items", tags=["line_items"])
 _ITEM_FIELDS = (
     "report_id", "congress", "chamber", "fiscal_year", "subcommittee", "stage",
     "title_name", "department", "agency", "account", "account_inferred",
-    "non_add_inferred", "account_effective", "program", "line_item_text",
+    "is_memo", "account_effective", "program", "line_item_text",
     "prior_year_enacted", "budget_estimate", "committee_recommendation",
     "delta_vs_enacted", "delta_vs_estimate",
     "account_key", "account_key_title", "account_key_agency", "account_key_bureau", "designation",
-    "hierarchy_depth", "verified", "verification_tier", "column_layout", "extraction_method",
+    "hierarchy_depth", "verified", "verification_tier", "verification_method",
+    "column_layout", "extraction_method",
 )
 
 

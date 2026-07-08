@@ -215,3 +215,60 @@ some Defense tables have ALL-CAPS single-amount rows. Every variant tried lost a
 If this is revisited, the acceptance criterion is the one issue #4 used: re-extract all 16 prints
 and assert the **row set is unchanged** and every `raw_text` is unchanged, so only the intended
 field moves.
+
+---
+
+## 6. Senate parentheses were read as negatives — FIXED
+
+**Status:** **fixed.** The 88 Senate reports were re-extracted; the row set is unchanged (28,873),
+and every `raw_text` is unchanged — only the parsed sign moved.
+**Scope (was):** **9,629 amounts across 3,970 rows**, all `chamber = senate`. Senate rows with a
+negative `committee_recommendation` fell from 5,128 to 1,787; the remainder are genuine negatives.
+
+### What was wrong
+`parse_dollar` defaulted to `paren_negative=True` — the accounting convention, where `(35,000)`
+means −35,000. Appropriations comparative statements do not use that convention: parentheses mark a
+**non-add memo** (a limitation, a transfer authority, an "of which" breakout), and real negatives
+print an explicit minus (`-2,000`). `comparative_house.py` passed `paren_negative=False` for exactly
+this reason. `comparative_senate.py` took the default.
+
+So `(By transfer from Disaster Relief)` shipped as −$24,000,000, and a bureau's gross
+`Appropriations` line shipped as −$8,776,051,000.
+
+### Why every gate missed it
+All 5,128 affected rows were `verified = true` at what was then tier `delta`, the strongest tier — though on the Senate track that label named a check that had never run (fixed; the tier now reports the gate that actually passed, `string_match` here):
+
+* Senate `verified` is a **string match** of `raw_text` against the source HTML. The raw text
+  `(24,000)` is transcribed perfectly. Only the interpretation is wrong, and a string match cannot
+  see an interpretation.
+* The **delta identity** is invariant to a sign flip applied across a row's columns: negate
+  `recommendation`, `prior`, and `estimate` together and `rec − prior == delta_vs_enacted` still
+  holds.
+
+Both gates compare a row to itself. Neither can witness a misread convention.
+
+Two tests actively concealed it. `test_parenthesized_amounts` asserted
+`prior_year_enacted.value == -34_000_000` under the docstring *"Parenthesized amounts like (34,000)
+should parse as negative"* — the bug, written down as the specification. And
+`test_full_report_subtotal_arithmetic`, the one test named for the check that would have caught it,
+read its input from `/tmp/CRPT-118srpt83.htm`, returned silently when the file was absent (it always
+was), and asserted only row *counts* even when it ran.
+
+### How it was found, and what now prevents it
+`verification.reconcile` checks the line items against the subtotals the committee printed — an
+independent witness, outside the row. The Senate track is parsed deterministically and string-matches
+at ~100%, yet only 65.1% of its printed subtotals reconciled. Transcription-perfect digits whose sums
+do not close means the *interpretation* is wrong. Correcting the sign took Senate to 78.8%.
+
+Three things guard it now:
+
+1. `paren_negative` is a **required keyword** on `parse_dollar`. The convention is a property of the
+   source table, never of the token, and no caller may take it by default.
+2. `test_full_report_subtotal_arithmetic` reconciles the committed fixture and asserts a 100% strict
+   pass rate.
+3. `approps reconcile --fail-under` is a release gate over the shipped artifact.
+
+### Residual
+`is_memo` remains a *hypothesis*, not a fact: 2,350 flagged rows (20.3%) are added in by the
+printed total that encloses them. `reconcile` resolves this per total and reports `memo_mode`; the
+column itself is still named for the common case. See `DATA.md`.

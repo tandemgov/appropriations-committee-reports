@@ -110,7 +110,7 @@ def test_recovers_when_excluding_flagged_line_reconciles(monkeypatch):
     assert lines[0]["account_inferred"] == "Operations and Support"
     assert lines[1]["account_inferred"] == "Operations and Support"
     # the flagged non-add line is marked and NOT given the account label
-    assert lines[2].get("non_add_inferred") is True
+    assert lines[2].get("is_memo") is True
     assert "account_inferred" not in lines[2]
     # the subtotal row itself is untouched
     assert "account_inferred" not in lines[3]
@@ -129,7 +129,7 @@ def test_gate_rejects_when_exclusion_still_does_not_reconcile(monkeypatch):
 
     assert stats["blocks_recovered"] == 0
     assert all("account_inferred" not in ln for ln in lines)
-    assert all("non_add_inferred" not in ln for ln in lines)
+    assert all("is_memo" not in ln for ln in lines)
 
 
 def test_gate_rejects_when_gemini_flags_nothing(monkeypatch):

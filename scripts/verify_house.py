@@ -93,9 +93,11 @@ def main() -> None:
         if not checks:
             unverifiable += 1
             x["verified"] = False
+            x["verification_method"] = "none"
             continue
         ok = all(checks)
         x["verified"] = ok
+        x["verification_method"] = "delta_arithmetic" if ok else "none"
         if ok:
             passed += 1
         else:
