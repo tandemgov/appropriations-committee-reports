@@ -114,10 +114,10 @@ consistent column, or extract them with a layout-aware parser; then re-verify.
 
 ---
 
-## 4. Enacted-stage amounts are 1000x too large
+## 4. Enacted-stage amounts were 1000x too large — FIXED
 
-**Status:** **not flagged in the data — filter `stage == 'committee'`.** Fix pending.
-**Scope:** every `stage = enacted` row — 11,829 rows (10.8% of the dataset), 16 CPRT prints.
+**Status:** **fixed.** 4,922 amounts corrected; the 16 CPRT prints were re-extracted and the row set is unchanged (11,829).
+**Scope (was):** every `stage = enacted` row — 11,829 rows (10.8% of the dataset), 16 CPRT prints.
 
 ### What's wrong
 `comparative_enacted.py` sets `in_thousands = True` as a per-page default and only corrects it
@@ -155,9 +155,53 @@ delta gate cannot detect a uniform scale error, and needs pairing with a magnitu
 The committee track is correct. Senate comparative statements do carry the `[In thousands]`
 marker, and a raw `6,030` correctly becomes `6030000` (780 sampled amounts scaled, 0 unscaled).
 
-### Proper fix
-- Stop defaulting `in_thousands = True` per page in the enacted extractor. Default to `False`
-  for CPRT prints, or infer from a `$` sign / magnitude, requiring positive evidence to scale.
-- Re-extract the 16 affected CPRT prints and regenerate `data/output/`.
-- Regression-test `$5,250,000 -> 5_250_000` for the enacted parser.
-- Add a magnitude sanity check to verification so uniform scale errors are catchable at all.
+### What was done
+- `in_thousands` now defaults to `False` per page. Scaling requires positive evidence — a unit
+  header on the page. The failure mode of the old default was silent and 1000x; the failure mode
+  of this one is a visibly-too-small number.
+- **The unit header is spelled fourteen different ways** across these prints — `[In thousands of
+  dollars]`, `(Dollars in thousands)`, `[$ in thousands]`, `(Amounts in thousands)`,
+  `[Budget authority in thousands of dollars]`, … The old regex recognized only the "in thousands
+  of dollars" family. Defaulting to `True` had hidden that gap; flipping the default exposed it,
+  and unfixed it would have under-scaled the USDA and NRC tables by 1000x in the other direction.
+  `_THOUSANDS` now matches a bracketed span containing "thousand", anchored on the opening bracket
+  so `(6) Budget year dollars in thousands` and a bare `thousands);` cannot masquerade as headers.
+- Re-extracted all 16 CPRT prints. **Row set identical (11,829); every `raw_text` identical;
+  4,922 amounts divided by 1,000; 7,065 correctly left alone; zero other changes.**
+- Regression tests in `tests/test_enacted.py` pin every real header spelling, the lookalikes that
+  must not match, and `$5,051 -> 5_051_000` / `32,386,831,000 -> 32_386_831_000`.
+- Added `approps.verification.magnitude`, run by `approps output`: no line item may exceed a $3T
+  plausibility ceiling. It found 11 rows on the broken data and finds 0 now. It is a coarse
+  backstop — blind to a 1000x rescale of a small line — and the module documents two smarter
+  checks that were tried and rejected for being confounded.
+
+---
+
+## 5. Two-column table detection is keyed to one header spelling (latent)
+
+**Status:** latent hazard, not a live defect. Documented so it is not "fixed" by accident.
+**Scope:** `comparative_enacted.py`, the Defense "Budget Request | Final Bill" adjustment tables.
+
+Issue #4 broadened the *units* regex (`_THOUSANDS`) to recognize all fourteen header spellings.
+The *table-shape* logic — two-column detection and account-heading context — was deliberately left
+keyed to the original narrow phrase, `_THOUSANDS_TABLE_SHAPE`, so that the units fix provably
+changed units and nothing else.
+
+Broadening the shape detection is not a one-line change. Both the Defense adjustment tables and the
+NRC tables announce a "Final Bill" column, but:
+
+- Defense rows carry **two** amounts (budget request, final bill) and ALL-CAPS labels. The
+  two-column path uses a `_caps_fraction >= 0.7` gate to skip the lowercase
+  `Program increase—…` rows, which are *deltas* and must not pollute absolute amounts.
+- NRC rows (`(Dollars in thousands)` / `Account Final Bill`) carry **one** amount and mixed-case
+  labels. Routed down the two-column path, the caps gate silently drops all of them.
+
+The column name cannot distinguish them: pdfplumber renders Defense's stacked two-line
+`Budget`/`Request` header as interleaved characters — literally `R B e u q d u g e e s t t Final
+Bill`. Structural discrimination (does a nearby data row carry two amounts?) also fails, because
+some Defense tables have ALL-CAPS single-amount rows. Every variant tried lost a different set of
+16-38 rows.
+
+If this is revisited, the acceptance criterion is the one issue #4 used: re-extract all 16 prints
+and assert the **row set is unchanged** and every `raw_text` is unchanged, so only the intended
+field moves.

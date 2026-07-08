@@ -702,6 +702,21 @@ def output(output_format: str) -> None:
     if inferred_total:
         click.echo(f"  account_inferred set on {inferred_total} rows (arithmetic-verified subtotal blocks)")
 
+    # Arithmetic verification is scale-invariant and cannot see a units bug, so check absolute
+    # magnitude before the numbers reach a CSV. See approps.verification.magnitude.
+    from approps.verification.magnitude import oversized_line_items
+
+    if oversized := oversized_line_items(all_comp):
+        click.secho(
+            f"  WARNING: {len(oversized)} line items exceed the plausibility ceiling "
+            f"— likely a units bug, NOT a verification failure:",
+            fg="red",
+        )
+        for finding in oversized[:5]:
+            click.secho(f"    {finding}", fg="red")
+        if len(oversized) > 5:
+            click.secho(f"    ... and {len(oversized) - 5} more", fg="red")
+
     if output_format == "csv":
         if all_comp:
             write_comparative_csv(all_comp, inline_tables=all_inline)

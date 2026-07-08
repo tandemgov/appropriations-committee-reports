@@ -60,7 +60,7 @@ The comparative statement is a dense, fixed-width table typically spanning 800-1
 4. Committee recommendation vs. prior year (delta)
 5. Committee recommendation vs. budget estimate (delta)
 
-All values are in thousands of dollars.
+The source tables print these columns in thousands of dollars. The extracted `value` is normalized to **whole dollars** (the parser applies the ×1,000 itself), and `in_thousands` records only how the source presented it. See `docs/DATA_DICTIONARY.md`.
 
 **Method:** Deterministic fixed-width positional parsing.
 

@@ -4,8 +4,6 @@ Line-item appropriations data extracted from congressional committee reports, FY
 
 Download it from the [latest release](https://github.com/tandemgov/appropriations-committee-reports/releases/latest). Everything here is CC0 — public domain, no attribution required (though it's appreciated).
 
-> **Known defect, `stage = enacted` (11,829 rows), unfixed as of this writing.** Amounts on enacted rows are **1000× too large**. The explanatory-statement prints publish whole dollars and carry no `[In thousands]` marker, but the extractor defaults to treating them as thousands and multiplies by 1,000. Delta arithmetic is scale-invariant, so these rows are still marked `verified = True` — the verification gate cannot catch a uniform scale error. **Filter to `stage == "committee"` until this is fixed.** Details in [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md#4-enacted-stage-amounts-are-1000x-too-large).
-
 ## Read this before you use a number
 
 **Not every row is verified.** 26% of rows have no independent corroboration, and a few hundred have values sitting in the wrong columns. Both conditions are flagged in the data. If you are going to cite a dollar figure, filter first:
@@ -15,12 +13,8 @@ import pandas as pd
 
 df = pd.read_parquet("comparative_statements.parquet")
 
-# Corroborated amount, standard column layout, unaffected stage: 68,600 rows (62.9%).
-strict = df[
-    (df.stage == "committee")            # exclude the 1000x-scaled enacted rows (see above)
-    & (df.column_layout == "standard")
-    & (df.verification_tier != "none")
-]
+# The subset with a corroborated amount in a standard column layout: 80,429 rows (73.8%).
+strict = df[(df.column_layout == "standard") & (df.verification_tier != "none")]
 ```
 
 That is the honest default. The other 26% are not junk — they are mostly correct — but nothing in the document independently confirms them, so they should not be quoted without checking the source PDF.
