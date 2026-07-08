@@ -198,6 +198,73 @@ class TestSenateComparative:
         assert not failures, "subtotals do not reconcile:\n  " + "\n  ".join(failures)
         assert result.strict_pass_rate == 1.0
 
+    def test_recovers_rows_whose_dot_leader_was_squeezed_out(self):
+        """A long label leaves no room for the ``...`` leader, yet the numbers still print.
+
+        The original reader keyed on a three-dot leader to split label from numbers, so a row
+        whose label consumed the whole leader field -- printing one or two dots, or none --
+        matched no branch and was dropped, deleting a real line item. Here the column edges
+        adjudicate instead: the long-labelled program is recovered, and the subtotal only
+        reconciles because it is (1,050 + 2,100 + 3,150 = 6,300; without the middle row the
+        block would sum to 3,150 and fail). A wrapped-label total that spills its tail onto
+        the next line is stitched back into a single row rather than dropped or misread as a
+        header.
+        """
+        def cell(value: str) -> str:
+            return f"{value:>18}"
+
+        def row(label: str, values: list[str], *, leader: bool = True) -> str:
+            if leader and len(label) < 60:
+                left = label + "." * (60 - len(label))
+            else:
+                left = label if len(label) >= 60 else label + " " * (60 - len(label))
+            return left[:60] + "".join(cell(v) for v in values)
+
+        text = "\n".join([
+            "          COMPARATIVE STATEMENT OF NEW BUDGET (AUTHORITY)",
+            "                   [In thousands of dollars]",
+            "-" * 150,
+            "     Item          2023 enacted   Budget estimate   Committee rec   vs enacted   vs estimate",
+            "-" * 150,
+            "-" * 150,
+            "        TITLE I--TEST DEPARTMENT",
+            "Test Account:",
+            row("    Short program A", ["1,000", "1,100", "1,050", "+50", "-50"]),
+            row("    Short program B", ["2,000", "2,200", "2,100", "+100", "-100"]),
+            row(
+                "    A long program with no dot-leader room",
+                ["3,000", "3,300", "3,150", "+150", "-150"],
+                leader=False,
+            ),
+            "-" * 150,
+            row("      Subtotal", ["6,000", "6,600", "6,300", "+300", "-300"]),
+            row(
+                "    Total, some very long account name appropriated in",
+                ["6,000", "6,600", "6,300", "+300", "-300"],
+                leader=False,
+            ),
+            "     this bill" + "." * 40,
+        ])
+
+        lines = extract_senate_comparative(
+            text=text, report_id="TEST", congress=118, fiscal_year=2024
+        )
+        by_text = {ln.line_item_text: ln for ln in lines}
+
+        long_row = by_text["A long program with no dot-leader room"]
+        assert long_row.committee_recommendation is not None
+        assert long_row.committee_recommendation.value == 3_150_000
+
+        # The wrapped tail is stitched onto the label, not emitted as its own "this bill" row.
+        assert "Total, some very long account name appropriated in this bill" in by_text
+        assert not any("this bill" == ln.line_item_text for ln in lines)
+
+        result = reconcile_report("TEST", [_row(ln) for ln in lines])
+        subtotal = next(c for c in result.checks if c.label == "Subtotal")
+        assert subtotal.status is Status.OK
+        assert subtotal.primary.computed == 6_300_000
+        assert len(subtotal.child_indices) == 3
+
     def test_the_wildlife_block_reproduces_its_printed_subtotal(self):
         """The concrete arithmetic, spelled out: 149,938 + 59,247 = 209,185."""
         text = (FIXTURES / "senate_comparative_stmt.txt").read_text()
