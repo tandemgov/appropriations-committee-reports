@@ -4,6 +4,8 @@ Line-item appropriations data extracted from congressional committee reports, FY
 
 Download it from the [latest release](https://github.com/tandemgov/appropriations-committee-reports/releases/latest). Everything here is CC0 — public domain, no attribution required (though it's appreciated).
 
+> **Known defect, `stage = enacted` (11,829 rows), unfixed as of this writing.** Amounts on enacted rows are **1000× too large**. The explanatory-statement prints publish whole dollars and carry no `[In thousands]` marker, but the extractor defaults to treating them as thousands and multiplies by 1,000. Delta arithmetic is scale-invariant, so these rows are still marked `verified = True` — the verification gate cannot catch a uniform scale error. **Filter to `stage == "committee"` until this is fixed.** Details in [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md#4-enacted-stage-amounts-are-1000x-too-large).
+
 ## Read this before you use a number
 
 **Not every row is verified.** 26% of rows have no independent corroboration, and a few hundred have values sitting in the wrong columns. Both conditions are flagged in the data. If you are going to cite a dollar figure, filter first:
@@ -13,8 +15,12 @@ import pandas as pd
 
 df = pd.read_parquet("comparative_statements.parquet")
 
-# The subset with a corroborated amount in a standard column layout: 80,429 rows (73.8%).
-strict = df[(df.column_layout == "standard") & (df.verification_tier != "none")]
+# Corroborated amount, standard column layout, unaffected stage: 68,600 rows (62.9%).
+strict = df[
+    (df.stage == "committee")            # exclude the 1000x-scaled enacted rows (see above)
+    & (df.column_layout == "standard")
+    & (df.verification_tier != "none")
+]
 ```
 
 That is the honest default. The other 26% are not junk — they are mostly correct — but nothing in the document independently confirms them, so they should not be quoted without checking the source PDF.
@@ -63,9 +69,13 @@ df = pd.read_csv(
 )
 ```
 
-## Amounts are in thousands
+## Amounts are in whole dollars
 
-Every row in this release carries `in_thousands = True` — comparative statements are conventionally published `[In thousands of dollars]`. A `committee_recommendation` of `649` means **$649,000**. Do not skip this. The column is retained per-row rather than assumed, so check it rather than hardcoding the multiplier.
+Every amount is stored in **whole dollars**. The source convention is already applied: a comparative statement printed `[In thousands of dollars]` showing `6,030` is stored as `6030000`. Do not multiply.
+
+`in_thousands` is a provenance flag recording how the *source table* was presented. It does not describe the stored value. Ignore it unless you are auditing extraction.
+
+Amounts may be negative (rescissions, offsets).
 
 `real_factor_2024` is a CPI-U deflator: multiply a nominal amount by it to get constant FY2024 dollars.
 

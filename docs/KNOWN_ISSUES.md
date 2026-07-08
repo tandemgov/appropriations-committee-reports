@@ -111,3 +111,53 @@ then check for the column inconsistency).
 ### Proper fix (this issue)
 Detect supplemental/emergency blocks as a section and normalize the amount into a single
 consistent column, or extract them with a layout-aware parser; then re-verify.
+
+---
+
+## 4. Enacted-stage amounts are 1000x too large
+
+**Status:** **not flagged in the data — filter `stage == 'committee'`.** Fix pending.
+**Scope:** every `stage = enacted` row — 11,829 rows (10.8% of the dataset), 16 CPRT prints.
+
+### What's wrong
+`comparative_enacted.py` sets `in_thousands = True` as a per-page default and only corrects it
+when a `[In thousands of dollars]`-style marker line is matched:
+
+```python
+in_thousands = True                            # per-page default
+...
+if _THOUSANDS.search(s) and len(s) < 45:
+    in_thousands = "thousand" in s.lower()     # only runs when a marker is found
+```
+
+The CPRT explanatory-statement prints **publish whole dollars and carry no such marker** (0
+matches for "in thousands" across the first 40 pages of `CPRT-114HPRT98155`,
+`CPRT-114HPRT98369`, `CPRT-115HPRT25289`, `CPRT-115HPRT29456`). The default therefore stands and
+`_to_dollars` multiplies by 1,000.
+
+| Source `raw_text` | Stored `value` | Should be |
+|---|---|---|
+| `$5,250,000` | `5,250,000,000` | `5,250,000` |
+| `$615,847,000` | `615,847,000,000` | `615,847,000` |
+| `32,386,831,000` (division total) | `32,386,831,000,000` | `32,386,831,000` |
+
+The last implies a $32.4 *trillion* division total — roughly 5x the entire federal budget.
+
+### Why verification didn't catch it
+**Delta arithmetic is scale-invariant.** Multiply `prior`, `estimate`, and `recommendation` by
+the same constant and `recommendation - prior == delta_vs_enacted` still holds. So every one of
+these rows is `verified = True` at `verification_tier = delta` — the *strongest* tier — and
+passes the `column_layout = 'standard'` filter. This is a structural gap, not a one-off: the
+delta gate cannot detect a uniform scale error, and needs pairing with a magnitude sanity check
+(no single line item should exceed total discretionary budget authority for its year).
+
+### Not affected
+The committee track is correct. Senate comparative statements do carry the `[In thousands]`
+marker, and a raw `6,030` correctly becomes `6030000` (780 sampled amounts scaled, 0 unscaled).
+
+### Proper fix
+- Stop defaulting `in_thousands = True` per page in the enacted extractor. Default to `False`
+  for CPRT prints, or infer from a `$` sign / magnitude, requiring positive evidence to scale.
+- Re-extract the 16 affected CPRT prints and regenerate `data/output/`.
+- Regression-test `$5,250,000 -> 5_250_000` for the enacted parser.
+- Add a magnitude sanity check to verification so uniform scale errors are catchable at all.
