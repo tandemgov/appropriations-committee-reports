@@ -54,11 +54,13 @@ Run `approps reconcile` to check every printed subtotal against the line items a
 | Track | Checkable totals | Tie exactly | Strict¹ |
 |---|---:|---:|---:|
 | house | 9,871 | 73.0% | 74.8% |
-| senate | 4,833 | 78.8% | 81.4% |
+| senate | 5,198 | 77.7% | 80.7% |
 | enacted | 1,138 | 59.1% | 60.3% |
-| **all** | **15,842** | **73.7%** | **75.7%** |
+| **all** | **16,207** | **73.5%** | **75.7%** |
 
 ¹ Excludes `overlapping_view` totals — advance-appropriation and forward-funding lines that re-aggregate rows already counted under another view, and so are not the sum of any contiguous block by construction.
+
+The Senate checkable count rose (from 4,833) when the reader was taught to recover rows whose dot leader was squeezed out by a long label — 682 line items across 72 of 87 reports, 363 of them `Total` rows the reconciler had been blind to. The strict rate dipped slightly (from 81.4%) because those newly-visible totals are disproportionately cross-block rollups, the hardest kind to reconcile: the corpus now *measures* structure it previously dropped.
 
 Roughly a quarter of printed totals do not currently reconcile. Most of that is House vision noise and the enacted explanatory statements' flattened hierarchy. **A total that does not reconcile is not proof its line items are wrong** — the reconciler recovers nesting from document order, and unusual table shapes defeat it. But a total that *does* reconcile is a strong, independent corroboration of every line item beneath it.
 
