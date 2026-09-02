@@ -1,6 +1,6 @@
 # The dataset
 
-Line-item appropriations data extracted from congressional committee reports, FY2016–FY2027: **109,052 line items** across **246 reports**, both chambers, committee and enacted stages.
+Line-item appropriations data extracted from congressional committee reports, FY2016–FY2027: **109,221 line items** across **246 reports**, both chambers, committee and enacted stages.
 
 Download it from the [latest release](https://github.com/tandemgov/appropriations-committee-reports/releases/latest). Everything here is CC0 — public domain, no attribution required (though it's appreciated).
 
@@ -26,11 +26,11 @@ Each row names the gate that actually checked it. `verification_method` carries 
 | Tier | Rows | What was checked | Can it see a misread convention? |
 |---|---:|---|---|
 | `delta_arithmetic` | 33,391 (30.6%) | House vision rows: `recommendation − prior = delta_vs_enacted`, and likewise for the estimate. | **No** — invariant to a sign flip across the row's columns. |
-| `string_match` | 26,792 (24.6%) | Senate rows: the amount's *raw text* appears in the source HTML. | **No** — proves transcription, says nothing about parsing. |
+| `string_match` | 27,472 (25.2%) | Senate rows: the amount's *raw text* appears in the source HTML. | **No** — proves transcription, says nothing about parsing. |
 | `verbatim_page` | 14,270 (13.1%) | Enacted statements and House typeset prints: the amount appears verbatim on its source PDF page. | **No** — same reason. |
 | `block` | 5,616 (5.1%) | Member of a subtotal block whose amounts sum exactly. | **Yes** — a witness outside the row. |
 | `inline` | 491 (0.5%) | Amount + account restated in the report's string-verified prose. | Partly. |
-| `none` | 28,492 (26.1%) | **No witness at all.** Treat as unconfirmed. | — |
+| `none` | 27,981 (25.6%) | **No witness at all.** Treat as unconfirmed. | — |
 
 The `none` rows are overwhelmingly House. The House comparative statements are *scanned images* in the source PDFs and are read by a vision model; the Senate reports are born-digital HTML and are parsed deterministically. That asymmetry is the single biggest driver of data quality here.
 
@@ -43,7 +43,7 @@ The `none` rows are overwhelmingly House. The House comparative statements are *
 
 This is not hypothetical — it shipped, on 9,629 amounts, every one of them `verified`. See [Correction — Senate parentheses](#correction--senate-parentheses).
 
-Until this release, all 74,453 of those rows were labelled `delta`, on every track. The label asserted an arithmetic check that had never run on 52% of them. It has been split into the three names above, because a column that describes three different claims with one word is not a corroboration column, it is a reassurance.
+Until this release, all 75,133 of those rows were labelled `delta`, on every track. The label asserted an arithmetic check that had never run on 52% of them. It has been split into the three names above, because a column that describes three different claims with one word is not a corroboration column, it is a reassurance.
 
 The check that *can* see a misread convention compares the line items to a witness outside the row — the total the committee printed. That is `approps reconcile`, and you should weigh a row's reconciliation standing at least as heavily as its tier.
 
@@ -97,7 +97,7 @@ See [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) for exactly what goes wrong i
 
 | File | Rows | Description |
 |---|---:|---|
-| `comparative_statements.{csv,parquet}` | 109,052 | The main table. One row per line item. |
+| `comparative_statements.{csv,parquet}` | 109,221 | The main table. One row per line item. |
 | `inline_funding_tables.{csv,parquet}` | 13,853 | Narrative funding tables from report prose. String-verified against source text. |
 | `account_authority.{csv,parquet}` | 732 | Federal account reference used by the crosswalk. |
 | `SHA256SUMS` | — | Checksums for all of the above. |
@@ -145,9 +145,9 @@ Amounts may be negative (rescissions, offsets).
 ## Coverage
 
 - **Fiscal years:** 2016–2027
-- **Chambers:** House 80,179 rows · Senate 28,873 rows
-- **Stages:** `committee` 97,223 · `enacted` 11,829
-- **Accounts:** `account_key` resolves to a canonical federal account symbol on 27,469 rows (25.2%). It is populated only on conservative matches — fuzzy hits are recorded in `account_match` but deliberately withheld from the key.
+- **Chambers:** House 80,179 rows · Senate 29,042 rows
+- **Stages:** `committee` 97,392 · `enacted` 11,829
+- **Accounts:** `account_key` resolves to a canonical federal account symbol on 27,503 rows (25.2%). It is populated only on conservative matches — fuzzy hits are recorded in `account_match` but deliberately withheld from the key.
 
 Reports per year vary because omnibus years produce fewer standalone committee reports. **FY2021, FY2023, and FY2027 carry no Senate reports at all**, and FY2022 has only 3 — so any House-vs-Senate comparison must be scoped to years where both chambers reported. FY2027 is simply incomplete: the Senate had not marked up when this was built. [`docs/COVERAGE.md`](docs/COVERAGE.md) has the full matrix.
 

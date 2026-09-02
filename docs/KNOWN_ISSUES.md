@@ -220,7 +220,8 @@ field moves.
 
 ## 6. Senate parentheses were read as negatives — FIXED
 
-**Status:** **fixed.** The 88 Senate reports were re-extracted; the row set is unchanged (28,873),
+**Status:** **fixed.** The 88 Senate reports were re-extracted; the row set was unchanged by this fix
+(28,873 at the time; 29,042 after the later dot-leader recovery — see the CHANGELOG),
 and every `raw_text` is unchanged — only the parsed sign moved.
 **Scope (was):** **9,629 amounts across 3,970 rows**, all `chamber = senate`. Senate rows with a
 negative `committee_recommendation` fell from 5,128 to 1,787; the remainder are genuine negatives.

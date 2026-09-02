@@ -201,9 +201,9 @@ The **strict pass rate** excludes `overlapping_view`, and is the honest denomina
 | Track | Checkable | Tie exactly | Strict |
 |---|---:|---:|---:|
 | house | 9,871 | 73.0% | 74.8% |
-| senate | 4,833 | 78.8% | 81.4% |
+| senate | 5,198 | 77.7% | 80.7% |
 | enacted | 1,138 | 59.1% | 60.3% |
-| **all** | **15,842** | **73.7%** | **75.7%** |
+| **all** | **16,207** | **73.5%** | **75.7%** |
 
 A total that reconciles corroborates every line item beneath it. A total that does *not* reconcile is a review item, not a proven error — the reconciler infers nesting, and unusual table shapes defeat it.
 

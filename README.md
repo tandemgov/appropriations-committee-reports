@@ -6,7 +6,7 @@ Extract line-item appropriations data from Congressional committee reports into 
 
 Congressional appropriations data is locked inside committee report PDFs and HTML documents. This tool extracts it into structured CSV/JSON, enabling longitudinal analysis of federal spending decisions.
 
-> **Just want the data?** Download it from the [latest release](https://github.com/tandemgov/appropriations-committee-reports/releases/latest) — 109,052 line items, FY2016–FY2027, CC0. **Read [DATA.md](DATA.md) first:** 26% of rows carry no independent corroboration and are flagged as such, so filter before you cite a number.
+> **Just want the data?** Download it from the [latest release](https://github.com/tandemgov/appropriations-committee-reports/releases/latest) — 109,221 line items, FY2016–FY2027, CC0. **Read [DATA.md](DATA.md) first:** 26% of rows carry no independent corroboration and are flagged as such, so filter before you cite a number.
 
 **Extracted data includes:**
 - Comparative statements of new budget authority (the dense multi-page tables at the back of each report showing every line item with prior year enacted, budget estimate, and committee recommendation)
@@ -166,11 +166,11 @@ This gate found a sign defect that had shipped in every prior release, on 9,629 
 
 ## Current results
 
-**246 report-stages, 109,052 comparative line items (74,453 passing a primary gate), 13,853 inline funding records**, spanning committee (both chambers) and enacted stages, FY2016–FY2027. Full breakdown by stage × chamber × fiscal year in **[docs/COVERAGE.md](docs/COVERAGE.md)**.
+**246 report-stages, 109,221 comparative line items (75,133 passing a primary gate), 13,853 inline funding records**, spanning committee (both chambers) and enacted stages, FY2016–FY2027. Full breakdown by stage × chamber × fiscal year in **[docs/COVERAGE.md](docs/COVERAGE.md)**.
 
 | Stage | Reports | Rows | Primary gate | Rows passing it | Printed totals that reconcile¹ |
 |---|---:|---:|---|---:|---:|
-| Senate committee (HTML text) | 87 | 28,873 | `string_match` | 26,792 | 81.4% |
+| Senate committee (HTML text) | 87 | 29,042 | `string_match` | 27,472 | 80.7% |
 | House committee (vision) | 143 | 65,909 | `delta_arithmetic` | 33,391 | 74.8% |
 | House committee (typeset text) | — | 2,441 | `verbatim_page` | 2,441 | — |
 | Enacted (House CPRT explanatory statements) | 16 | 11,829 | `verbatim_page` | 11,829 | 60.3% |
