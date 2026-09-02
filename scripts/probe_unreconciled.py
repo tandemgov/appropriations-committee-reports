@@ -1,10 +1,10 @@
-"""Re-run the issue #2 archetype probe on `unreconciled` totals.
+"""Archetype probe over `unreconciled` totals — do the two cheap explanations hold?
 
-Reproduces the two cheap explanations the issue tested, now that the 682 dropped Senate rows are back in the corpus:
+Both were measured before the Senate dot-leader recovery and are re-measurable after it:
   A. the miss exactly equals an EARLIER printed total in the same report
      (a double-count, or a rollup the reconciler failed to collapse)
   B. the miss exactly equals a SINGLE nearby leaf (block boundary off by one)
-Anything else is unexplained -- the residual the issue calls "the real work".
+Anything else is unexplained. See DATA.md, "Does it add up?", for the standing limitation.
 """
 
 from __future__ import annotations
