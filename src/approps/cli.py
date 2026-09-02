@@ -22,11 +22,7 @@ _INTERMEDIATE_SUFFIXES = ("_nemotron", "_hybrid")
 
 def _primary_json_files(root: Path) -> list[Path]:
     """Extracted primary artifacts only — excludes intermediate vision passes."""
-    return [
-        p
-        for p in root.rglob("*.json")
-        if not p.stem.endswith(_INTERMEDIATE_SUFFIXES)
-    ]
+    return [p for p in root.rglob("*.json") if not p.stem.endswith(_INTERMEDIATE_SUFFIXES)]
 
 
 def _setup_logging(verbose: bool) -> None:
@@ -38,7 +34,9 @@ def _setup_logging(verbose: bool) -> None:
     )
 
 
-def _filter_reports(reports, chamber: str | None, fiscal_year: int | None, stage: str | None = None):
+def _filter_reports(
+    reports, chamber: str | None, fiscal_year: int | None, stage: str | None = None
+):
     """Narrow a list of ReportMetadata by chamber, fiscal year, and/or stage.
 
     Lets the catalog-driven commands target one track (e.g. Senate FY2024, or the enacted
@@ -96,7 +94,9 @@ def discover(min_congress: int, max_congress: int) -> None:
 @cli.command()
 @click.option("--package-id", "-p", help="Download a specific report by package ID")
 @click.option("--all", "fetch_all", is_flag=True, help="Download all reports in the catalog")
-@click.option("--chamber", "-c", type=click.Choice(["house", "senate"]), help="Limit to one chamber")
+@click.option(
+    "--chamber", "-c", type=click.Choice(["house", "senate"]), help="Limit to one chamber"
+)
 @click.option("--fiscal-year", "--fy", type=int, default=None, help="Limit to one fiscal year")
 @click.option(
     "--stage",
@@ -149,7 +149,9 @@ def download(
 @cli.command()
 @click.option("--package-id", "-p", help="Extract a specific report")
 @click.option("--all", "extract_all", is_flag=True, help="Extract all downloaded reports")
-@click.option("--chamber", "-c", type=click.Choice(["house", "senate"]), help="Limit to one chamber")
+@click.option(
+    "--chamber", "-c", type=click.Choice(["house", "senate"]), help="Limit to one chamber"
+)
 @click.option("--fiscal-year", "--fy", type=int, default=None, help="Limit to one fiscal year")
 @click.option(
     "--stage",
@@ -255,7 +257,9 @@ def extract_file(
         )
         data_count = sum(1 for ln in comp_lines if not ln.is_subtotal)
         sub_count = sum(1 for ln in comp_lines if ln.is_subtotal)
-        click.echo(f"  Comparative: {len(comp_lines)} lines ({data_count} data, {sub_count} subtotals)")
+        click.echo(
+            f"  Comparative: {len(comp_lines)} lines ({data_count} data, {sub_count} subtotals)"
+        )
     else:
         click.echo("  Comparative: skipped (House PDF extraction requires vision model)")
 
@@ -319,16 +323,22 @@ def extract_house_pdf(
 
     if is_born_digital_house_pdf(path):
         lines = extract_house_text(
-            pdf_path=path, report_id=rid, congress=congress,
-            fiscal_year=fiscal_year, subcommittee=subcommittee,
+            pdf_path=path,
+            report_id=rid,
+            congress=congress,
+            fiscal_year=fiscal_year,
+            subcommittee=subcommittee,
         )
         click.echo(f"Born-digital text print: {len(lines)} comparative lines")
     else:
         from approps.extraction.comparative_house import extract_house_comparative
 
         lines = extract_house_comparative(
-            pdf_path=path, report_id=rid, congress=congress,
-            fiscal_year=fiscal_year, subcommittee=subcommittee,
+            pdf_path=path,
+            report_id=rid,
+            congress=congress,
+            fiscal_year=fiscal_year,
+            subcommittee=subcommittee,
         )
         click.echo(f"Image-based print (vision): {len(lines)} comparative lines")
 
@@ -396,13 +406,16 @@ def _extract_report(report, extract_type, raw_dir, extracted_dir, chamber_cls):
             # guarding: an image-only PDF extracts no text and returns 0, as before.
             if not tables and report.chamber == chamber_cls.SENATE:
                 pdf_path = (
-                    raw_dir / str(report.congress) / report.chamber.value
+                    raw_dir
+                    / str(report.congress)
+                    / report.chamber.value
                     / f"{report.package_id}.pdf"
                 )
                 if pdf_path.exists():
                     from approps.extraction.inline_tables import (
                         extract_inline_tables_from_pdf,
                     )
+
                     tables = extract_inline_tables_from_pdf(
                         pdf_path=pdf_path,
                         report_id=report.package_id,
@@ -435,10 +448,7 @@ def _extract_report(report, extract_type, raw_dir, extracted_dir, chamber_cls):
                 click.echo(f"  Senate comparative extraction failed: {e}", err=True)
         else:
             pdf_path = (
-                raw_dir
-                / str(report.congress)
-                / report.chamber.value
-                / f"{report.package_id}.pdf"
+                raw_dir / str(report.congress) / report.chamber.value / f"{report.package_id}.pdf"
             )
             if pdf_path.exists():
                 try:
@@ -450,10 +460,13 @@ def _extract_report(report, extract_type, raw_dir, extracted_dir, chamber_cls):
                         extract_house_text,
                         is_born_digital_house_pdf,
                     )
+
                     if is_born_digital_house_pdf(pdf_path):
                         lines = extract_house_text(
-                            pdf_path=pdf_path, report_id=report.package_id,
-                            congress=report.congress, fiscal_year=report.fiscal_year,
+                            pdf_path=pdf_path,
+                            report_id=report.package_id,
+                            congress=report.congress,
+                            fiscal_year=report.fiscal_year,
                             subcommittee=report.subcommittee,
                         )
                         label = "House PDF/Text"
@@ -462,17 +475,23 @@ def _extract_report(report, extract_type, raw_dir, extracted_dir, chamber_cls):
                     # single-model vision path (gemini/anthropic/openai-compat).
                     elif VISION_BACKEND == "hybrid":
                         from approps.extraction.hybrid import extract_house_hybrid
+
                         lines, _ = extract_house_hybrid(
-                            pdf_path=pdf_path, report_id=report.package_id,
-                            congress=report.congress, fiscal_year=report.fiscal_year,
+                            pdf_path=pdf_path,
+                            report_id=report.package_id,
+                            congress=report.congress,
+                            fiscal_year=report.fiscal_year,
                             subcommittee=report.subcommittee,
                         )
                         label = "House PDF/Hybrid"
                     elif VISION_BACKEND == "nemotron":
                         from approps.extraction.nemotron_parse import extract_house_nemotron
+
                         lines, _ = extract_house_nemotron(
-                            pdf_path=pdf_path, report_id=report.package_id,
-                            congress=report.congress, fiscal_year=report.fiscal_year,
+                            pdf_path=pdf_path,
+                            report_id=report.package_id,
+                            congress=report.congress,
+                            fiscal_year=report.fiscal_year,
                             subcommittee=report.subcommittee,
                         )
                         label = "House PDF/Nemotron"
@@ -490,9 +509,7 @@ def _extract_report(report, extract_type, raw_dir, extracted_dir, chamber_cls):
                 except Exception as e:
                     click.echo(f"  House PDF extraction failed: {e}", err=True)
             else:
-                click.echo(
-                    f"  PDF not downloaded. Run 'approps download -p {report.package_id}'."
-                )
+                click.echo(f"  PDF not downloaded. Run 'approps download -p {report.package_id}'.")
 
     # Save extracted data
     out_dir = extracted_dir / str(report.congress) / report.chamber.value
@@ -539,7 +556,9 @@ def _extract_enacted_report(report, raw_dir, extracted_dir) -> None:
 @cli.command()
 @click.option("--package-id", "-p", help="Verify a specific report's extraction")
 @click.option("--all", "verify_all", is_flag=True, help="Verify all extracted reports")
-@click.option("--chamber", "-c", type=click.Choice(["house", "senate"]), help="Limit to one chamber")
+@click.option(
+    "--chamber", "-c", type=click.Choice(["house", "senate"]), help="Limit to one chamber"
+)
 @click.option("--fiscal-year", "--fy", type=int, default=None, help="Limit to one fiscal year")
 @click.option(
     "--dry-run",
@@ -717,7 +736,9 @@ def output(output_format: str) -> None:
 
     click.echo(f"Loaded {len(all_comp)} comparative lines, {len(all_inline)} inline tables")
     if inferred_total:
-        click.echo(f"  account_inferred set on {inferred_total} rows (arithmetic-verified subtotal blocks)")
+        click.echo(
+            f"  account_inferred set on {inferred_total} rows (arithmetic-verified subtotal blocks)"
+        )
 
     # Arithmetic verification is scale-invariant and cannot see a units bug, so check absolute
     # magnitude before the numbers reach a CSV. See approps.verification.magnitude.
@@ -734,6 +755,18 @@ def output(output_format: str) -> None:
         if len(oversized) > 5:
             click.secho(f"    ... and {len(oversized) - 5} more", fg="red")
 
+    # A per-row gate cannot see a gate that never ran: re-extraction clears verify's flags.
+    from approps.verification.coverage import underverified_tracks
+
+    if underverified := underverified_tracks(all_comp):
+        click.secho(
+            "  WARNING: a track's verified coverage collapsed "
+            "— re-run `approps verify --all` before publishing:",
+            fg="red",
+        )
+        for finding in underverified:
+            click.secho(f"    {finding}", fg="red")
+
     if output_format == "csv":
         if all_comp:
             write_comparative_csv(all_comp, inline_tables=all_inline)
@@ -743,10 +776,15 @@ def output(output_format: str) -> None:
     else:
         out_path = OUTPUT_DIR / "all_data.json"
         OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-        out_path.write_text(json_mod.dumps({
-            "comparative_lines": [ln.model_dump(mode="json") for ln in all_comp],
-            "inline_tables": [t.model_dump(mode="json") for t in all_inline],
-        }, indent=2))
+        out_path.write_text(
+            json_mod.dumps(
+                {
+                    "comparative_lines": [ln.model_dump(mode="json") for ln in all_comp],
+                    "inline_tables": [t.model_dump(mode="json") for t in all_inline],
+                },
+                indent=2,
+            )
+        )
         click.echo(f"JSON output written to {out_path}")
 
 
@@ -784,7 +822,9 @@ def crosswalk() -> None:
             key = (ln.subcommittee or "", cleaned.normalized)
             if key not in table:
                 context = " ".join(
-                    filter(None, [ln.subcommittee, ln.department, ln.agency, ln.title_name, ln.program])
+                    filter(
+                        None, [ln.subcommittee, ln.department, ln.agency, ln.title_name, ln.program]
+                    )
                 )
                 table[key] = match_account(cleaned.normalized, context)
 
@@ -796,7 +836,9 @@ def crosswalk() -> None:
     click.echo(f"Distinct account entities: {len(table)}")
     for meth, n in methods.most_common():
         click.echo(f"  {meth:13}: {n} ({100 * n / len(table):.0f}%)")
-    click.echo(f"Trusted account_key (exact + agency-scoped): {trusted} ({100 * trusted / len(table):.0f}%)")
+    click.echo(
+        f"Trusted account_key (exact + agency-scoped): {trusted} ({100 * trusted / len(table):.0f}%)"
+    )
     click.echo(f"Crosswalk + review queue written to {out_path}")
 
 
@@ -841,7 +883,9 @@ def status() -> None:
 
 @cli.command()
 @click.option("--metric", default="committee_recommendation", help="Money metric for the series")
-@click.option("--min-years", default=2, type=int, help="Only accounts seen in >= this many fiscal years")
+@click.option(
+    "--min-years", default=2, type=int, help="Only accounts seen in >= this many fiscal years"
+)
 @click.option("--reword-only", is_flag=True, help="Only report substantive (reword) title changes")
 def trace(metric: str, min_years: int, reword_only: bool) -> None:
     """Follow crosswalk-keyed accounts across fiscal years and report title changes.
@@ -869,17 +913,36 @@ def trace(metric: str, min_years: int, reword_only: bool) -> None:
 
         w = _csv.writer(fh)
         w.writerow(
-            ["account_key", "canonical_title", "first_fy", "last_fy", "n_years",
-             "change_fy", "from_title", "to_title", "kind"]
+            [
+                "account_key",
+                "canonical_title",
+                "first_fy",
+                "last_fy",
+                "n_years",
+                "change_fy",
+                "from_title",
+                "to_title",
+                "kind",
+            ]
         )
         for a in sorted(auths, key=lambda x: x.account_key):
             for c in a.title_changes:
                 kinds[c.kind] += 1
                 if reword_only and c.kind != "reword":
                     continue
-                w.writerow([a.account_key, a.canonical_title, a.first_fiscal_year,
-                            a.last_fiscal_year, len(a.fiscal_years), c.fiscal_year,
-                            c.from_title, c.to_title, c.kind])
+                w.writerow(
+                    [
+                        a.account_key,
+                        a.canonical_title,
+                        a.first_fiscal_year,
+                        a.last_fiscal_year,
+                        len(a.fiscal_years),
+                        c.fiscal_year,
+                        c.from_title,
+                        c.to_title,
+                        c.kind,
+                    ]
+                )
                 rows_written += 1
 
     changed = sum(1 for a in auths if a.title_changes)
@@ -905,9 +968,15 @@ def trace(metric: str, min_years: int, reword_only: bool) -> None:
     help="Exit non-zero if the strict pass rate falls below this (e.g. 0.95). The release gate.",
 )
 @click.option("--worst", type=int, default=10, help="Show N reports with the most genuine failures")
-@click.option("--json", "json_out", type=click.Path(), default=None, help="Write the full ledger as JSON")
+@click.option(
+    "--json", "json_out", type=click.Path(), default=None, help="Write the full ledger as JSON"
+)
 def reconcile(
-    source: str | None, report_id: str | None, fail_under: float | None, worst: int, json_out: str | None
+    source: str | None,
+    report_id: str | None,
+    fail_under: float | None,
+    worst: int,
+    json_out: str | None,
 ) -> None:
     """Check that line items sum to the totals the reports actually printed.
 
@@ -943,7 +1012,9 @@ def reconcile(
 
     click.echo("=" * 78)
     click.echo("RECONCILIATION — do the line items add up to the printed totals?")
-    click.echo(f"{'track':9} {'reports':>7} {'totals':>7} {'checkable':>9} {'pass':>7} {'strict':>7} {'genuine':>8}")
+    click.echo(
+        f"{'track':9} {'reports':>7} {'totals':>7} {'checkable':>9} {'pass':>7} {'strict':>7} {'genuine':>8}"
+    )
     click.echo("-" * 78)
     for track, group in sorted(by_track.items()):
         stats = summarize(group)
@@ -959,7 +1030,9 @@ def reconcile(
         f"{(overall['pass_rate'] or 0):>6.1%} {(overall['strict_pass_rate'] or 0):>6.1%} "
         f"{overall['genuine_failures']:>8}"
     )
-    click.echo("\nby status: " + "  ".join(f"{k}={v}" for k, v in overall["by_status"].items() if v))
+    click.echo(
+        "\nby status: " + "  ".join(f"{k}={v}" for k, v in overall["by_status"].items() if v)
+    )
 
     queue = sorted(
         (r for r in results if r.n_genuine_failures), key=lambda r: -r.n_genuine_failures
@@ -1021,7 +1094,10 @@ def reconcile(
     if fail_under is not None:
         strict = overall["strict_pass_rate"] or 0.0
         if strict < fail_under:
-            click.echo(f"\nFAIL: strict pass rate {strict:.1%} is below the {fail_under:.1%} gate", err=True)
+            click.echo(
+                f"\nFAIL: strict pass rate {strict:.1%} is below the {fail_under:.1%} gate",
+                err=True,
+            )
             sys.exit(1)
         click.echo(f"\nPASS: strict pass rate {strict:.1%} meets the {fail_under:.1%} gate")
 
