@@ -6,7 +6,7 @@ This is the front door to the appropriations extraction deliverables — what ea
 
 | Deliverable | File | Size | What it is |
 |---|---|---|---|
-| **Comparative statements** | `data/output/comparative_statements.csv` | 109,052 rows / 246 report-stages | Every line item in the back-of-report comparative ledgers: department → agency → account → program, with prior-year enacted, budget estimate, and committee/enacted recommendation, plus normalization columns. The primary deliverable. |
+| **Comparative statements** | `data/output/comparative_statements.csv` | 109,221 rows / 246 report-stages | Every line item in the back-of-report comparative ledgers: department → agency → account → program, with prior-year enacted, budget estimate, and committee/enacted recommendation, plus normalization columns. The primary deliverable. |
 | **Inline funding tables** | `data/output/inline_funding_tables.csv` | 13,853 records | The 3-line narrative funding summaries in the report body (a second, independent extraction). |
 | **Combined JSON** | `data/output/all_data.json` | — | Both of the above as nested JSON. |
 | **FY2027 House Defense** | `data/output/fy2027-house-defense/` | 2,327 line items + 1,354 marks | Standalone deliverable from the born-digital Defense committee print; see its own README. |
@@ -19,9 +19,9 @@ Coverage across stage × chamber × fiscal year is in **[COVERAGE.md](COVERAGE.m
 Beyond the raw amounts, every comparative row is enriched with (see the data dictionary for exact semantics):
 
 - `verified` — whether the row's dollar amounts passed verification (see below).
-- `account_key` / `account_key_title` / `account_match` — the authoritative federal-account code, when the account name matched conservatively (exact/agency-scoped; fuzzy hits are recorded but gated out of the key). Rows the primary crosswalk leaves unkeyed get a second pass against **Tango's federal-account reference** (`data/reference/tango_accounts.csv`, refreshed by `scripts/fetch_tango_accounts.py` from the Tango budget lake), matched by title containment and resolved to a single account (`account_match` = `tango`/`tango_scoped`). Populated on ~27,470 rows.
+- `account_key` / `account_key_title` / `account_match` — the authoritative federal-account code, when the account name matched conservatively (exact/agency-scoped; fuzzy hits are recorded but gated out of the key). Rows the primary crosswalk leaves unkeyed get a second pass against **Tango's federal-account reference** (`data/reference/tango_accounts.csv`, refreshed by `scripts/fetch_tango_accounts.py` from the Tango budget lake), matched by title containment and resolved to a single account (`account_match` = `tango`/`tango_scoped`). Populated on ~27,500 rows.
 - `account_key_agency` / `account_key_bureau` — agency + bureau of the matched federal account, from the Tango crosswalk. Fills the agency hierarchy for House committee rows (which carry no extracted agency); populated on the Tango-matched rows.
-- `real_factor_2024` — CPI-U inflation factor; multiply any nominal amount by it for FY2024 constant dollars. Populated on ~94,700 rows.
+- `real_factor_2024` — CPI-U inflation factor; multiply any nominal amount by it for FY2024 constant dollars. Populated on ~94,770 rows.
 - `designation` — base / OCO / emergency / disaster / rescission / CHIMP, read only from parentheticals/suffixes.
 
 ## How the data was produced
@@ -64,4 +64,4 @@ approps crosswalk                # rebuild the account crosswalk
 approps output                   # write the combined CSV/JSON deliverables
 ```
 
-House comparative extraction needs a vision backend (`VISION_BACKEND` = `hybrid` with a Nemotron server, or `gemini` with `GEMINI_API_KEY`); the delta-arithmetic gate for House vision runs via `scripts/verify_house.py`. `approps output` counts each report exactly once — it ignores the intermediate `<id>_nemotron.json` / `<id>_hybrid.json` passes left on disk. 176 tests pass; `uv run pytest tests/`.
+House comparative extraction needs a vision backend (`VISION_BACKEND` = `hybrid` with a Nemotron server, or `gemini` with `GEMINI_API_KEY`); the delta-arithmetic gate for House vision runs via `scripts/verify_house.py`. `approps output` counts each report exactly once — it ignores the intermediate `<id>_nemotron.json` / `<id>_hybrid.json` passes left on disk. 254 tests pass; `uv run pytest tests/`.

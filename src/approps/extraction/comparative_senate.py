@@ -59,6 +59,60 @@ _TITLE_RE = re.compile(r"^\s*TITLE\s+[IVXLC]+")
 # "In thousands" indicator
 _THOUSANDS_RE = re.compile(r"\[In thousands of dollars\]", re.IGNORECASE)
 
+# One numeric cell: a dollar amount, a signed delta, a parenthesized memo, or a run of dots
+# standing in for a blank column. Shared by the dot-leader and the column-aligned readers.
+_NUM_TOKEN = re.compile(r"(?:\(\+?[\d,]+\))|(?:[+\-][\d,]+)|(?:[\d,]{3,})|(?:\.{4,})")
+
+# A dot leader trailing to end of line, used to strip it off a label.
+_TRAIL_DOTS = re.compile(r"\.{2,}\s*$")
+
+# A wrapped-label continuation line: word text (no digits) ending in a dot leader, e.g.
+# "       this bill.............................................." -- the tail of a label too
+# long to fit on the row that carried its numbers. Requires a letter so a bare dashed
+# separator never matches.
+_CONTINUATION_RE = re.compile(r"^(?=.*[A-Za-z])[^\d]*?\.{2,}\s*$")
+
+# How far a numeric token's right edge may sit from a declared column edge and still count as
+# occupying that column. The columns are right-aligned, so the right edge is the stable signal.
+_EDGE_TOLERANCE = 2
+
+
+def _columnar_split(line: str, edges: list[int]) -> tuple[str, list[str]] | None:
+    """Split a data line into ``(label, five column tokens)`` using the table's column edges.
+
+    The dot-leader reader (below) fails on rows whose label is long enough to squeeze the
+    leader down to one or two dots, or off the line entirely -- the numbers still print in
+    their fixed-width columns, but there is no ``...`` to split on. Those rows were silently
+    dropped, deleting real line items (many of them ``Total`` rows, whose loss also corrupts
+    the block structure the reconciler recovers from document order).
+
+    Here the columns adjudicate instead of the leader: a token counts only if its right edge
+    lands on a declared column edge, which excludes numbers embedded in the label (a public
+    law cite, a fiscal year) because those do not align. The label is everything left of the
+    leftmost aligned cell, so a blank leading column printed as a dot run is kept out of it.
+    Requires at least two aligned numeric cells, so a lone coincidental alignment is not read
+    as a data row.
+    """
+    aligned: list[tuple[int, int, str]] = []  # (column index, start position, token)
+    for match in _NUM_TOKEN.finditer(line):
+        j = min(range(len(edges)), key=lambda k: abs(match.end() - edges[k]))
+        if abs(match.end() - edges[j]) <= _EDGE_TOLERANCE:
+            aligned.append((j, match.start(), match.group()))
+
+    numeric = [tok for _, _, tok in aligned if not tok.startswith(".")]
+    if len(numeric) < 2:
+        return None
+
+    start = min(pos for _, pos, _ in aligned)
+    label = _TRAIL_DOTS.sub("", line[:start]).strip()
+    if not label:
+        return None
+
+    slots = [""] * len(edges)
+    for j, _, tok in aligned:
+        slots[j] = tok
+    return label, slots
+
 
 def _find_comparative_section(lines: list[str]) -> tuple[int, int] | None:
     """Find the start and end line indices of the comparative statement section.
@@ -236,6 +290,12 @@ def extract_senate_comparative(
 
     section_start, section_end = section
 
+    # Column right edges, used to read rows whose dot leader was squeezed out (see
+    # _columnar_split). None when the header geometry is unclear, in which case only the
+    # dot-leader reader runs -- no regression, just no recovery for that report.
+    positions = _find_column_positions(lines, section_start)
+    edges = [end - 2 for _, end in positions] if positions else None
+
     # Check for "In thousands of dollars"
     in_thousands = False
     for i in range(section_start, min(section_start + 10, len(lines))):
@@ -289,29 +349,37 @@ def extract_senate_comparative(
         number_matches = list(_HAS_NUMBERS_RE.finditer(line))
         has_numbers = len(number_matches) >= 1
 
-        if has_numbers and "..." in line:
-            # This is a data line with dot leaders separating text from numbers
+        # Two readers produce the same ``(item_text, num_tokens)`` shape. The dot-leader reader
+        # is the original path and handles the common row; the column reader recovers rows whose
+        # leader was squeezed out (see _columnar_split) and is tried only when the first fails.
+        item_text: str | None = None
+        num_tokens: list[str] | None = None
 
-            # Split at the FIRST dot leader — everything before is the item name,
-            # everything after the dots + whitespace is the numeric columns
+        if has_numbers and "..." in line:
+            # A data line with a dot leader separating text from numbers. Split at the FIRST
+            # dot leader -- everything before is the item name, everything after is the columns.
+            # Dots WITHIN the number columns represent "no change" / zero.
             dot_match = re.search(r"\.{3,}", line)
             if dot_match:
                 item_text = line[: dot_match.start()].rstrip()
-                # Find the end of the dot leader
-                after_dots = line[dot_match.end():]
-                # Now extract number tokens from after the dot leader.
-                # Dots that appear WITHIN the number columns represent "no change" / zero.
-                num_tokens = re.findall(
-                    r"(?:\(\+?[\d,]+\))|(?:[+\-][\d,]+)|(?:[\d,]{3,})|(?:\.{4,})",
-                    after_dots,
-                )
+                num_tokens = _NUM_TOKEN.findall(line[dot_match.end():])
             else:
                 item_text = stripped
-                num_tokens = re.findall(
-                    r"(?:\(\+?[\d,]+\))|(?:[+\-][\d,]+)|(?:[\d,]{3,})|(?:\.{4,})",
-                    line,
-                )
+                num_tokens = _NUM_TOKEN.findall(line)
+        elif has_numbers and edges is not None:
+            split = _columnar_split(line, edges)
+            if split is not None:
+                item_text, num_tokens = split
+                # A label too long for its row wraps its tail onto the next line, which carries
+                # the leader but no numbers (e.g. "Total, ... appropriated in" / "this bill...").
+                # Stitch it back and consume it, so it is neither dropped nor mistaken for a
+                # header that would corrupt the hierarchy context for the rows below.
+                if i + 1 < section_end and _CONTINUATION_RE.match(lines[i + 1].strip()):
+                    tail = _TRAIL_DOTS.sub("", lines[i + 1].strip()).strip()
+                    item_text = f"{item_text} {tail}".strip()
+                    i += 1
 
+        if item_text is not None and num_tokens is not None:
             # Pad to 5 columns
             while len(num_tokens) < 5:
                 num_tokens.append("")

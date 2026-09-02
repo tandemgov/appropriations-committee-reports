@@ -8,27 +8,27 @@ Each cell is `<reports> rpt / <delta-verified rows>✓ of <total rows>`. "Delta-
 
 | FY | Senate committee | House committee | Enacted (House CPRT) |
 |----|---|---|---|
-| FY2016 | 12 rpt / 3,594✓ of 3,965 | 12 rpt / 2,837✓ of 5,150 | 2 rpt / 1,101✓ of 1,101 |
-| FY2017 | 12 rpt / 3,695✓ of 3,859 | 12 rpt / 2,913✓ of 5,346 | 1 rpt / 1,151✓ of 1,151 |
-| FY2018 | 8 rpt / 2,104✓ of 2,197 | 12 rpt / 2,476✓ of 4,374 | 2 rpt / 1,216✓ of 1,216 |
-| FY2019 | 12 rpt / 3,810✓ of 3,999 | 13 rpt / 4,292✓ of 7,808 | 1 rpt / 795✓ of 795 |
-| FY2020 | 10 rpt / 2,770✓ of 2,890 | 12 rpt / 2,092✓ of 3,970 | 2 rpt / 1,371✓ of 1,371 |
+| FY2016 | 12 rpt / 3,731✓ of 3,999 | 12 rpt / 2,837✓ of 5,150 | 2 rpt / 1,101✓ of 1,101 |
+| FY2017 | 12 rpt / 3,736✓ of 3,861 | 12 rpt / 2,913✓ of 5,346 | 1 rpt / 1,151✓ of 1,151 |
+| FY2018 | 8 rpt / 2,129✓ of 2,201 | 12 rpt / 2,476✓ of 4,374 | 2 rpt / 1,216✓ of 1,216 |
+| FY2019 | 12 rpt / 3,868✓ of 4,013 | 13 rpt / 4,292✓ of 7,808 | 1 rpt / 795✓ of 795 |
+| FY2020 | 10 rpt / 2,817✓ of 2,900 | 12 rpt / 2,092✓ of 3,970 | 2 rpt / 1,371✓ of 1,371 |
 | FY2021 | — | 12 rpt / 3,104✓ of 5,735 | 2 rpt / 1,306✓ of 1,306 |
-| FY2022 | 3 rpt / 702✓ of 747 | 12 rpt / 3,191✓ of 5,282 | 2 rpt / 1,764✓ of 1,764 |
+| FY2022 | 3 rpt / 709✓ of 750 | 12 rpt / 3,191✓ of 5,282 | 2 rpt / 1,764✓ of 1,764 |
 | FY2023 | — | 12 rpt / 3,187✓ of 5,834 | 2 rpt / 1,516✓ of 1,516 |
-| FY2024 | 12 rpt / 4,446✓ of 4,837 | 10 rpt / 2,045✓ of 3,770 | 2 rpt / 1,609✓ of 1,609 |
-| FY2025 | 11 rpt / 3,733✓ of 4,073 | 12 rpt / 3,344✓ of 9,019 | — |
-| FY2026 | 7 rpt / 1,943✓ of 2,326 | 12 rpt / 1,639✓ of 4,486 | — |
+| FY2024 | 12 rpt / 4,558✓ of 4,849 | 10 rpt / 2,045✓ of 3,769 | 2 rpt / 1,609✓ of 1,609 |
+| FY2025 | 11 rpt / 3,828✓ of 4,097 | 12 rpt / 3,344✓ of 9,004 | — |
+| FY2026 | 7 rpt / 2,096✓ of 2,372 | 12 rpt / 1,639✓ of 4,486 | — |
 | FY2027 | — | 12 rpt / 4,401✓ of 7,097 | — |
 
 **Stage totals:**
 
 | Stage | Reports | Rows | Delta-verified |
 |---|---:|---:|---:|
-| Senate committee (HTML text) | 87 | 28,873 | 26,792 (92.7%) |
+| Senate committee (HTML text) | 87 | 29,042 | 27,472 (94.6%) |
 | House committee (vision + text) | 143 | 68,350 | 35,832 (52.4%) |
 | Enacted (House CPRT explanatory statements) | 16 | 11,829 | 11,829 (100%) |
-| **Total** | **246** | **109,052** | **74,453** |
+| **Total** | **246** | **109,221** | **75,133** |
 
 ## Inline narrative funding tables
 
@@ -41,7 +41,7 @@ The 3-line funding summaries in the report body (a second, independent extractio
 - **House committee is the full decade — 143/143 of the catalog universe, all re-cleaned on `gemini-3.1-pro-preview` (2026-07-07).** Every House report's hybrid extraction was re-run with the Nemotron first pass reused and the suspect-page Gemini cleanup leg upgraded to `gemini-3.1-pro-preview`, served through **Vertex** (the AI Studio API key's per-minute quota on the preview model is far too low; `GEMINI_VERTEX=1` routes the same model through the GCP endpoint's much higher quota). This supersedes the earlier partial state where 27 backfilled reports were flash-cleaned and one 202-page report (`CRPT-116hrpt9`, Homeland FY2019) was a Nemotron-only baseline — all are now uniformly 3.1-pro-cleaned. The stronger cleanup extracted more rows carrying a checkable amount and made more subtotal blocks reconcile, roughly tripling the absolute `account_inferred` count from ~7,320 to ~19,500 rows (the fraction of value-bearing rows held at ~31%; see below). No wrong data can enter regardless of model: every row is delta-verified independently.
 - **Indentation recovery (the non-add double-gate) ran corpus-wide on `gemini-2.5-pro` via Vertex (2026-07-07).** After re-cleaning, all 143 House reports were post-processed by the Gemini non-add double-gate (see [DATA_DICTIONARY.md](DATA_DICTIONARY.md), `is_memo`): for each over-summing subtotal block, Gemini flags the indented non-add sub-details and the block is labeled **only when excluding exactly those lines makes it reconcile**. It recovered ~900 additional blocks (~2,500 rows) that the plain arithmetic reconciler could not, and flagged 3,974 rows as non-add. (The `is_memo` field also folds in **parenthesized non-add memos** — limitations, transfer authorities, GWOT/"of which" breakouts written `(X)` — bringing it to ~8,484 rows corpus-wide; filter these out with subtotals before summing per account.) All 143 reports are marked done (the two heaviest — `CRPT-119hrpt667` at 31 over-sum pages and `CRPT-117hrpt394` — take ~30 min each of Vertex latency; `recover_indent --all-house --write --resume` is idempotent and finishes any report whose pass was interrupted).
 - **House committee verified fraction is lower (52.4%) than Senate (92.7%).** This is a property of the source, not a defect: House comparative tables are scanned images extracted by vision, and the "verified" count is the value-bearing rows whose table arithmetic closes exactly. The remainder are structural/label rows (account/agency/section headings, subtotals) and rows that don't express both delta identities — they carry no independently-checkable amount. Zero rows that carry a verifiable amount are silently wrong. The two single-column reports below carry no delta columns at all, so they contribute rows but no delta-verified count, which pulls the House fraction down.
-- **`verified` understates corroboration — the `verification_tier` field is the fuller picture.** `verified` is the strict test (a row's *own* delta arithmetic closes). But two other in-document witnesses corroborate amounts that don't pass that specific test, and the `verification_tier` column records them (see [DATA_DICTIONARY.md](DATA_DICTIONARY.md)): `block` — a value-bearing member of a subtotal block whose amounts reconcile exactly (the block sum is a second witness; this is the same evidentiary standard as `account_inferred`), and `inline` — the amount and account restated in the report's string-verified inline funding tables. For House committee rows the tiers are **`delta` 35,832 (52.4%) · `block` 5,616 (8.2%) · `inline` 491 (0.7%) · `none` 26,411 (38.6%)** — so **~61% is corroborated from within the documents**, not 52%. The remaining ~39% (`none`) is structural/label rows plus value-bearing rows whose amount appears nowhere else in the corpus; those are the true boundary of in-document verification, provable only against an external source (USASpending, the committees' own published tables) or by human review.
+- **`verified` understates corroboration — the `verification_tier` field is the fuller picture.** `verified` is the strict test (a row's *own* delta arithmetic closes). But two other in-document witnesses corroborate amounts that don't pass that specific test, and the `verification_tier` column records them (see [DATA_DICTIONARY.md](DATA_DICTIONARY.md)): `block` — a value-bearing member of a subtotal block whose amounts reconcile exactly (the block sum is a second witness; this is the same evidentiary standard as `account_inferred`), and `inline` — the amount and account restated in the report's string-verified inline funding tables. For House committee rows the tiers are **`delta_arithmetic` 33,391 (48.9%) · `block` 5,616 (8.2%) · `verbatim_page` 2,441 (3.6%) · `inline` 491 (0.7%) · `none` 26,411 (38.6%)** — so **~61% is corroborated from within the documents**, not 52%. The remaining ~39% (`none`) is structural/label rows plus value-bearing rows whose amount appears nowhere else in the corpus; those are the true boundary of in-document verification, provable only against an external source (USASpending, the committees' own published tables) or by human review.
 - **FY2026 and FY2027 are the 119th Congress (added 2026-07-02).** FY2026 (1st session): House 12/12 subcommittees, Senate 8/8 (Labor-HHS srpt55 recovered from its born-digital PDF, see below). FY2027 (2nd session): House 12/12 — the Senate had not yet marked up FY2027 bills as of this writing, so re-run `approps discover` to pick up Senate FY2027 as it publishes. Discovery was extended from the 118th to the 119th Congress; three classifier fixes went with it (the House-renamed "National Security, Department of State" subcommittee, a plural "APPROPRIATIONS BILLS" fiscal-year title, and the line-break-hyphenation fix below).
 - **Two House reports carry a single-column statement, not a comparative statement:** Interior-Environment FY2026 (`CRPT-119hrpt215`, 651 rows) and Agriculture FY2027 (`CRPT-119hrpt632`, 303 rows). These bills publish only a "Statement of New Budget (Obligational) Authority — Amounts Recommended in the Bill" (the committee's recommended amount per line, with no prior-year/request/delta columns). Their rows populate `committee_recommendation` only and are self-identifying by the four empty comparison columns; they cannot be delta-verified because there is nothing to reconcile against.
 - **Defense FY2027 (`CRPT-119hrpt715`) is born-digital typeset text, not scanned images** — its comparative statement is parsed from the PDF text layer (2,441 rows, 99.7% delta-verified), while its 12 embedded scanned pages are roll-call votes/charts. This supersedes the earlier stand-in (the House Defense full-committee **print**), which remains as a standalone deliverable in `data/output/fy2027-house-defense/` and is no longer counted in the combined dataset to avoid double-counting the same bill.
