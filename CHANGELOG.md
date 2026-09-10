@@ -15,6 +15,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- House vision pages whose table header failed OCR were dropped unflagged, costing Defense FY2025 its whole Title III Procurement block. Two new signals now escalate them to the fallback; shipped data is unchanged until the vision pass re-runs (KNOWN_ISSUES #7).
+
 ### Internal / Infra
 
 ## [1.3.0] - 2026-09-02

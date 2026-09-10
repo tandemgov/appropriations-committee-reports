@@ -39,6 +39,34 @@ from approps.verification.recall_check import (
 
 logger = logging.getLogger(__name__)
 
+# Two row-producing pages this close belong to the same statement.
+# Tuned on the corpus: 4 misses CRPT-118hrpt557's Title III block, 5 recovers it.
+_STATEMENT_MAX_GAP = 5
+
+
+def _statement_gap_pages(lines: list[dict], image_pages: list[int]) -> set[int]:
+    """Image pages inside a statement's own run that produced no rows at all.
+
+    Every other suspect signal is a failure a page reports about itself, and a page dropped whole reports nothing, so it shows up only as absence.
+    """
+    produced = sorted({page_of(ln) for ln in lines if page_of(ln)})
+    if len(produced) < 2:
+        return set()
+    runs: list[list[int]] = [[produced[0]]]
+    for page in produced[1:]:
+        if page - runs[-1][-1] <= _STATEMENT_MAX_GAP:
+            runs[-1].append(page)
+        else:
+            runs.append([page])
+    candidates = {idx + 1 for idx in image_pages}
+    gaps: set[int] = set()
+    for run in runs:
+        if len(run) < 3:  # too short to assert a statement runs through it
+            continue
+        seen = set(run)
+        gaps |= {p for p in range(run[0] + 1, run[-1]) if p not in seen and p in candidates}
+    return gaps
+
 
 class PerDayQuotaError(Exception):
     """Gemini per-model-per-day quota is exhausted — backoff won't help (resets at midnight PT)."""
@@ -105,7 +133,9 @@ def extract_house_hybrid(
         logger.info(f"Reusing {reuse_nemotron_path}")
         nemo = json.loads(Path(reuse_nemotron_path).read_text())
         lines = nemo["comparative_lines"]
-        empty = nemo.get("extraction_report", {}).get("pages_empty", [])
+        report = nemo.get("extraction_report", {})
+        empty = report.get("pages_empty", [])
+        unreadable = report.get("pages_table_unreadable", [])
     else:
         logger.info(f"Nemotron first pass over {len(image_pages)} image pages ...")
         nemo_lines, nemo_meta = extract_house_nemotron(
@@ -113,6 +143,7 @@ def extract_house_hybrid(
         )
         lines = [ln.model_dump(mode="json") for ln in nemo_lines]
         empty = nemo_meta["pages_empty"]
+        unreadable = nemo_meta.get("pages_table_unreadable", [])
 
     # 1b. Born-digital text fallback -----------------------------------------------
     # A few reports embed non-comparative scanned pages (roll-call votes, charts) but
@@ -178,7 +209,10 @@ def extract_house_hybrid(
         logger.info(f"No inline CSV for {report_id}; recall cross-check skipped")
 
     # 3. Suspect pages -------------------------------------------------------------
-    suspect = sorted(set(before["fail_pages"]) | set(empty) | recall_pages)
+    gap_pages = _statement_gap_pages(lines, image_pages)
+    if gap_pages:
+        logger.info(f"Statement gaps (produced no rows inside a run): {sorted(gap_pages)}")
+    suspect = sorted(set(before["fail_pages"]) | set(empty) | set(unreadable) | recall_pages | gap_pages)
     logger.info(f"Suspect pages -> Gemini ({len(suspect)} of {len(image_pages)}): {suspect}")
 
     # 4-5. Gemini re-extract suspect pages, replace wholesale ----------------------
@@ -209,6 +243,8 @@ def extract_house_hybrid(
     meta = {
         "image_pages": len(image_pages),
         "suspect_pages_to_gemini": suspect,
+        "pages_table_unreadable": sorted(unreadable),
+        "statement_gap_pages": sorted(gap_pages),
         "gemini_calls": gemini_calls,
         "gemini_calls_saved_vs_pure": len(image_pages) - gemini_calls,
         "nemotron_pass_rate": before["pass_rate"],

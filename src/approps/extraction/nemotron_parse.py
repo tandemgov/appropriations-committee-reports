@@ -121,6 +121,20 @@ def _is_comparative_table(spec: str, body: str) -> bool:
     return _header_slots(body) is not None
 
 
+# Comma-grouped money, the shape every value column in these tables is set in.
+_MONEY_RE = re.compile(r"\d{1,3}(?:,\d{3})+")
+
+
+def _money_dense_tabular(raw: str, min_values: int = 12) -> bool:
+    """True when a page holds a table dense with comma-grouped money.
+
+    A failed header OCR makes a real comparative page look non-comparative; money density is the independent evidence that keeps it ambiguous.
+    """
+    return any(
+        len(_MONEY_RE.findall(body)) >= min_values for _spec, body in _TABULAR_RE.findall(raw)
+    )
+
+
 # House comparative tables are scanned bitonal images embedded in the PDF. The scan
 # has a fixed native resolution; rendering the whole PAGE downsamples the scan region
 # (most of the page is margin), causing digit OCR errors (notably 6<->8). Cropping to
@@ -359,6 +373,7 @@ def extract_with_nemotron(page: pdfplumber.pdf.Page, page_number: int) -> tuple[
       - "empty_failed": a comparative table was present but parsed to nothing, OR the
         model produced no output at all (greedy-EOS even after retry) so we can't tell.
         These are the pages worth sending to a Gemini fallback.
+      - "table_unreadable": no header recognised but the page is dense with money, so it is ambiguous and goes to Gemini rather than being dropped.
       - "non_comparative": the model produced output but no comparative table (a votes
         page, a project-table-only page, etc.). NOT a recall gap — must not be sent to
         Gemini, which would mangle a non-comparative table into the comparative schema.
@@ -391,6 +406,8 @@ def extract_with_nemotron(page: pdfplumber.pdf.Page, page_number: int) -> tuple[
         kind = "rows"
     elif not raw.strip() or _has_comparative_table(raw):
         kind = "empty_failed"  # model bailed, or had a comparative table it couldn't parse
+    elif _money_dense_tabular(raw):
+        kind = "table_unreadable"  # a money table whose header we couldn't read — ambiguous
     else:
         kind = "non_comparative"  # produced content but no comparative table on this page
     logger.info(f"Page {page_number}: extracted {len(items)} items (full-page, kind={kind})")
@@ -428,6 +445,7 @@ def extract_house_nemotron(
     lines = []
     succeeded: list[int] = []
     empty: list[int] = []  # comparative table present but unparsed, or model bailed
+    unreadable: list[int] = []  # money table, header unreadable — send to the fallback
     non_comparative: list[int] = []  # no comparative table on the page (don't flag)
     errored: list[dict] = []
     cur_title = cur_dept = None
@@ -444,6 +462,8 @@ def extract_house_nemotron(
             continue
         if kind == "empty_failed":
             empty.append(page_num)
+        elif kind == "table_unreadable":
+            unreadable.append(page_num)
         elif kind == "non_comparative":
             non_comparative.append(page_num)
         page_lines, cur_title, cur_dept = _items_to_lines(
@@ -460,6 +480,7 @@ def extract_house_nemotron(
         "image_pages": len(image_pages),
         "pages_succeeded": len(succeeded),
         "pages_empty": empty,
+        "pages_table_unreadable": unreadable,
         "pages_non_comparative": non_comparative,
         "pages_errored": errored,
         "total_lines": len(lines),

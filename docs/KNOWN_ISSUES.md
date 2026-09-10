@@ -273,3 +273,26 @@ Three things guard it now:
 `is_memo` remains a *hypothesis*, not a fact: 2,350 flagged rows (20.3%) are added in by the
 printed total that encloses them. `reconcile` resolves this per total and reports `memo_mode`; the
 column itself is still named for the common case. See `DATA.md`.
+
+---
+
+## 7. House vision pages dropped whole — Defense titles missing from the shipped data
+
+**Status:** cause fixed in the extractor (`table_unreadable` + `_statement_gap_pages`); **the shipped release is still affected** until the House vision pass is re-run.
+**Scope:** House vision track. Worst in Defense, where whole titles are absent; ~340 candidate pages across 149 House reports.
+
+### What's wrong
+`_is_comparative_table` identifies a comparative statement by its header names. When a scan's header does not survive OCR, the table is classified `non_comparative` and discarded, and that class is deliberately never sent to the Gemini fallback. Nothing is flagged, so the page leaves no trace.
+
+CRPT-118hrpt557 (Defense FY2025) is the clearest case. Its Title III Procurement block is printed plainly on page 288 — Aircraft Procurement Army, Missile Procurement Army, Weapons Procurement Navy and 16 more — and none of it is in the dataset. Titles II and IV are missing the same way. 149 rows survive, about two thirds of them from the supplementals and the recapitulation. Two pages of 169 reached the fallback.
+
+**Do not sum Defense from the shipped dataset.** It undercounts.
+
+### Why no gate caught it
+Every suspect signal was a failure a page reports about itself, and a page dropped whole reports nothing. Reconciliation could not see it either: a missing block takes its own printed subtotal with it, so the rows and the witness that would convict them disappear together. `approps reconcile -p CRPT-118hrpt557` scores 18 of 21 totals OK.
+
+### The fix
+Two signals that do not require the page to report its own failure: `_money_dense_tabular` treats a headerless money table as ambiguous rather than ignorable, and `_statement_gap_pages` escalates an image page that produced nothing while sitting inside a run of pages that did.
+
+### Remaining
+Re-extraction has not run, so the data is unchanged. A report-level completeness check — comparing each report's extracted title totals against the titles its own recapitulation names — would catch the class directly and is not built.
