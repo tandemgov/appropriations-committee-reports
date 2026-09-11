@@ -1,6 +1,6 @@
 # The dataset
 
-Line-item appropriations data extracted from congressional committee reports, FY2016–FY2027: **109,221 line items** across **246 reports**, both chambers, committee and enacted stages.
+Line-item appropriations data extracted from congressional committee reports, FY2016–FY2027: **114,344 line items** across **246 reports**, both chambers, committee and enacted stages.
 
 Download it from the [latest release](https://github.com/tandemgov/appropriations-committee-reports/releases/latest). Everything here is CC0 — public domain, no attribution required (though it's appreciated).
 
@@ -97,7 +97,7 @@ See [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) for exactly what goes wrong i
 
 | File | Rows | Description |
 |---|---:|---|
-| `comparative_statements.{csv,parquet}` | 109,221 | The main table. One row per line item. |
+| `comparative_statements.{csv,parquet}` | 114,344 | The main table. One row per line item. |
 | `inline_funding_tables.{csv,parquet}` | 13,853 | Narrative funding tables from report prose. String-verified against source text. |
 | `account_authority.{csv,parquet}` | 732 | Federal account reference used by the crosswalk. |
 | `SHA256SUMS` | — | Checksums for all of the above. |
