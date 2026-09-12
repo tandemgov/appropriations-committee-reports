@@ -1,6 +1,6 @@
 """Recover comparative rows from pages the vision pass dropped whole.
 
-See KNOWN_ISSUES #7. The extractor now escalates these pages, but the shipped extractions predate the fix, so this replays the missing leg over them.
+The extractor now escalates these pages, but the shipped extractions predate the fix, so this replays the missing leg over them.
 A gap page holds no rows by definition, so the merge is additive and overwrites nothing.
 
     uv run python scripts/repair_dropped_pages.py --dry-run
