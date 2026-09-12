@@ -326,3 +326,24 @@ Acceptance, per the discipline in #5: re-extract all 87 Senate reports and diff 
 
 ### Remaining
 The delta column itself is still not captured on these three-column statements (`delta_vs_enacted` is null), because the value reader's geometry helper insists on five columns. The figure is derivable as recommendation minus prior-year. Correcting the geometry was tried and reverted: it changed 28 unrelated reports for no gain.
+
+
+---
+
+## 9. Senate statements lost the rows above their first subtotal — FIXED
+
+**Status:** FIXED (2026-09-12). 23 reports re-extracted, 63 rows recovered.
+**Scope:** Senate committee track, every fiscal year. 18 reports opened mid-table; 23 gained rows once fixed.
+
+### What was wrong
+The reader found the data by counting rules: "after the third separator, data begins". A statement has two rules in its header, one under the title and one under the column names, so the third rule is somewhere in the table itself. Where a statement prints a rule above its opening subtotal — Corps of Engineers, Diplomatic Programs, Active Components and NRC tables all do — every row above that rule was stepped over.
+
+`CRPT-118srpt72` began at `Subtotal, Investigations` with `Investigations` and `Rescission` missing above it. `CRPT-114srpt236` began at `SUBTOTAL, OPERATING REACTORS`, missing `OPERATING REACTORS` and `CORPORATE SUPPORT`.
+
+### Why no gate caught it
+Same shape as #7. The rows and the subtotal they belong to were both absent, so nothing could be compared against anything. The detector that found it was structural rather than arithmetic: **a statement whose first row is a subtotal has lost its head**, since no table opens with a total of nothing.
+
+### The fix
+Data begins after the second rule, the one closing the column headers. Acceptance: all 87 Senate reports re-extracted and diffed — 64 byte-identical, 23 gained rows, **zero other changes**, so the edit is purely additive.
+
+Senate strict reconciliation moved 81.3% to 81.7% and genuine failures fell from 941 to 922.

@@ -422,10 +422,9 @@ def extract_senate_comparative(
     positions = _find_column_positions(lines, section_start)
     edges = [end - 2 for _, end in positions] if positions else None
 
-    # Which schema slot each value column belongs to, read from the header names. Most
-    # statements are the classic five columns, but FY2026 Senate reports print three
-    # (prior appropriation, recommendation, delta) and a positional read silently files
-    # the delta as the recommendation. None means keep the positional reading.
+    # Which slot each value column belongs to, read from the header names.
+    # FY2026 statements print three columns, where a positional read files the delta as the recommendation.
+    # None keeps the positional reading.
     slots = _column_slots(lines, section_start)
 
     # Check for "In thousands of dollars"
@@ -435,15 +434,13 @@ def extract_senate_comparative(
             in_thousands = True
             break
 
-    # Skip past the header area (find the separator after column headers)
-    data_start = section_start
-    separator_count = 0
-    for i in range(section_start, min(section_start + 20, len(lines))):
-        if _SEPARATOR_RE.match(lines[i]):
-            separator_count += 1
-            if separator_count >= 3:  # After the third separator, data begins
-                data_start = i + 1
-                break
+    # Data begins after the second rule, the one closing the column headers.
+    # A third rule is already inside the table, above a statement's first subtotal.
+    seps = [
+        i for i in range(section_start, min(section_start + 20, len(lines)))
+        if _SEPARATOR_RE.match(lines[i])
+    ]
+    data_start = seps[1] + 1 if len(seps) >= 2 else section_start
 
     # Track hierarchy context
     current_title: str | None = None
@@ -543,8 +540,7 @@ def extract_senate_comparative(
             # Determine hierarchy
             level, is_sub = _parse_hierarchy_context(item_text, indent)
 
-            # Place the row's amounts into their schema slots. Without a header reading
-            # this is the identity mapping, which is what every five-column report gets.
+            # Without a header reading this is the identity mapping, as every five-column report gets.
             placed: list[str | None] = [None] * 5
             for idx, amount in enumerate(amounts[:5]):
                 slot = slots[idx] if slots and idx < len(slots) else idx

@@ -78,3 +78,32 @@ def test_a_header_reading_the_arithmetic_contradicts_is_refused():
         _row("Forest health", "12,000", "9,000", "-4,444"),
     ]
     assert _column_slots(broken, 0) is None
+
+
+HEAD_DROP = [
+    "   COMPARATIVE STATEMENT OF NEW BUDGET (OBLIGATIONAL) AUTHORITY FOR FISCAL YEAR 2024",
+    "                            [In thousands of dollars]",
+    RULE,
+    _hdr("2023", "Budget", "Committee"),
+    _hdr("appropriation", "estimate", "recommendation"),
+    RULE,
+    "             TITLE I--DEPARTMENT OF DEFENSE--CIVIL",
+    _row("Investigations", "172,500", "129,832", "93,272"),
+    _row("Rescission", "", "", "-10,380"),
+    " " * 60 + "-" * 40,  # the rule a statement prints above its first subtotal
+    _row("Subtotal, Investigations", "172,500", "129,832", "82,892"),
+]
+
+
+def test_rows_above_the_first_subtotal_rule_survive():
+    """Data starts after the header rule, not after the third rule in the document.
+
+    Counting to a third rule steps over every row above a statement's opening subtotal.
+    """
+    from approps.extraction.comparative_senate import extract_senate_comparative
+
+    html = "<pre>" + "\n".join(HEAD_DROP) + "</pre>"
+    rows = extract_senate_comparative(html, "TEST-1", 118, 2024, "Energy-Water")
+    labels = [(r.line_item_text or "").strip() for r in rows]
+    assert "Investigations" in labels
+    assert labels.index("Investigations") < labels.index("Subtotal, Investigations")
