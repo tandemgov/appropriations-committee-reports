@@ -296,3 +296,33 @@ Two signals that do not require the page to report its own failure: `_money_dens
 
 ### Remaining
 A report-level completeness check — comparing each report's extracted title totals against the titles its own recapitulation names — would catch the class directly rather than page by page, and is not built.
+
+
+---
+
+## 8. Senate value columns were placed by position, not by name — FIXED
+
+**Status:** FIXED (2026-09-12). Six FY2026 reports re-extracted.
+**Scope:** Senate committee track, FY2026: `CRPT-119srpt37`, `srpt38`, `srpt43`, `srpt44`, `srpt46`, `srpt47`. 862 value-bearing rows.
+
+### What was wrong
+FY2026 Senate statements print **three** value columns, not the five earlier years printed:
+
+```
+Item | 2025 appropriation | Committee recommendation | recommendation compared with (+ or -) 2025 appropriation
+```
+
+`_find_column_positions` reads column *geometry* and never looked at the header names, so the three columns were filed into the first three of five fixed slots. Every value landed one place to the left: `budget_estimate` held the committee recommendation, and `committee_recommendation` held a delta. Anyone charting an FY2026 Senate level got a change figure instead.
+
+### Why no gate caught it
+The same blindness as #6 and #7. String matching passes, because every digit is genuinely on the page. Reconciliation passes too: **deltas are additive**, so a column of deltas sums to a subtotal of deltas exactly as amounts do. `CRPT-119srpt46` reconciled at 53% before the fix and nothing looked wrong.
+
+It was found by an arithmetic tripwire over the shipped data — `committee_recommendation == budget_estimate - prior_year_enacted` held for **100%** of value-bearing rows in six reports, which no correctly-parsed statement does.
+
+### The fix
+`_column_slots` reads each column's stacked header text and maps it to its schema slot by name, the way the House/Nemotron path already did. Three guards keep it from making things worse: an identity mapping returns None so five-column reports take the untouched positional path; a mapping with duplicate or missing slots is refused; and `_arithmetic_agrees` checks the reading against the table's own deltas before trusting it, because the header is a claim and the rows are the evidence.
+
+Acceptance, per the discipline in #5: re-extract all 87 Senate reports and diff against the previous parser. **81 of 87 byte-identical, 0 row-set changes, and exactly the 6 intended reports changed.**
+
+### Remaining
+The delta column itself is still not captured on these three-column statements (`delta_vs_enacted` is null), because the value reader's geometry helper insists on five columns. The figure is derivable as recommendation minus prior-year. Correcting the geometry was tried and reverted: it changed 28 unrelated reports for no gain.

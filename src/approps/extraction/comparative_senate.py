@@ -207,6 +207,132 @@ def _find_column_positions(lines: list[str], section_start: int) -> list[tuple[i
     return positions
 
 
+# Fixed schema slots for the value columns.
+_SLOT_ENACTED, _SLOT_ESTIMATE, _SLOT_REC, _SLOT_D_ENACTED, _SLOT_D_ESTIMATE = range(5)
+
+
+def _slot_for(name: str) -> int | None:
+    """Map a column's stacked header text to its schema slot."""
+    h = " ".join(name.lower().split())
+    is_delta = "compared" in h or "+ or -" in h or " vs" in h or "change" in h
+    wants_estimate = "estimate" in h or "request" in h
+    wants_enacted = "appropriation" in h or "enacted" in h
+    if is_delta:
+        if wants_estimate:
+            return _SLOT_D_ESTIMATE
+        return _SLOT_D_ENACTED if wants_enacted else None
+    if "recommendation" in h or "bill" in h:
+        return _SLOT_REC
+    if wants_estimate:
+        return _SLOT_ESTIMATE
+    return _SLOT_ENACTED if wants_enacted else None
+
+
+def _value_column_ranges(lines: list[str], start: int) -> list[tuple[int, int]] | None:
+    """Character ranges of the value columns, however many this table has.
+
+    _find_column_positions insists on five and returns None otherwise, which is what let a
+    three-column FY2026 statement fall through to plain left-to-right ordering.
+    """
+    counts: dict[int, int] = {}
+    ends_by_row: list[list[int]] = []
+    for i in range(start, min(start + 80, len(lines))):
+        if _SEPARATOR_RE.match(lines[i]):
+            continue
+        ends = [m.end() for m in re.finditer(r"(?:[\d,]{3,}|\([\d,+]+\)|[+\-][\d,]+)", lines[i])]
+        if ends:
+            ends_by_row.append(ends)
+            counts[len(ends)] = counts.get(len(ends), 0) + 1
+    if not counts:
+        return None
+    n = max(counts, key=lambda k: (counts[k], k))
+    if not 2 <= n <= 5:
+        return None
+    all_ends = sorted(e for ends in ends_by_row if len(ends) == n for e in ends)
+    clusters = _cluster_positions(all_ends, tolerance=3)
+    if len(clusters) < n:
+        clusters = _cluster_positions(all_ends, tolerance=5)
+    if len(clusters) < n:
+        return None
+    clusters.sort(key=len, reverse=True)
+    col_ends = sorted(int(sum(c) / len(c)) for c in clusters[:n])
+    ranges = []
+    for j, end in enumerate(col_ends):
+        begin = end - 20 if j == 0 else col_ends[j - 1] + 1
+        ranges.append((max(0, begin), end + 2))
+    return ranges
+
+
+def _column_slots(lines: list[str], start: int) -> list[int | None] | None:
+    """Read each value column's stacked header and map it to a schema slot.
+
+    The header words sit above their own column, so slicing the header block by the
+    column's character range recovers the name the table actually gives it. Returns None
+    when the names do not resolve, and the caller keeps the positional reading.
+    """
+    ranges = _value_column_ranges(lines, start)
+    if not ranges:
+        return None
+    # The column names sit between the rule under the title and the rule above the data.
+    # Reaching past either one pulls in the statement's title, whose words ("...IN THE
+    # BILL FOR FISCAL YEAR...", "BUDGET ESTIMATES") outvote the real column names.
+    bounds = [i for i in range(start, min(start + 20, len(lines))) if _SEPARATOR_RE.match(lines[i])]
+    if len(bounds) < 2:
+        return None
+    header_lines = [ln for ln in lines[bounds[0] + 1:bounds[1]] if ln.strip()]
+    if not header_lines:
+        return None
+    slots: list[int | None] = []
+    for begin, end in ranges:
+        text = " ".join(ln[begin:end].strip() for ln in header_lines if ln[begin:end].strip())
+        slots.append(_slot_for(text))
+    named = [s for s in slots if s is not None]
+    if len(named) != len(set(named)) or _SLOT_REC not in named:
+        return None  # ambiguous or missing the one column every statement must have
+    if slots == list(range(len(slots))):
+        return None  # identity: the positional reading already agrees, change nothing
+    if not _arithmetic_agrees(lines, start, ranges, slots):
+        return None
+    return slots
+
+
+def _arithmetic_agrees(lines, start, ranges, slots) -> bool:
+    """Check a header reading against the table's own deltas before trusting it.
+
+    A delta column is the difference of two of the other columns, so a correct mapping
+    reproduces it and a wrong one does not. Rows are the evidence; the header is only the
+    claim. Returns True when there is no delta column to check against.
+    """
+    deltas = [(i, s) for i, s in enumerate(slots) if s in (_SLOT_D_ENACTED, _SLOT_D_ESTIMATE)]
+    if not deltas or _SLOT_REC not in slots:
+        return True
+    rec_i = slots.index(_SLOT_REC)
+    agree = disagree = 0
+    for i in range(start, min(start + 400, len(lines))):
+        line = lines[i]
+        if _SEPARATOR_RE.match(line):
+            continue
+        # Pull the number out of each cell: the dot leader bleeds into the first one.
+        nums = []
+        for b, e in ranges:
+            m = re.search(r"[-+]?\d[\d,]*", line[b:e])
+            nums.append(int(m.group().replace(",", "").replace("+", "")) if m else None)
+        if nums[rec_i] is None:
+            continue
+        for d_i, d_slot in deltas:
+            base = _SLOT_ESTIMATE if d_slot == _SLOT_D_ESTIMATE else _SLOT_ENACTED
+            if base not in slots:
+                continue
+            b_i = slots.index(base)
+            if nums[d_i] is None or nums[b_i] is None:
+                continue
+            if nums[d_i] == nums[rec_i] - nums[b_i]:
+                agree += 1
+            else:
+                disagree += 1
+    return agree >= 5 and agree >= 4 * disagree
+
+
 def _cluster_positions(values: list[int], tolerance: int = 3) -> list[list[int]]:
     """Cluster nearby integer values together."""
     if not values:
@@ -296,6 +422,12 @@ def extract_senate_comparative(
     positions = _find_column_positions(lines, section_start)
     edges = [end - 2 for _, end in positions] if positions else None
 
+    # Which schema slot each value column belongs to, read from the header names. Most
+    # statements are the classic five columns, but FY2026 Senate reports print three
+    # (prior appropriation, recommendation, delta) and a positional read silently files
+    # the delta as the recommendation. None means keep the positional reading.
+    slots = _column_slots(lines, section_start)
+
     # Check for "In thousands of dollars"
     in_thousands = False
     for i in range(section_start, min(section_start + 10, len(lines))):
@@ -328,6 +460,14 @@ def extract_senate_comparative(
 
         # Skip empty lines and separator lines
         if not stripped or _SEPARATOR_RE.match(line):
+            i += 1
+            continue
+
+        # A second statement in the same report can carry a different column set.
+        if _COMP_START_RE.search(line):
+            reread = _column_slots(lines, i)
+            if reread:
+                slots = reread
             i += 1
             continue
 
@@ -403,6 +543,14 @@ def extract_senate_comparative(
             # Determine hierarchy
             level, is_sub = _parse_hierarchy_context(item_text, indent)
 
+            # Place the row's amounts into their schema slots. Without a header reading
+            # this is the identity mapping, which is what every five-column report gets.
+            placed: list[str | None] = [None] * 5
+            for idx, amount in enumerate(amounts[:5]):
+                slot = slots[idx] if slots and idx < len(slots) else idx
+                if slot is not None:
+                    placed[slot] = amount
+
             # Update hierarchy context
             if level == HierarchyLevel.TITLE:
                 current_title = item_text.strip()
@@ -433,15 +581,15 @@ def extract_senate_comparative(
                 program=item_text.strip() if level.value >= HierarchyLevel.PROGRAM.value else None,
                 hierarchy_depth=level.value,
                 line_item_text=item_text.strip(),
-                prior_year_enacted=amounts[0] if len(amounts) > 0 else None,
-                budget_estimate=amounts[1] if len(amounts) > 1 else None,
-                committee_recommendation=amounts[2] if len(amounts) > 2 else None,
-                delta_vs_enacted=amounts[3] if len(amounts) > 3 else None,
-                delta_vs_estimate=amounts[4] if len(amounts) > 4 else None,
+                prior_year_enacted=placed[_SLOT_ENACTED],
+                budget_estimate=placed[_SLOT_ESTIMATE],
+                committee_recommendation=placed[_SLOT_REC],
+                delta_vs_enacted=placed[_SLOT_D_ENACTED],
+                delta_vs_estimate=placed[_SLOT_D_ESTIMATE],
                 is_subtotal=is_sub,
                 # Flag the memo rows here rather than at output time, so the extracted JSON and
                 # the released CSV carry the same claim and reconciliation can run on either.
-                is_memo=is_paren_memo(amounts[2] if len(amounts) > 2 else None),
+                is_memo=is_paren_memo(placed[_SLOT_REC]),
                 in_thousands=in_thousands,
                 line_number=i + 1,
             ))
