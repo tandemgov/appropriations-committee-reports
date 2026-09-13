@@ -25,10 +25,10 @@ Each cell is `<reports> rpt / <delta-verified rows>✓ of <total rows>`. "Delta-
 
 | Stage | Reports | Rows | Delta-verified |
 |---|---:|---:|---:|
-| Senate committee (HTML text) | 87 | 29,042 | 27,472 (94.6%) |
-| House committee (vision + text) | 143 | 68,350 | 35,832 (52.4%) |
+| Senate committee (HTML text) | 87 | 29,105 | 27,499 (94.5%) |
+| House committee (vision + text) | 143 | 73,473 | 38,121 (51.9%) |
 | Enacted (House CPRT explanatory statements) | 16 | 11,829 | 11,829 (100%) |
-| **Total** | **246** | **109,221** | **75,133** |
+| **Total** | **246** | **114,407** | **77,449** |
 
 ## Inline narrative funding tables
 

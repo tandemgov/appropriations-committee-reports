@@ -15,6 +15,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Senate statements no longer lose the rows above their first subtotal. Data start was found by counting to the third rule, which falls inside the table whenever a statement rules off its opening subtotal (KNOWN_ISSUES #9).
+- Senate value columns are now placed by their header names rather than their order. FY2026 statements print three columns, and a positional read filed the recommendation as the budget estimate and a delta as the recommendation across 862 rows in six reports (KNOWN_ISSUES #8).
+- House vision pages whose table header failed OCR were dropped unflagged, costing Defense FY2025 its whole Title III Procurement block. Two new signals now escalate them, and re-extracting the 307 affected pages recovered 5,160 line items across 73 reports (KNOWN_ISSUES #7).
+
 ### Internal / Infra
 
 ## [1.3.0] - 2026-09-02

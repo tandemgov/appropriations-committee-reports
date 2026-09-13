@@ -273,3 +273,77 @@ Three things guard it now:
 `is_memo` remains a *hypothesis*, not a fact: 2,350 flagged rows (20.3%) are added in by the
 printed total that encloses them. `reconcile` resolves this per total and reports `memo_mode`; the
 column itself is still named for the common case. See `DATA.md`.
+
+---
+
+## 7. House vision pages dropped whole — Defense titles missing from the shipped data
+
+**Status:** FIXED — cause fixed in the extractor (`table_unreadable` + `_statement_gap_pages`) and the affected pages re-extracted (2026-09-11).
+**Scope:** House vision track. 307 dropped pages across 73 of 149 House reports; worst in Defense, where whole titles were absent.
+
+### What's wrong
+`_is_comparative_table` identifies a comparative statement by its header names. When a scan's header does not survive OCR, the table is classified `non_comparative` and discarded, and that class is deliberately never sent to the Gemini fallback. Nothing is flagged, so the page leaves no trace.
+
+CRPT-118hrpt557 (Defense FY2025) is the clearest case. Its Title III Procurement block is printed plainly on page 288 — Aircraft Procurement Army, Missile Procurement Army, Weapons Procurement Navy and 16 more — and none of it is in the dataset. Titles II and IV are missing the same way. 149 rows survive, about two thirds of them from the supplementals and the recapitulation. Two pages of 169 reached the fallback.
+
+**Recovered 2026-09-11:** `scripts/repair_dropped_pages.py` re-read all 307 pages and merged 5,160 rows back in (the merge is additive — a gap page holds no rows to overwrite). CRPT-118hrpt557 went from 18 of 21 printed totals reconciling to 23 of 27, and `Total, title III, Procurement` now reconciles exactly against the 19 accounts beneath it. Corpus totals moved from 109,221 rows to 114,344, and the House strict reconcile rate from 74.8% to 76.1%.
+
+### Why no gate caught it
+Every suspect signal was a failure a page reports about itself, and a page dropped whole reports nothing. Reconciliation could not see it either: a missing block takes its own printed subtotal with it, so the rows and the witness that would convict them disappear together. `approps reconcile -p CRPT-118hrpt557` scores 18 of 21 totals OK.
+
+### The fix
+Two signals that do not require the page to report its own failure: `_money_dense_tabular` treats a headerless money table as ambiguous rather than ignorable, and `_statement_gap_pages` escalates an image page that produced nothing while sitting inside a run of pages that did.
+
+### Remaining
+A report-level completeness check — comparing each report's extracted title totals against the titles its own recapitulation names — would catch the class directly rather than page by page, and is not built.
+
+
+---
+
+## 8. Senate value columns were placed by position, not by name — FIXED
+
+**Status:** FIXED (2026-09-12). Six FY2026 reports re-extracted.
+**Scope:** Senate committee track, FY2026: `CRPT-119srpt37`, `srpt38`, `srpt43`, `srpt44`, `srpt46`, `srpt47`. 862 value-bearing rows.
+
+### What was wrong
+FY2026 Senate statements print **three** value columns, not the five earlier years printed:
+
+```
+Item | 2025 appropriation | Committee recommendation | recommendation compared with (+ or -) 2025 appropriation
+```
+
+`_find_column_positions` reads column *geometry* and never looked at the header names, so the three columns were filed into the first three of five fixed slots. Every value landed one place to the left: `budget_estimate` held the committee recommendation, and `committee_recommendation` held a delta. Anyone charting an FY2026 Senate level got a change figure instead.
+
+### Why no gate caught it
+The same blindness as #6 and #7. String matching passes, because every digit is genuinely on the page. Reconciliation passes too: **deltas are additive**, so a column of deltas sums to a subtotal of deltas exactly as amounts do. `CRPT-119srpt46` reconciled at 53% before the fix and nothing looked wrong.
+
+It was found by an arithmetic tripwire over the shipped data — `committee_recommendation == budget_estimate - prior_year_enacted` held for **100%** of value-bearing rows in six reports, which no correctly-parsed statement does.
+
+### The fix
+`_column_slots` reads each column's stacked header text and maps it to its schema slot by name, the way the House/Nemotron path already did. Three guards keep it from making things worse: an identity mapping returns None so five-column reports take the untouched positional path; a mapping with duplicate or missing slots is refused; and `_arithmetic_agrees` checks the reading against the table's own deltas before trusting it, because the header is a claim and the rows are the evidence.
+
+Acceptance, per the discipline in #5: re-extract all 87 Senate reports and diff against the previous parser. **81 of 87 byte-identical, 0 row-set changes, and exactly the 6 intended reports changed.**
+
+### Remaining
+The delta column itself is still not captured on these three-column statements (`delta_vs_enacted` is null), because the value reader's geometry helper insists on five columns. The figure is derivable as recommendation minus prior-year. Correcting the geometry was tried and reverted: it changed 28 unrelated reports for no gain.
+
+
+---
+
+## 9. Senate statements lost the rows above their first subtotal — FIXED
+
+**Status:** FIXED (2026-09-12). 23 reports re-extracted, 63 rows recovered.
+**Scope:** Senate committee track, every fiscal year. 18 reports opened mid-table; 23 gained rows once fixed.
+
+### What was wrong
+The reader found the data by counting rules: "after the third separator, data begins". A statement has two rules in its header, one under the title and one under the column names, so the third rule is somewhere in the table itself. Where a statement prints a rule above its opening subtotal — Corps of Engineers, Diplomatic Programs, Active Components and NRC tables all do — every row above that rule was stepped over.
+
+`CRPT-118srpt72` began at `Subtotal, Investigations` with `Investigations` and `Rescission` missing above it. `CRPT-114srpt236` began at `SUBTOTAL, OPERATING REACTORS`, missing `OPERATING REACTORS` and `CORPORATE SUPPORT`.
+
+### Why no gate caught it
+Same shape as #7. The rows and the subtotal they belong to were both absent, so nothing could be compared against anything. The detector that found it was structural rather than arithmetic: **a statement whose first row is a subtotal has lost its head**, since no table opens with a total of nothing.
+
+### The fix
+Data begins after the second rule, the one closing the column headers. Acceptance: all 87 Senate reports re-extracted and diffed — 64 byte-identical, 23 gained rows, **zero other changes**, so the edit is purely additive.
+
+Senate strict reconciliation moved 81.3% to 81.7% and genuine failures fell from 941 to 922.
