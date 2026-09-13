@@ -1,6 +1,6 @@
 # The dataset
 
-Line-item appropriations data extracted from congressional committee reports, FY2016–FY2027: **114,407 line items** across **246 reports**, both chambers, committee and enacted stages.
+Line-item appropriations data extracted from congressional committee reports, FY2016–FY2027: **114,532 line items** across **246 reports**, both chambers, committee and enacted stages.
 
 Download it from the [latest release](https://github.com/tandemgov/appropriations-committee-reports/releases/latest). Everything here is CC0 — public domain, no attribution required (though it's appreciated).
 
@@ -13,7 +13,7 @@ import pandas as pd
 
 df = pd.read_parquet("comparative_statements.parquet")
 
-# The subset with a corroborated amount in a standard column layout: 80,435 rows (73.8%).
+# The subset with a corroborated amount in a standard column layout: 84,013 rows (73.4%).
 strict = df[(df.column_layout == "standard") & (df.verification_tier != "none")]
 ```
 
@@ -97,7 +97,7 @@ See [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) for exactly what goes wrong i
 
 | File | Rows | Description |
 |---|---:|---|
-| `comparative_statements.{csv,parquet}` | 114,407 | The main table. One row per line item. |
+| `comparative_statements.{csv,parquet}` | 114,532 | The main table. One row per line item. |
 | `inline_funding_tables.{csv,parquet}` | 13,853 | Narrative funding tables from report prose. String-verified against source text. |
 | `account_authority.{csv,parquet}` | 732 | Federal account reference used by the crosswalk. |
 | `SHA256SUMS` | — | Checksums for all of the above. |

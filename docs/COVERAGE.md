@@ -19,16 +19,16 @@ Each cell is `<reports> rpt / <delta-verified rows>✓ of <total rows>`. "Delta-
 | FY2024 | 12 rpt / 4,558✓ of 4,849 | 10 rpt / 2,045✓ of 3,769 | 2 rpt / 1,609✓ of 1,609 |
 | FY2025 | 11 rpt / 3,828✓ of 4,097 | 12 rpt / 3,344✓ of 9,004 | — |
 | FY2026 | 7 rpt / 2,096✓ of 2,372 | 12 rpt / 1,639✓ of 4,486 | — |
-| FY2027 | — | 12 rpt / 4,401✓ of 7,097 | — |
+| FY2027 | — | 12 rpt / 4,630✓ of 7,361 | — |
 
 **Stage totals:**
 
 | Stage | Reports | Rows | Delta-verified |
 |---|---:|---:|---:|
 | Senate committee (HTML text) | 87 | 29,105 | 27,499 (94.5%) |
-| House committee (vision + text) | 143 | 73,473 | 38,121 (51.9%) |
+| House committee (vision + text) | 143 | 73,598 | 38,301 (52.0%) |
 | Enacted (House CPRT explanatory statements) | 16 | 11,829 | 11,829 (100%) |
-| **Total** | **246** | **114,407** | **77,449** |
+| **Total** | **246** | **114,532** | **77,629** |
 
 ## Inline narrative funding tables
 

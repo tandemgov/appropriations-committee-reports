@@ -19,7 +19,7 @@ from pathlib import Path
 import pdfplumber
 
 from approps.extraction.comparative_house import _find_image_pages, _items_to_lines, _page_to_base64_png
-from approps.extraction.hybrid import _gemini_extract_retry, _statement_gap_pages
+from approps.extraction.hybrid import _gemini_extract_retry, _statement_edge_pages, _statement_gap_pages
 from approps.extraction.verify import page_of, verify
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -48,7 +48,8 @@ def _repair_one(path: Path, workers: int, dry_run: bool) -> dict | None:
         return None
 
     pdf = pdfplumber.open(str(pdf_path))
-    gaps = sorted(_statement_gap_pages(lines, _find_image_pages(pdf)))
+    image_pages = _find_image_pages(pdf)
+    gaps = sorted(_statement_gap_pages(lines, image_pages) | _statement_edge_pages(lines, image_pages))
     if not gaps:
         return None
     if dry_run:
