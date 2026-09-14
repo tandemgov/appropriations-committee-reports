@@ -29,7 +29,7 @@ from approps.extraction.comparative_house import (
     _page_to_base64_png,
 )
 from approps.extraction.nemotron_parse import extract_house_nemotron
-from approps.extraction.verify import page_of, verify
+from approps.extraction.verify import page_of, row_status, verify
 from approps.output.schemas import ComparativeStatementLine
 from approps.verification.recall_check import (
     audit_recall,
@@ -50,22 +50,67 @@ def _statement_gap_pages(lines: list[dict], image_pages: list[int]) -> set[int]:
     Every other suspect signal is a failure a page reports about itself, and a page dropped whole reports nothing, so it shows up only as absence.
     """
     produced = sorted({page_of(ln) for ln in lines if page_of(ln)})
-    if len(produced) < 2:
-        return set()
+    candidates = {idx + 1 for idx in image_pages}
+    gaps: set[int] = set()
+    for run in _statement_runs(produced):
+        if len(run) < 3:  # too short to assert a statement runs through it
+            continue
+        seen = set(run)
+        gaps |= {p for p in range(run[0] + 1, run[-1]) if p not in seen and p in candidates}
+    return gaps
+
+
+def _statement_edge_pages(lines: list[dict], image_pages: list[int]) -> set[int]:
+    """Image pages directly before or after a statement's run that produced no rows.
+
+    A dropped first or last page leaves no hole inside the run, so `_statement_gap_pages` cannot see it; CRPT-119hrpt696 lost its opening page and its Grand Total this way.
+    """
+    produced = sorted({page_of(ln) for ln in lines if page_of(ln)})
+    candidates = {idx + 1 for idx in image_pages}
+    seen = set(produced)
+    edges: set[int] = set()
+    for run in _statement_runs(produced):
+        if len(run) < 3:
+            continue
+        edges |= {p for p in (run[0] - 1, run[-1] + 1) if p in candidates and p not in seen}
+    return edges
+
+
+def _statement_runs(produced: list[int]) -> list[list[int]]:
+    """Group sorted row-producing pages into runs no more than `_STATEMENT_MAX_GAP` apart."""
+    if not produced:
+        return []
     runs: list[list[int]] = [[produced[0]]]
     for page in produced[1:]:
         if page - runs[-1][-1] <= _STATEMENT_MAX_GAP:
             runs[-1].append(page)
         else:
             runs.append([page])
-    candidates = {idx + 1 for idx in image_pages}
-    gaps: set[int] = set()
-    for run in runs:
-        if len(run) < 3:  # too short to assert a statement runs through it
-            continue
-        seen = set(run)
-        gaps |= {p for p in range(run[0] + 1, run[-1]) if p not in seen and p in candidates}
-    return gaps
+    return runs
+
+
+# Enacted and request are levels, never changes, so an explicit plus sign there is a delta read into the wrong column.
+_LEVEL_COLS = ("prior_year_enacted", "budget_estimate")
+
+
+def _shifted_column_pages(lines: list[dict]) -> set[int]:
+    """Pages where a delta landed in a level column.
+
+    Such a row reads as unverifiable rather than failing the delta arithmetic, so the fail-page gate never escalates it.
+    """
+    return {
+        page_of(ln)
+        for ln in lines
+        if any(((ln.get(c) or {}).get("raw_text") or "").lstrip().startswith("+") for c in _LEVEL_COLS)
+    }
+
+
+def _looks_like_statement(page_lines: list[dict]) -> bool:
+    """Whether a re-read page carries a row whose delta arithmetic closes.
+
+    The page beside a statement is often another table — a project list, a vote roster, an authorization table — that Gemini maps into the five columns anyway; only a comparative table can close a delta identity.
+    """
+    return any(row_status(ln) == "pass" for ln in page_lines)
 
 
 class PerDayQuotaError(Exception):
@@ -209,10 +254,16 @@ def extract_house_hybrid(
         logger.info(f"No inline CSV for {report_id}; recall cross-check skipped")
 
     # 3. Suspect pages -------------------------------------------------------------
-    gap_pages = _statement_gap_pages(lines, image_pages)
+    edge_pages = _statement_edge_pages(lines, image_pages)
+    gap_pages = _statement_gap_pages(lines, image_pages) | edge_pages
     if gap_pages:
-        logger.info(f"Statement gaps (produced no rows inside a run): {sorted(gap_pages)}")
-    suspect = sorted(set(before["fail_pages"]) | set(empty) | set(unreadable) | recall_pages | gap_pages)
+        logger.info(f"Statement gaps (produced no rows inside or at the edge of a run): {sorted(gap_pages)}")
+    shifted_pages = _shifted_column_pages(lines)
+    if shifted_pages:
+        logger.info(f"Deltas read into level columns: {sorted(shifted_pages)}")
+    suspect = sorted(
+        set(before["fail_pages"]) | set(empty) | set(unreadable) | recall_pages | gap_pages | shifted_pages
+    )
     logger.info(f"Suspect pages -> Gemini ({len(suspect)} of {len(image_pages)}): {suspect}")
 
     # 4-5. Gemini re-extract suspect pages, replace wholesale ----------------------
@@ -232,6 +283,12 @@ def extract_house_hybrid(
         except Exception as e:  # noqa: BLE001
             logger.error(f"  gemini page {page_num} ERROR: {e} (keeping Nemotron rows)")
 
+    rejected = sorted(p for p in edge_pages if p in gemini_lines and not _looks_like_statement(gemini_lines[p]))
+    for page_num in rejected:
+        del gemini_lines[page_num]
+    if rejected:
+        logger.info(f"Edge pages holding no comparative rows, kept out: {rejected}")
+
     suspect_set = set(gemini_lines)
     merged = [ln for ln in lines if page_of(ln) not in suspect_set]
     for page_lines in gemini_lines.values():
@@ -245,6 +302,8 @@ def extract_house_hybrid(
         "suspect_pages_to_gemini": suspect,
         "pages_table_unreadable": sorted(unreadable),
         "statement_gap_pages": sorted(gap_pages),
+        "shifted_column_pages": sorted(shifted_pages),
+        "edge_pages_rejected": rejected,
         "gemini_calls": gemini_calls,
         "gemini_calls_saved_vs_pure": len(image_pages) - gemini_calls,
         "nemotron_pass_rate": before["pass_rate"],

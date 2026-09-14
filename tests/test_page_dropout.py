@@ -5,7 +5,7 @@ CRPT-118hrpt557 lost its Title III Procurement block this way, unflagged, and re
 
 from __future__ import annotations
 
-from approps.extraction.hybrid import _statement_gap_pages
+from approps.extraction.hybrid import _looks_like_statement, _statement_edge_pages, _statement_gap_pages
 from approps.extraction.nemotron_parse import _money_dense_tabular
 
 # Title III as it actually appears, with the header garbled the way the scan garbled it.
@@ -72,3 +72,52 @@ def test_non_image_pages_are_never_escalated():
     lines = [_line(p) for p in (294, 296, 298)]
     # Only 295 is an image page; 297 is text and cannot be sent to a vision fallback.
     assert _statement_gap_pages(lines, image_pages=[293, 294, 295, 297]) == {295}
+
+
+def test_dropped_first_and_last_pages_of_a_statement_are_flagged():
+    # CRPT-119hrpt696: the opening page and the Grand Total page produced no rows.
+    lines = [_line(p) for p in (351, 352, 353, 354)]
+    assert _statement_edge_pages(lines, image_pages=list(range(339, 360))) == {350, 355}
+
+
+def test_edge_pages_that_are_text_are_never_escalated():
+    lines = [_line(p) for p in (351, 352, 353)]
+    assert _statement_edge_pages(lines, image_pages=[349, 350, 351, 352]) == {350}
+
+
+def test_a_short_run_has_no_edges():
+    lines = [_line(p) for p in (351, 352)]
+    assert _statement_edge_pages(lines, image_pages=list(range(339, 360))) == set()
+
+
+def _amounts(label, enacted=None, request=None, committee=None, vs_enacted=None, vs_request=None):
+    def amount(value):
+        return {"value": value, "raw_text": "", "in_thousands": True}
+
+    return {
+        "line_item_text": label,
+        "line_number": 35200,
+        "prior_year_enacted": amount(enacted),
+        "budget_estimate": amount(request),
+        "committee_recommendation": amount(committee),
+        "delta_vs_enacted": amount(vs_enacted),
+        "delta_vs_estimate": amount(vs_request),
+    }
+
+
+def test_a_page_with_a_closing_row_is_a_statement():
+    page = [
+        _amounts("Training and Employment Services:"),
+        _amounts("Total, Training and Employment Services", 3_981_588, 3_425_067, 1_889_912, -2_091_676, -1_535_155),
+    ]
+    assert _looks_like_statement(page)
+
+
+def test_a_project_list_is_not_a_statement():
+    # Military construction lists beside a statement carry request and recommendation but no deltas.
+    page = [_amounts("ALABAMA"), _amounts("F-35 SIMULATOR FACILITY", request=11_600, committee=11_600)]
+    assert not _looks_like_statement(page)
+
+
+def test_a_vote_roster_is_not_a_statement():
+    assert not _looks_like_statement([_amounts("FULL COMMITTEE VOTES"), _amounts("Roll Call 1")])

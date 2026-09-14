@@ -39,6 +39,17 @@ NON_COMPARATIVE = (
 )
 
 
+# FY2027 layout (CRPT-119hrpt696): "Committee vs." sits on the line above, so the delta headers repeat the bare names.
+TWO_LINE_HEADER = (
+    r"<x_0.20><y_0.0>\begin{tabular}{cccccc}"
+    "\n & **FY 2026** & **FY 2027** & **Committee** & **Committee vs.** & \\\\"
+    "\n & **Enacted** & **Request*** & **Recommendation** & **Enacted** & **Request**\\\\"
+    "\nApprenticeship programs..... & 285,000 & --- & 290,000 & +5,000 & +290,000\\\\"
+    "\nTotal, Training and Employment Services..... & 3,981,588 & 3,425,067 & 1,889,912 & -2,091,676 & -1,535,155\\\\"
+    r"\end{tabular}"
+)
+
+
 def _row(items, label_prefix):
     return next(it for it in items if it["text"].startswith(label_prefix))
 
@@ -59,6 +70,20 @@ def test_four_column_layout_maps_to_enacted_bill_and_delta():
     assert row["col3"] == "440,000"   # bill
     assert row["col4"] == "-133,000"  # bill vs enacted
     assert row["col5"] == ""          # bill-vs-request column absent
+
+
+def test_two_line_header_keeps_amounts_out_of_delta_columns():
+    row = _row(parse_page(TWO_LINE_HEADER), "Total, Training and Employment Services")
+    assert (row["col1"], row["col2"], row["col3"], row["col4"], row["col5"]) == (
+        "3,981,588", "3,425,067", "1,889,912", "-2,091,676", "-1,535,155",
+    )
+
+
+def test_two_line_header_blank_delta_does_not_erase_the_request():
+    row = _row(parse_page(TWO_LINE_HEADER), "Apprenticeship programs")
+    assert (row["col1"], row["col2"], row["col3"], row["col4"], row["col5"]) == (
+        "285,000", "", "290,000", "+5,000", "+290,000",
+    )
 
 
 def test_three_column_table_is_not_comparative():

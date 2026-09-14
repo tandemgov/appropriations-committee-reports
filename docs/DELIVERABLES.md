@@ -6,7 +6,7 @@ This is the front door to the appropriations extraction deliverables — what ea
 
 | Deliverable | File | Size | What it is |
 |---|---|---|---|
-| **Comparative statements** | `data/output/comparative_statements.csv` | 114,407 rows / 246 report-stages | Every line item in the back-of-report comparative ledgers: department → agency → account → program, with prior-year enacted, budget estimate, and committee/enacted recommendation, plus normalization columns. The primary deliverable. |
+| **Comparative statements** | `data/output/comparative_statements.csv` | 115,413 rows / 246 report-stages | Every line item in the back-of-report comparative ledgers: department → agency → account → program, with prior-year enacted, budget estimate, and committee/enacted recommendation, plus normalization columns. The primary deliverable. |
 | **Inline funding tables** | `data/output/inline_funding_tables.csv` | 13,853 records | The 3-line narrative funding summaries in the report body (a second, independent extraction). |
 | **Combined JSON** | `data/output/all_data.json` | — | Both of the above as nested JSON. |
 | **FY2027 House Defense** | `data/output/fy2027-house-defense/` | 2,327 line items + 1,354 marks | Standalone deliverable from the born-digital Defense committee print; see its own README. |

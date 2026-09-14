@@ -4,31 +4,31 @@ What appropriations line-item data has been extracted, by stage, chamber, and fi
 
 ## Comparative statements (the dense back-of-report ledgers)
 
-Each cell is `<reports> rpt / <delta-verified rows>✓ of <total rows>`. "Delta-verified" means the row's table arithmetic closes (see [DATA_DICTIONARY.md](DATA_DICTIONARY.md) and the verification note below); the unverified remainder is mostly structural/label rows, not errors. (The House per-FY cells sum to ~495 rows fewer than the House stage total below: those rows carry no `fiscal_year` in the source and so land in no year column, but are counted in the stage total.)
+Each cell is `<reports> rpt / <delta-verified rows>✓ of <total rows>`. "Delta-verified" means the row's table arithmetic closes (see [DATA_DICTIONARY.md](DATA_DICTIONARY.md) and the verification note below); the unverified remainder is mostly structural/label rows, not errors. (The House per-FY cells sum to 857 rows fewer than the House stage total below: those rows, from 9 reports, carry no `fiscal_year` in the source and so land in no year column, but are counted in the stage total.)
 
 | FY | Senate committee | House committee | Enacted (House CPRT) |
 |----|---|---|---|
-| FY2016 | 12 rpt / 3,731✓ of 3,999 | 12 rpt / 2,837✓ of 5,150 | 2 rpt / 1,101✓ of 1,101 |
-| FY2017 | 12 rpt / 3,736✓ of 3,861 | 12 rpt / 2,913✓ of 5,346 | 1 rpt / 1,151✓ of 1,151 |
-| FY2018 | 8 rpt / 2,129✓ of 2,201 | 12 rpt / 2,476✓ of 4,374 | 2 rpt / 1,216✓ of 1,216 |
-| FY2019 | 12 rpt / 3,868✓ of 4,013 | 13 rpt / 4,292✓ of 7,808 | 1 rpt / 795✓ of 795 |
-| FY2020 | 10 rpt / 2,817✓ of 2,900 | 12 rpt / 2,092✓ of 3,970 | 2 rpt / 1,371✓ of 1,371 |
-| FY2021 | — | 12 rpt / 3,104✓ of 5,735 | 2 rpt / 1,306✓ of 1,306 |
-| FY2022 | 3 rpt / 709✓ of 750 | 12 rpt / 3,191✓ of 5,282 | 2 rpt / 1,764✓ of 1,764 |
-| FY2023 | — | 12 rpt / 3,187✓ of 5,834 | 2 rpt / 1,516✓ of 1,516 |
-| FY2024 | 12 rpt / 4,558✓ of 4,849 | 10 rpt / 2,045✓ of 3,769 | 2 rpt / 1,609✓ of 1,609 |
-| FY2025 | 11 rpt / 3,828✓ of 4,097 | 12 rpt / 3,344✓ of 9,004 | — |
-| FY2026 | 7 rpt / 2,096✓ of 2,372 | 12 rpt / 1,639✓ of 4,486 | — |
-| FY2027 | — | 12 rpt / 4,401✓ of 7,097 | — |
+| FY2016 | 12 rpt / 3,739✓ of 4,007 | 12 rpt / 3,065✓ of 5,740 | 2 rpt / 1,101✓ of 1,101 |
+| FY2017 | 12 rpt / 3,747✓ of 3,872 | 12 rpt / 3,122✓ of 5,824 | 1 rpt / 1,151✓ of 1,151 |
+| FY2018 | 8 rpt / 2,140✓ of 2,212 | 12 rpt / 2,911✓ of 5,277 | 2 rpt / 1,216✓ of 1,216 |
+| FY2019 | 12 rpt / 3,876✓ of 4,021 | 13 rpt / 4,715✓ of 8,676 | 1 rpt / 795✓ of 795 |
+| FY2020 | 10 rpt / 2,822✓ of 2,905 | 12 rpt / 2,876✓ of 5,434 | 2 rpt / 1,371✓ of 1,371 |
+| FY2021 | — | 12 rpt / 3,241✓ of 6,016 | 2 rpt / 1,306✓ of 1,306 |
+| FY2022 | 3 rpt / 713✓ of 754 | 12 rpt / 3,297✓ of 5,440 | 2 rpt / 1,764✓ of 1,764 |
+| FY2023 | — | 12 rpt / 3,427✓ of 6,297 | 2 rpt / 1,516✓ of 1,516 |
+| FY2024 | 12 rpt / 4,566✓ of 4,857 | 10 rpt / 2,063✓ of 3,840 | 2 rpt / 1,609✓ of 1,609 |
+| FY2025 | 11 rpt / 3,832✓ of 4,101 | 12 rpt / 3,418✓ of 9,152 | — |
+| FY2026 | 7 rpt / 2,064✓ of 2,376 | 12 rpt / 1,654✓ of 4,565 | — |
+| FY2027 | — | 12 rpt / 4,630✓ of 7,361 | — |
 
 **Stage totals:**
 
 | Stage | Reports | Rows | Delta-verified |
 |---|---:|---:|---:|
 | Senate committee (HTML text) | 87 | 29,105 | 27,499 (94.5%) |
-| House committee (vision + text) | 143 | 73,473 | 38,121 (51.9%) |
+| House committee (vision + text) | 143 | 74,479 | 38,777 (52.1%) |
 | Enacted (House CPRT explanatory statements) | 16 | 11,829 | 11,829 (100%) |
-| **Total** | **246** | **114,407** | **77,449** |
+| **Total** | **246** | **115,413** | **78,105** |
 
 ## Inline narrative funding tables
 

@@ -110,8 +110,22 @@ def _header_slots(body: str) -> list[int | None] | None:
             continue
         slots = [_header_to_slot(c) for c in cells[1:]]
         if _SLOT_ENACTED in slots and _SLOT_BILL in slots:
-            return slots
+            return _promote_repeated_to_deltas(slots)
     return None
+
+
+def _promote_repeated_to_deltas(slots: list[int | None]) -> list[int | None]:
+    """Map a repeated Enacted/Request header to its delta slot.
+
+    A two-line header sets "Committee vs." above a second "Enacted | Request" pair, so the delta cells carry no "vs" of their own; left as-is they overwrite the real amounts (CRPT-119hrpt696).
+    """
+    delta_of = {_SLOT_ENACTED: _SLOT_D_ENACTED, _SLOT_REQUEST: _SLOT_D_REQUEST}
+    seen: set[int | None] = set()
+    out: list[int | None] = []
+    for slot in slots:
+        out.append(delta_of[slot] if slot in seen and slot in delta_of else slot)
+        seen.add(slot)
+    return out
 
 
 def _is_comparative_table(spec: str, body: str) -> bool:

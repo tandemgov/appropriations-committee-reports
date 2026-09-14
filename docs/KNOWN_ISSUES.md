@@ -347,3 +347,34 @@ Same shape as #7. The rows and the subtotal they belong to were both absent, so 
 Data begins after the second rule, the one closing the column headers. Acceptance: all 87 Senate reports re-extracted and diffed — 64 byte-identical, 23 gained rows, **zero other changes**, so the edit is purely additive.
 
 Senate strict reconciliation moved 81.3% to 81.7% and genuine failures fell from 941 to 922.
+
+
+---
+
+## 10. House deltas were written over the enacted and request amounts — FIXED
+
+**Status:** FIXED (2026-09-13). `CRPT-119hrpt696` re-read with Gemini.
+**Scope:** House vision track. The signature — an explicit `+` on an enacted or request amount — appears in 2 of 148 House reports: `CRPT-119hrpt696` (Labor-HHS FY2027, 223 of 1,058 rows) and a single page of `CRPT-117hrpt392`.
+
+### What was wrong
+`CRPT-119hrpt696` sets "Committee vs." on the header line above a second `Enacted | Request` pair, so its two delta columns carry no "vs" of their own. `_header_to_slot` mapped them to the enacted and request slots, and `parse_page` lets a later cell overwrite an earlier one: each row's enacted and request amounts were replaced by its deltas, or blanked where the delta read `---`.
+
+A page-by-page audit against the scans found 298 of 1,023 table rows matching exactly. `Total, Title I, Department of Labor` carried a request of `+169,485` against 11,733,555 on the page, and Pell Grants carried −10,298,000 against 33,023,352. The statement's first page and its Grand Total page produced no rows at all.
+
+### Why no gate caught it
+A row missing a level cannot express either delta identity, so `row_status` calls it `unverifiable`, not `fail`. The hybrid pipeline escalates fail pages to Gemini, and not one page in the report had a failing row. `delta_arithmetic` still tagged 354 of its rows verified, and a string match would have passed them all, because every misplaced number is genuinely on the page.
+
+The independent witness was the report's own text-layer summary table: its department request totals (Labor 10,206,762, HHS 98,602,461) disagreed with the dataset (169,485, and the HHS committee-vs-request delta). The two dropped pages sat at the edges of the statement, where `_statement_gap_pages`, which only looks inside a run, cannot see them.
+
+### The fix
+`_promote_repeated_to_deltas` maps a repeated Enacted or Request header name to its delta slot, leaving every layout without a repeat untouched. Two escalation signals were added to the hybrid pipeline: `_shifted_column_pages` flags a page whose enacted or request cell carries an explicit `+`, which a level never does, and `_statement_edge_pages` flags an image page directly before or after a statement's run that produced no rows. On this report the sign signal flagged 44 of the 58 bad pages and none of the 13 good ones.
+
+The other bad pages held row offsets and merged rows with no clean signal, so every image page was re-read with Gemini rather than only the flagged ones. Page 401 came back with its last rows shifted one line; two further reads were both exact, and the hand transcription chose between them. Against that transcription, whose 1,168 delta identities all close, all 933 value rows now match: 932 as read, plus one misread digit that `auto_repair` corrected from the row's own deltas. `auto_repair` also filled four `---` recommendations as zero. Strict reconciliation moved from 69.9% to 87.2%, and genuine failures fell from 46 to 23.
+
+### Edge pages across the corpus
+`scripts/repair_dropped_pages.py` re-read the 107 candidate pages the gap and edge signals name across 69 House reports. Its first pass merged whatever came back, and 16 of those pages were not statement pages at all: full-committee vote rosters, military construction project lists, unauthorized-appropriations tables and a 302(b) allocation table, whose cells Gemini had mapped into the five columns anyway. `_looks_like_statement` now keeps a re-read page only when one of its rows closes a delta identity, which a comparative table does and those tables cannot; the hybrid pipeline applies the same test to edge pages.
+
+With the gate in place, 46 pages were recovered (885 rows, 479 verified, none with a plus-signed level), 21 were turned away, and 40 came back empty. No existing row changed. House strict reconciliation moved from 76.4% to 76.5%, with 58 more printed totals reconciling.
+
+### Remaining
+The Nemotron server was not reachable for this fix, so the header mapping and all three signals are covered by unit tests but have not run end to end through `extract_house_hybrid`. Row-offset and merged-row errors of the kind the sign signal missed are not measured outside `CRPT-119hrpt696`. Some recovered edge pages are Defense procurement detail tables whose quantity columns only partly align (#2): enough rows close a delta to pass the gate, and the rest join the mis-mapped rows #2 already describes.
