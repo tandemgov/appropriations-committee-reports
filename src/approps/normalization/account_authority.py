@@ -275,6 +275,7 @@ def trace_accounts(
             else MoneyPoint(fy, ch, st, None, tuple(sorted(str(r.get("report_id")) for r in rs)))
             for (fy, ch, st), rs in sorted(cells.items(), key=lambda kv: (kv[0][0], kv[0][1] or "", kv[0][2] or ""))
         )
+        report_count = len({r.get("report_id") for r in group})
         conflicted = {id(r) for rs in cells.values() if len(rs) > 1 for r in rs}
         # Labels and title changes come only from uncontested cells, so a wrongly keyed report cannot look like a rename.
         group = [r for r in group if id(r) not in conflicted]
@@ -317,7 +318,7 @@ def trace_accounts(
                 labels=labels,
                 title_changes=tuple(changes),
                 series=series,
-                report_count=len({r.get("report_id") for r in group}),
+                report_count=report_count,
                 metric=metric,
             )
         )

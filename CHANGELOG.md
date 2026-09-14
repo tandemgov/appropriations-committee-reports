@@ -41,6 +41,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - 857 rows lacked a fiscal year and 13,171 a subcommittee; both are filled from the report catalog or the enacted division (#17).
 - `/compare` double-counted account lines with their breakdowns and mixed chambers and stages; flow and account history promoted the largest program line to an account total (#18).
 - The account gate no longer admits a cross-jurisdiction key because two Senate reports repeat the same label-only match; every agency has a jurisdiction entry and the only exceptions are two reviewed accounts (#16).
+- Account history's `report_count` counts reports in conflicted years; it had dropped them (070-0113 reported 11 of 13).
+- The API reports the package version instead of 0.1.0.
+- `scripts/accuracy_review.py` applies the typeset adjustment-row exclusion itself, so it reproduces the published rates.
 
 - House vision pages whose header sets "Committee vs." on its own line had their delta columns written over the enacted and request amounts. The rows turned unverifiable rather than failing, so no gate escalated them, and only 29% of CRPT-119hrpt696's rows (Labor-HHS FY2027) matched the page. A repeated Enacted/Request header now maps to its delta slot, two new signals escalate a delta read into a level column and a page dropped at a statement's edge, and the report was re-read with Gemini: all 933 value rows now match a hand transcription, and its strict reconciliation rose from 69.9% to 87.2% (KNOWN_ISSUES #10).
 - Twelve Labor-HHS rows lost a false account match: "Inspector General Federal Funds" had been keyed to a Treasury advances account, and "User Fees" to National Park Service filming fees. The Tango crosswalk learns each subcommittee's agency scope from the corpus, and the corrected FY2027 rows widened Labor-HHS's scope enough to leave those matches ambiguous.

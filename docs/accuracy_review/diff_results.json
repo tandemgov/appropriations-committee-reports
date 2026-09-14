@@ -132,13 +132,13 @@
         "delta_vs_estimate"
       ]
     ],
-    "source_value_rows": 40,
-    "matched_rows": 30,
+    "source_value_rows": 29,
+    "matched_rows": 29,
     "extra_rows": 0,
-    "adjustment_rows": 0,
-    "cells": 88,
-    "cells_transcribed": 88,
-    "cells_in_right_column": 88
+    "adjustment_rows": 11,
+    "cells": 87,
+    "cells_transcribed": 87,
+    "cells_in_right_column": 87
   },
   {
     "unit": "ht-CRPT-119hrpt715-p168",
@@ -159,10 +159,10 @@
         "delta_vs_estimate"
       ]
     ],
-    "source_value_rows": 40,
+    "source_value_rows": 26,
     "matched_rows": 26,
     "extra_rows": 0,
-    "adjustment_rows": 0,
+    "adjustment_rows": 14,
     "cells": 78,
     "cells_transcribed": 78,
     "cells_in_right_column": 78
@@ -186,10 +186,10 @@
         "delta_vs_estimate"
       ]
     ],
-    "source_value_rows": 46,
+    "source_value_rows": 29,
     "matched_rows": 29,
     "extra_rows": 0,
-    "adjustment_rows": 0,
+    "adjustment_rows": 17,
     "cells": 87,
     "cells_transcribed": 87,
     "cells_in_right_column": 87
@@ -213,10 +213,10 @@
         "delta_vs_estimate"
       ]
     ],
-    "source_value_rows": 13,
+    "source_value_rows": 12,
     "matched_rows": 12,
     "extra_rows": 0,
-    "adjustment_rows": 0,
+    "adjustment_rows": 1,
     "cells": 36,
     "cells_transcribed": 34,
     "cells_in_right_column": 34

@@ -6,7 +6,9 @@ For each unit: align transcript rows to extracted rows in document order, then s
   column         — of those, the amount sits in the schema slot its source column means
 Every disagreement is written out for adjudication, because the transcriber can be wrong too.
 """
-import json, re, sys
+import json
+import re
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -131,9 +133,11 @@ for tpath in sorted((HERE / "transcripts").glob("*.json")):
     for r in t["rows"]:
         vals = [(slots[i] if i < len(slots) else None, parse_cell(c)) for i, c in enumerate(r.get("cells") or [])]
         vals = [(s, v) for s, v in vals if v is not None]
-        # A row whose only figure is a change column is an adjustment explanation ("Program increase", "Carryover"), not a funding line.
-        # The typeset parser omits these by design; count them separately rather than as omissions.
-        if vals and all(s in ("delta_vs_enacted", "delta_vs_estimate") for s, _ in vals) and u["track"] == "house_typeset":
+        # Typeset Defense tables explain each account's change with rows that print a single figure under the account ("Program increase—…", "Carryover", "Classified adjustment").
+        # They are not funding lines and the typeset parser omits them by design, so they leave the completeness denominator.
+        # Line items carry a line number or an upper-case label and more than one figure; totals are flagged.
+        if (u["track"] == "house_typeset" and len(vals) == 1 and not r.get("is_total")
+                and not re.match(r"^\d+\s", r["label"]) and r["label"] != r["label"].upper()):
             adjustment_rows += 1
             vals = []
         trows.append((r, vals))
@@ -218,6 +222,12 @@ for r in results:
         by_track[r["track"]][k] += r[k]
     print(f"{r['unit']:<32} rows {r['matched_rows']}/{r['source_value_rows']} extra {r['extra_rows']}  cells {r['cells_transcribed']}/{r['cells']} col {r['cells_in_right_column']}/{r['cells_transcribed']}  {r['headers']}")
 print()
-for tr, m in by_track.items():
-    print(tr, dict(m))
+print()
+print(f"{'track':<14} {'completeness':>18} {'transcription':>18} {'column':>18}  out-of-scope rows")
+for tr, m in sorted(by_track.items()):
+    def rate(a, b):
+        return f"{a}/{b} ({a / b:.1%})" if b else "n/a"
+    in_scope = m["source_value_rows"]
+    adj = sum(r["adjustment_rows"] for r in results if r["track"] == tr)
+    print(f"{tr:<14} {rate(m['matched_rows'], in_scope):>18} {rate(m['cells_transcribed'], m['cells']):>18} {rate(m['cells_in_right_column'], m['cells_transcribed']):>18}  {adj}")
 print("disagreements:", len(disagreements), dict((k, sum(1 for d in disagreements if d['kind']==k)) for k in {d['kind'] for d in disagreements}))

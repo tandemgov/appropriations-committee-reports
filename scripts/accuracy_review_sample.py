@@ -5,7 +5,10 @@ A unit is a contiguous region of source a reviewer can transcribe completely:
   senate                                  -> a 44-line window of the source HTML <pre> text
 Reviewers are given only the source locator, never the extracted rows (blind transcription).
 """
-import json, random, re, sys
+import json
+import random
+import re
+import sys
 from collections import defaultdict
 from pathlib import Path
 

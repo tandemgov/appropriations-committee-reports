@@ -221,3 +221,13 @@ def test_conflicted_years_do_not_drive_title_changes():
     ]
     (auth,) = trace_accounts(rows)
     assert auth.title_changes == ()
+
+
+def test_report_count_includes_reports_in_conflicted_years():
+    rows = [
+        _row(report_id="DHS20", committee_recommendation=700),
+        _row(report_id="AG20", committee_recommendation=30),
+        _row(report_id="DHS21", fiscal_year=2021, committee_recommendation=710),
+    ]
+    (auth,) = trace_accounts(rows)
+    assert auth.report_count == 3

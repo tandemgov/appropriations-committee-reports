@@ -37,12 +37,6 @@ import os
 import re
 
 from approps.config import VISION_MODEL, gemini_client
-
-# The non-add classifier model. Defaults to the corpus vision model but can be pointed at
-# another Gemini model via INDENT_MODEL — useful when the primary model's daily quota is
-# exhausted (each model has its own quota bucket). The double-gate's arithmetic check keeps
-# any capable model honest, so the exact model does not affect correctness, only quality.
-_INDENT_MODEL = os.environ.get("INDENT_MODEL", VISION_MODEL)
 from approps.normalization.account_inference import (
     _COLS,
     _MEMO_ONLY_RE,
@@ -50,6 +44,12 @@ from approps.normalization.account_inference import (
     _is_rollup,
     _rollup_name,
 )
+
+# The non-add classifier model. Defaults to the corpus vision model but can be pointed at
+# another Gemini model via INDENT_MODEL — useful when the primary model's daily quota is
+# exhausted (each model has its own quota bucket). The double-gate's arithmetic check keeps
+# any capable model honest, so the exact model does not affect correctness, only quality.
+_INDENT_MODEL = os.environ.get("INDENT_MODEL", VISION_MODEL)
 
 logger = logging.getLogger(__name__)
 

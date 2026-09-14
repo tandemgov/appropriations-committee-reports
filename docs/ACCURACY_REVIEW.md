@@ -35,9 +35,9 @@ Where row arithmetic decided a dispute (for example `114,500 − 78,948 = 35,552
 | House committee, scanned | 89 / 91 (97.8%) | 333 / 335 (99.4%) | 332 / 333 (99.7%) |
 | Senate committee | 139 / 144 (96.5%) | 513 / 513 (100%) | 505 / 513 (98.4%) |
 | Enacted | 128 / 131 (97.7%) | 128 / 128 (100%) | 128 / 128 (100%) |
-| House committee, typeset | 97 / 97 (100%) | 287 / 289 (99.3%) | 287 / 287 (100%) |
+| House committee, typeset | 96 / 96 (100%) | 286 / 288 (99.3%) | 286 / 286 (100%) |
 
-Typeset completeness excludes 42 Defense program-adjustment rows ("Program increase", "Carryover", "Classified adjustment") that print only a change from the request; the parser skips them by design, and they are not line items.
+Typeset figures exclude 43 Defense program-adjustment rows ("Program increase", "Carryover", "Classified adjustment", "Historical unobligated balances") that explain an account's change with a single figure; the parser skips them by design, and they are not line items. `scripts/accuracy_review.py` applies the exclusion structurally — a typeset row with one figure, no total flag, no leading line number, and a mixed-case label — and prints how many rows it set aside.
 With samples of 90–145 rows per track, a one-row difference moves completeness by about a point: read these as orders of magnitude, not as rates to two decimals.
 
 ### What the disagreements were
@@ -63,7 +63,7 @@ Two cells on a title-total row the alignment could not pair.
 ### Defects the review found, and what was done
 
 The review was run against the data as it stood, before the fixes below; the table above scores the data after them.
-The first pass disagreed with the source on 332 cells and rows; the final pass on 73, of which 42 are the out-of-scope adjustment rows.
+The first pass disagreed with the source on 332 cells and rows; the final pass on 31, after the 43 out-of-scope adjustment rows are set aside.
 
 | Found in the sample | Corpus scope | Action | KNOWN_ISSUES |
 |---|---|---|---|
@@ -114,5 +114,5 @@ uv run python scripts/accuracy_review.py
 ```
 
 The script scores `data/output/comparative_statements.csv`, so it needs the extracted reports the release was built from (hashed in the release manifest).
-Its per-track totals are the table above before adjudication; the adjudication — which disagreements were the transcriber's, which were out of scope — is written out in this document, unit by unit.
+It prints the per-track table above, including the out-of-scope typeset rows it excluded. The remaining adjudication — which of the 31 disagreements were the extraction's and which were the reviewer's or the alignment's — is written out in this document, unit by unit.
 A House scanned-page unit is the set of rows whose extracted `line_number // 100` is the page.
