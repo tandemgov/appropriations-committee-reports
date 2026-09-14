@@ -1,0 +1,330 @@
+{
+ "unit_id": "se-CRPT-118srpt191-L6154",
+ "report_id": "CRPT-118srpt191",
+ "html_line_start": 6154,
+ "html_line_end": 6197,
+ "units_header": "[In thousands of dollars]",
+ "column_headers": [
+  "2024 appropriation",
+  "Budget estimate",
+  "Committee recommendation",
+  "Senate Committee recommendation compared with (+ or -) 2024 appropriation",
+  "Senate Committee recommendation compared with (+ or -) Budget estimate"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "Family Housing, Navy & Marine Corps",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "19,000",
+    "",
+    "",
+    "-19,000",
+    ""
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Authorized Projects (Sec 136):",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Military Construction, Defense-Wide",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "37,100",
+    "",
+    "",
+    "-37,100",
+    ""
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "Total, Administrative Provisions",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "1,014,179",
+    "",
+    "707,921",
+    "-306,258",
+    "+707,921"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Total, title I, Department of Defense",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "18,675,000",
+    "17,545,079",
+    "19,307,000",
+    "+632,000",
+    "+1,761,921"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "Appropriations",
+   "indent_level": 3,
+   "is_total": false,
+   "cells": [
+    "(18,675,000)",
+    "(17,545,079)",
+    "(19,307,000)",
+    "(+632,000)",
+    "(+1,761,921)"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "TITLE II--DEPARTMENT OF VETERANS AFFAIRS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Veterans Benefits Administration",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Compensation and pensions:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Budget year appropriations",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "15,072,388",
+    "9,820,699",
+    "9,820,699",
+    "-5,251,689",
+    ""
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Advance from prior year appropriations",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "146,778,136",
+    "182,310,515",
+    "182,310,515",
+    "+35,532,379",
+    ""
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "Subtotal, Compensation and pensions available in fiscal year",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "161,850,524",
+    "192,131,214",
+    "192,131,214",
+    "+30,280,690",
+    ""
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "Advance appropriations, FY 2026",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "182,310,515",
+    "204,481,753",
+    "204,481,753",
+    "+22,171,238",
+    ""
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Less appropriations from prior year advances",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "-146,778,136",
+    "-182,310,515",
+    "-182,310,515",
+    "-35,532,379",
+    ""
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "Total, Compensation and pensions appropriated in this bill",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "197,382,903",
+    "214,302,452",
+    "214,302,452",
+    "+16,919,549",
+    ""
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "Readjustment benefits:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "Budget year appropriations",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "374,852",
+    "2,657,656",
+    "2,657,656",
+    "+2,282,804",
+    ""
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "Advance from prior year appropriations",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "8,452,500",
+    "13,399,805",
+    "13,399,805",
+    "+4,947,305",
+    ""
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "Subtotal, readjustment benefits available in fiscal year",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "8,827,352",
+    "16,057,461",
+    "16,057,461",
+    "+7,230,109",
+    ""
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "Advance appropriations, FY 2026",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "13,399,805",
+    "17,614,235",
+    "17,614,235",
+    "+4,214,430",
+    ""
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "Less appropriations from prior year advances",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "-8,452,500",
+    "-13,399,805",
+    "-13,399,805",
+    "-4,947,305",
+    ""
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "Total, Readjustment benefits appropriated in this bill",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "13,774,657",
+    "20,271,891",
+    "20,271,891",
+    "+6,497,234",
+    ""
+   ]
+  },
+  {
+   "seq": 23,
+   "label": "Veterans insurance and indemnities:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 24,
+   "label": "Budget year appropriations",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "12,701",
+    "",
+    "",
+    "-12,701",
+    ""
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Columns from header at lines 6053-6057 (table title at 6049). Window starts mid-Administrative Provisions of Title I; row 1 'Family Housing, Navy & Marine Corps' is indented under a group heading above the window. Wrapped labels joined: rows 12 (6173-6174), 15 (6179-6180), 19 (6187-6188). Rows 2, 9, 16, 23 are left-aligned group headings ending in ':'; rows 7 and 8 are centered headings. Row 6 'Appropriations' (label unparenthesized, amounts in parentheses) is a memo row under Total, title I. Row 24 (line 6197) is the last window line; its account 'Veterans insurance and indemnities' continues past the window. indent_level = leading spaces // 4; centered headings set to 0."
+}

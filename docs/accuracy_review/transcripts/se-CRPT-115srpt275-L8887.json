@@ -1,0 +1,421 @@
+{
+ "unit_id": "se-CRPT-115srpt275-L8887",
+ "report_id": "CRPT-115srpt275",
+ "html_line_start": 8887,
+ "html_line_end": 8930,
+ "units_header": "[In thousands of dollars]",
+ "column_headers": [
+  "2018 appropriation",
+  "Budget estimate",
+  "Committee recommendation",
+  "Senate Committee recommendation compared  with (+ or -) 2018 appropriation",
+  "Senate Committee recommendation compared  with (+ or -) Budget estimate"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "COPS programs",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "275,500",
+    "",
+    "310,000",
+    "+34,500",
+    "+310,000"
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Total, State and Local Law Enforcement Activities",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "2,442,300",
+    "1,559,300",
+    "2,504,300",
+    "+62,000",
+    "+945,000"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Total, title II, Department of Justice",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "30,296,264",
+    "28,834,744",
+    "30,698,837",
+    "+402,573",
+    "+1,864,093"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "TITLE III--SCIENCE",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Office of Science and Technology Policy",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "5,544",
+    "5,544",
+    "5,544",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "National Space Council",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,965",
+    "1,965",
+    "1,965",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "National Aeronautics and Space Administration",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Science",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "6,221,500",
+    "5,895,000",
+    "6,400,300",
+    "+178,800",
+    "+505,300"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Aeronautics",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "685,000",
+    "633,900",
+    "725,000",
+    "+40,000",
+    "+91,100"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Space Technology",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "760,000",
+    "",
+    "932,800",
+    "+172,800",
+    "+932,800"
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Exploration Research and Technology",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "1,002,700",
+    "",
+    "",
+    "-1,002,700"
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "Exploration",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "4,790,000",
+    "",
+    "5,338,700",
+    "+548,700",
+    "+5,338,700"
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "Deep Space Exploration Systems",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "4,558,800",
+    "",
+    "",
+    "-4,558,800"
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Space Operations",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "4,751,500",
+    "",
+    "4,639,100",
+    "-112,400",
+    "+4,639,100"
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "LEO and Spaceflight Operations",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "4,624,600",
+    "",
+    "",
+    "-4,624,600"
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "STEM Opportunities formerly Education",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "100,000",
+    "",
+    "110,000",
+    "+10,000",
+    "+110,000"
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "Safety, Security and Mission Services",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,826,900",
+    "2,749,700",
+    "2,750,000",
+    "-76,900",
+    "+300"
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "Construction and environmental compliance and restoration",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "562,240",
+    "388,200",
+    "388,200",
+    "-174,040",
+    ""
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "Office of Inspector General",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "39,000",
+    "39,300",
+    "39,300",
+    "+300",
+    ""
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "Total, National Aeronautics and Space Administration",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "20,736,140",
+    "19,892,200",
+    "21,323,400",
+    "+587,260",
+    "+1,431,200"
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "National Science Foundation",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "Research and related activities",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "6,263,476",
+    "6,079,680",
+    "6,485,183",
+    "+221,707",
+    "+405,503"
+   ]
+  },
+  {
+   "seq": 23,
+   "label": "Defense function",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "71,000",
+    "71,000",
+    "71,000",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 24,
+   "label": "Subtotal",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "6,334,476",
+    "6,150,680",
+    "6,556,183",
+    "+221,707",
+    "+405,503"
+   ]
+  },
+  {
+   "seq": 25,
+   "label": "Major research equipment and facilities construction",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "182,800",
+    "94,650",
+    "249,254",
+    "+66,454",
+    "+154,604"
+   ]
+  },
+  {
+   "seq": 26,
+   "label": "Education and human resources",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "902,000",
+    "873,370",
+    "915,000",
+    "+13,000",
+    "+41,630"
+   ]
+  },
+  {
+   "seq": 27,
+   "label": "Agency operations and award management",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "328,510",
+    "333,630",
+    "328,510",
+    "",
+    "-5,120"
+   ]
+  },
+  {
+   "seq": 28,
+   "label": "Office of the National Science Board",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "4,370",
+    "4,320",
+    "4,370",
+    "",
+    "+50"
+   ]
+  },
+  {
+   "seq": 29,
+   "label": "Office of Inspector General",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "15,200",
+    "15,350",
+    "15,350",
+    "+150",
+    ""
+   ]
+  },
+  {
+   "seq": 30,
+   "label": "Total, National Science Foundation",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "7,767,356",
+    "7,472,000",
+    "8,068,667",
+    "+301,311",
+    "+596,667"
+   ]
+  },
+  {
+   "seq": 31,
+   "label": "Total, title III, Science",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "28,511,005",
+    "27,371,709",
+    "29,399,576",
+    "+888,571",
+    "+2,027,867"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Columns from header at lines 8685-8689 (table title at 8681); header line 8686 prints 'compared  with' with a double space, kept. Window starts at the last line item of State and Local Law Enforcement Activities (Title II). No wrapped labels. Rows 4, 7, 21 are centered headings. indent_level = leading spaces // 4; centered headings set to 0."
+}

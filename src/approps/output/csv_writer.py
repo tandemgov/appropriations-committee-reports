@@ -13,6 +13,7 @@ from pydantic import BaseModel
 
 from approps.config import OUTPUT_DIR
 from approps.extraction.dollar_parser import is_paren_memo
+from approps.normalization.account_gate import gate_account_keys
 from approps.normalization.account_names import clean_account_label
 from approps.normalization.crosswalk import match_account
 from approps.normalization.inflation import load_deflators
@@ -182,15 +183,67 @@ def _enrich_accounts(lines: list[ComparativeStatementLine], rows: list[dict]) ->
             row["real_factor_2024"] = round(deflators[_REAL_BASE_YEAR] / deflators[fy], 4)
 
 
+_AMOUNT_FIELDS = (
+    "prior_year_enacted", "budget_estimate", "committee_recommendation", "delta_vs_enacted", "delta_vs_estimate",
+)
+
+#: Per nonstandard layout, the amount columns whose values cannot be read as their names say.
+#: The output build empties these (the extracted values survive in nonstandard_layout_rows.csv) so a mislabeled figure cannot pass for a trustworthy one.
+UNTRUSTED_COLUMNS: dict[str, tuple[str, ...]] = {
+    "category_split": ("prior_year_enacted", "budget_estimate", "delta_vs_enacted", "delta_vs_estimate"),
+    "procurement_qty": _AMOUNT_FIELDS,
+    "text_in_amount": _AMOUNT_FIELDS,
+    "amount_in_label": _AMOUNT_FIELDS,
+    "signed_level": _AMOUNT_FIELDS,
+    "adjustment_detail": _AMOUNT_FIELDS,
+}
+
+# A level never prints an explicit plus; a `+` in a level column is a change figure filed in the wrong slot.
+_PLUS_LEVEL = re.compile(r"^\(?\+\d")
+
+# A comma-grouped figure after the label's leader: the reader split the row too far right, so the columns after it are shifted.
+_AMOUNT_IN_LABEL = re.compile(r"(?:\.{2,}|\s{2,})\s*[-+(]?\d{1,3}(?:,\d{3})+\)?\s*$")
+
+# Words a value cell can legitimately carry beside its digits.
+_CELL_WORDS_OK = re.compile(r"^[\s$,.()+\-−–—\d]*$|^\(?\s*(emergency|oco|gwot|na|n/a)\s*\)?$", re.I)
+# Enacted "Program increase—PFAS remediation  10,000" rows state a change from the request, not a level.
+_ADJUSTMENT_LABEL = re.compile(r"^program (increase|decrease|reduction)s?\b", re.I)
+
+
 def _column_layout(line: ComparativeStatementLine) -> str:
-    """`category_split` when the row is a nonstandard category-split table crammed into the
-    standard schema, else `standard`. Signature: the two columns the parser labelled prior
-    and budget-estimate sum to the recommendation and the deltas merely echo them — a real
-    comparative row essentially never satisfies all of these. See docs/KNOWN_ISSUES.md."""
-    # A bare procurement line-item number ("29", "30") as the label means the program name
-    # was lost — Defense procurement quantity-column tables the five-column parser can't map.
+    """The row's table shape, when that shape makes its amount columns mean something other than their names.
+
+    * `procurement_qty` — the label is a bare procurement line number ("29"): a Defense quantity-column table lost its program name and its amounts are shifted.
+    * `text_in_amount` — a value cell carried words, not a figure: a header row, a merged multi-line cell, or a project list (Community Project Funding) forced into the five columns.
+    * `amount_in_label` — the label ends in a figure ("Aeronautics..... 935,000"), so the row was split past its first value column and the rest are shifted.
+    * `signed_level` — a level column carries an explicit `+`, which only a change figure prints: the columns were filed out of order.
+    * `adjustment_detail` — an enacted "Program increase—…" line, whose amount is a change from the request, stored as a level.
+    * `category_split` — funding split across category columns that sum to the recommendation, with the deltas echoing them; only the recommendation is a real total.
+    * `standard` — otherwise.
+
+    See docs/KNOWN_ISSUES.md.
+    """
     if re.fullmatch(r"\d{1,3}\.?", (line.line_item_text or "").strip()):
         return "procurement_qty"
+
+    amounts = [getattr(line, f) for f in _AMOUNT_FIELDS]
+    has_value = any(a is not None and a.value is not None for a in amounts)
+    if has_value and any(
+        a is not None and a.raw_text and not _CELL_WORDS_OK.match(a.raw_text.strip()) and re.search(r"[A-Za-z]{2,}", a.raw_text)
+        for a in amounts
+    ):
+        return "text_in_amount"
+    if has_value and _AMOUNT_IN_LABEL.search(line.line_item_text or ""):
+        return "amount_in_label"
+    if any(
+        a is not None and a.raw_text and _PLUS_LEVEL.match(a.raw_text.strip())
+        for a in (line.prior_year_enacted, line.budget_estimate, line.committee_recommendation)
+    ):
+        return "signed_level"
+
+    stage = getattr(line.stage, "value", line.stage)
+    if stage == "enacted" and _ADJUSTMENT_LABEL.match((line.line_item_text or "").strip()):
+        return "adjustment_detail"
 
     def v(a):
         return a.value if a is not None else None
@@ -200,6 +253,27 @@ def _column_layout(line: ComparativeStatementLine) -> str:
     if None not in (pe, be, cr, de, dt) and pe and be and pe + be == cr and de == pe and dt == be:
         return "category_split"
     return "standard"
+
+
+def _isolate_nonstandard(line: ComparativeStatementLine, row: dict) -> dict | None:
+    """Empty the untrusted columns of a nonstandard row in place; return the sidecar record of what was removed."""
+    untrusted = UNTRUSTED_COLUMNS.get(row["column_layout"])
+    if not untrusted:
+        return None
+    record = {
+        "row_id": row["row_id"], "report_id": row["report_id"], "column_layout": row["column_layout"],
+        "line_item_text": row["line_item_text"], "verified": row["verified"], "verification_method": row["verification_method"],
+    }
+    for field in _AMOUNT_FIELDS:
+        amount = getattr(line, field)
+        record[field] = amount.value if amount is not None else None
+        record[f"{field}_raw_text"] = amount.raw_text if amount is not None else None
+    for field in untrusted:
+        row[field] = None
+    row["verified"] = False
+    row["verification_method"] = "none"
+    row["verification_tier"] = "none"
+    return record
 
 
 def _is_paren_memo(line: ComparativeStatementLine) -> bool:
@@ -271,6 +345,7 @@ def _enrich_tango(lines: list[ComparativeStatementLine], rows: list[dict]) -> No
 def _comparative_line_to_row(line: ComparativeStatementLine) -> ComparativeStatementRow:
     """Flatten a ComparativeStatementLine to a CSV-ready row."""
     return ComparativeStatementRow(
+        column_repair=line.column_repair,
         report_id=line.report_id,
         congress=line.congress,
         chamber=line.chamber.value,
@@ -336,15 +411,27 @@ def write_comparative_csv(
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     rows = [_comparative_line_to_row(line).model_dump() for line in lines]
+    ordinals: dict[str, int] = {}
+    for row in rows:
+        n = ordinals.get(row["report_id"], 0) + 1
+        ordinals[row["report_id"]] = n
+        row["row_id"] = f"{row['report_id']}:{n:05d}"
     _enrich_accounts(lines, rows)
     _enrich_tango(lines, rows)
+    withheld = gate_account_keys(rows)
+    logger.info(f"Withheld account keys: {withheld}")
     inline_index = _build_inline_index(inline_tables or [])
+    sidecar = []
     for line, row in zip(lines, rows, strict=True):
         row["verification_tier"] = _verification_tier(line, inline_index)
         row["column_layout"] = _column_layout(line)
-    df = _coerce_int_columns(pd.DataFrame(rows), ComparativeStatementRow)
+        if (record := _isolate_nonstandard(line, row)) is not None:
+            sidecar.append(record)
+    df = _coerce_int_columns(pd.DataFrame(rows, columns=list(ComparativeStatementRow.model_fields)), ComparativeStatementRow)
     df.to_csv(output_path, index=False)
-    logger.info(f"Wrote {len(rows)} rows to {output_path}")
+    sidecar_path = output_path.with_name("nonstandard_layout_rows.csv")
+    pd.DataFrame(sidecar).astype({f: "Int64" for f in _AMOUNT_FIELDS} if sidecar else {}).to_csv(sidecar_path, index=False)
+    logger.info(f"Wrote {len(rows)} rows to {output_path}; {len(sidecar)} nonstandard rows to {sidecar_path}")
     return output_path
 
 

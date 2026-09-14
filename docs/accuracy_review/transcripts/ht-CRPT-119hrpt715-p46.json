@@ -1,0 +1,158 @@
+{
+ "unit_id": "ht-CRPT-119hrpt715-p46",
+ "report_id": "CRPT-119hrpt715",
+ "pdf_page": 46,
+ "units_header": "[In thousands of dollars]",
+ "column_headers": [
+  "Budget Request",
+  "Committee Recommended",
+  "Change from Request"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "10 PAY GROUP A TRAINING (15 DAYS & DRILLS 24/48)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,134,143",
+    "1,134,143",
+    "0"
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "30 PAY GROUP F TRAINING (RECRUITS)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "121,533",
+    "121,533",
+    "0"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "40 PAY GROUP P TRAINING (PIPELINE RECRUITS)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "8,087",
+    "8,087",
+    "0"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "70 SCHOOL TRAINING",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "468,086",
+    "468,086",
+    "0"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "80 SPECIAL TRAINING",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "375,044",
+    "375,044",
+    "0"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "90 ADMINISTRATION AND SUPPORT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "3,758,649",
+    "3,758,649",
+    "0"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "94 THRIFT SAVINGS PLAN MATCHING CONTRIBUTIONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "29,037",
+    "29,037",
+    "0"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "100 EDUCATION BENEFITS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "23,896",
+    "23,896",
+    "0"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "UNDISTRIBUTED ADJUSTMENT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "0",
+    "-61,770",
+    "-61,770"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Historical unobligated balances",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-61,770",
+    ""
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "TOTAL, TITLE I, NATIONAL GUARD PERSONNEL, AIR FORCE",
+   "indent_level": 0,
+   "is_total": true,
+   "cells": [
+    "5,918,475",
+    "5,856,705",
+    "-61,770"
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "300 HEALTH CARE CONTRIBUTION—RESERVE COMPONENT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "465,097",
+    "465,097",
+    "0"
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "TOTAL, NATIONAL GUARD PERSONNEL, AIR FORCE",
+   "indent_level": 0,
+   "is_total": true,
+   "cells": [
+    "6,383,572",
+    "6,321,802",
+    "-61,770"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Single table: 'EXPLANATION OF PROJECT LEVEL ADJUSTMENTS' for National Guard Personnel, Air Force; line-number column headed 'M–1'. Complete table (starts and ends on this page). UNDISTRIBUTED ADJUSTMENT has no line number. Negative amounts are printed with a typographic minus sign followed by a thin space (e.g. '− 61,770'); transcribed as ASCII '-' with no space. Text layer encodes them as 'Ø' (bold) and '¥' (light). Adjustment sub-rows (light type, indented, no line number) carry their amount in the Committee Recommended column as printed; their other cells are blank. Leading line numbers are kept in the label."
+}

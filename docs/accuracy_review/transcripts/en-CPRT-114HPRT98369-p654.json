@@ -1,0 +1,319 @@
+{
+ "unit_id": "en-CPRT-114HPRT98369-p654",
+ "report_id": "CPRT-114HPRT98369",
+ "pdf_page": 654,
+ "units_header": "[Budget authority in thousands of dollars]",
+ "column_headers": [
+  "Budget Authority"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "Africa:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Anti-slavery programs in Africa",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "1,500"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Counter-Lord's Resistance Army",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "10,000"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "Democratic Republic of the Congo",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "70,568"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "East Asia and the Pacific:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "Cambodia",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "2,000"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "People's Republic of China (democracy, rule of law, and environment)",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "15,000"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Tibet",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "8,000"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Tibetan exile communities",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "6,000"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Vietnam",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "30,000"
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Near East:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "Lebanon",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "110,000"
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "Lebanon scholarships",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "[12,000]"
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Middle East Partnership Initiative",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "70,000"
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "Scholarships",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "[12,000]"
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "Middle East Regional Cooperation Program",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "5,000"
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "Near East Regional Democracy",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "32,000"
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "Reconciliation programs",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "10,000"
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "Syria",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "100,000"
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "South and Central Asia:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "Civilian victims of war, Afghanistan",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "10,000"
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "Civilian victims of war, Pakistan",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "7,500"
+   ]
+  },
+  {
+   "seq": 23,
+   "label": "Nepal",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "43,038"
+   ]
+  },
+  {
+   "seq": 24,
+   "label": "Sri Lanka",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "40,000"
+   ]
+  },
+  {
+   "seq": 25,
+   "label": "Western Hemisphere:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 26,
+   "label": "Caribbean Basin Security Initiative",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "25,000"
+   ]
+  },
+  {
+   "seq": 27,
+   "label": "Caribbean Energy Security Initiative",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "2,000"
+   ]
+  },
+  {
+   "seq": 28,
+   "label": "Colombia",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "133,000"
+   ]
+  },
+  {
+   "seq": 29,
+   "label": "Transfer to Migration and Refugee Assistance",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "[7,000]"
+   ]
+  },
+  {
+   "seq": 30,
+   "label": "Afro-Colombian and indigenous communities",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "[15,000]"
+   ]
+  },
+  {
+   "seq": 31,
+   "label": "Human rights",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "[6,500]"
+   ]
+  },
+  {
+   "seq": 32,
+   "label": "Biodiversity",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "[3,500]"
+   ]
+  },
+  {
+   "seq": 33,
+   "label": "Cuba",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "20,000"
+   ]
+  },
+  {
+   "seq": 34,
+   "label": "Mexico",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "39,000"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Single table 'ECONOMIC SUPPORT FUND' (Country/Program | Budget Authority), printed page 1634. Table begins on this page and continues onto the next page; no total row on this page. Region heading rows (Africa:, etc.) have no amount and are included with blank cells. Bracketed italic rows are 'of which' sub-allocations under the preceding country. Apostrophes printed as typographic right single quote (Lord’s, People’s); transcribed as ASCII apostrophe. Prose on the page ($40,000,000, $8,120,000, $1,500,000,000, $1,896,315,000, $2,422,673,000) is narrative and not transcribed. Text layer and rendered image agree."
+}

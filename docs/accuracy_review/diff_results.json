@@ -1,0 +1,706 @@
+[
+  {
+    "unit": "en-CPRT-114HPRT98369-p654",
+    "track": "enacted",
+    "sub": null,
+    "fy": 2016,
+    "headers": [
+      [
+        "Budget Authority",
+        "committee_recommendation"
+      ]
+    ],
+    "source_value_rows": 23,
+    "matched_rows": 23,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 23,
+    "cells_transcribed": 23,
+    "cells_in_right_column": 23
+  },
+  {
+    "unit": "en-CPRT-115HPRT25289-p1587",
+    "track": "enacted",
+    "sub": null,
+    "fy": 2017,
+    "headers": [
+      [
+        "Budget Authority",
+        "committee_recommendation"
+      ]
+    ],
+    "source_value_rows": 13,
+    "matched_rows": 13,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 13,
+    "cells_transcribed": 13,
+    "cells_in_right_column": 13
+  },
+  {
+    "unit": "en-CPRT-116HPRT35160-p200",
+    "track": "enacted",
+    "sub": null,
+    "fy": 2019,
+    "headers": [
+      [
+        "",
+        "committee_recommendation"
+      ]
+    ],
+    "source_value_rows": 21,
+    "matched_rows": 19,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 19,
+    "cells_transcribed": 19,
+    "cells_in_right_column": 19
+  },
+  {
+    "unit": "en-CPRT-117HPRT43750-p353",
+    "track": "enacted",
+    "sub": null,
+    "fy": 2021,
+    "headers": [
+      [
+        "FY 2021 Agreement",
+        "committee_recommendation"
+      ]
+    ],
+    "source_value_rows": 8,
+    "matched_rows": 8,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 8,
+    "cells_transcribed": 8,
+    "cells_in_right_column": 8
+  },
+  {
+    "unit": "en-CPRT-117HPRT47048-p471",
+    "track": "enacted",
+    "sub": null,
+    "fy": 2022,
+    "headers": [
+      [
+        "FY 2022 Agreement",
+        "committee_recommendation"
+      ]
+    ],
+    "source_value_rows": 12,
+    "matched_rows": 12,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 12,
+    "cells_transcribed": 12,
+    "cells_in_right_column": 12
+  },
+  {
+    "unit": "en-CPRT-118HPRT55008-p333",
+    "track": "enacted",
+    "sub": null,
+    "fy": 2024,
+    "headers": [
+      [
+        "",
+        "committee_recommendation"
+      ]
+    ],
+    "source_value_rows": 54,
+    "matched_rows": 53,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 53,
+    "cells_transcribed": 53,
+    "cells_in_right_column": 53
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p126",
+    "track": "house_typeset",
+    "sub": "Defense",
+    "fy": 2027,
+    "headers": [
+      [
+        "Budget Request",
+        "budget_estimate"
+      ],
+      [
+        "Committee Recommended",
+        "committee_recommendation"
+      ],
+      [
+        "Change from Request",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 29,
+    "matched_rows": 29,
+    "extra_rows": 0,
+    "adjustment_rows": 11,
+    "cells": 87,
+    "cells_transcribed": 87,
+    "cells_in_right_column": 87
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "track": "house_typeset",
+    "sub": "Defense",
+    "fy": 2027,
+    "headers": [
+      [
+        "Budget Request",
+        "budget_estimate"
+      ],
+      [
+        "Committee Recommended",
+        "committee_recommendation"
+      ],
+      [
+        "Change from Request",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 26,
+    "matched_rows": 26,
+    "extra_rows": 0,
+    "adjustment_rows": 14,
+    "cells": 78,
+    "cells_transcribed": 78,
+    "cells_in_right_column": 78
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "track": "house_typeset",
+    "sub": "Defense",
+    "fy": 2027,
+    "headers": [
+      [
+        "Budget Request",
+        "budget_estimate"
+      ],
+      [
+        "Committee Recommended",
+        "committee_recommendation"
+      ],
+      [
+        "Change from Request",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 29,
+    "matched_rows": 29,
+    "extra_rows": 0,
+    "adjustment_rows": 17,
+    "cells": 87,
+    "cells_transcribed": 87,
+    "cells_in_right_column": 87
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p46",
+    "track": "house_typeset",
+    "sub": "Defense",
+    "fy": 2027,
+    "headers": [
+      [
+        "Budget Request",
+        "budget_estimate"
+      ],
+      [
+        "Committee Recommended",
+        "committee_recommendation"
+      ],
+      [
+        "Change from Request",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 12,
+    "matched_rows": 12,
+    "extra_rows": 0,
+    "adjustment_rows": 1,
+    "cells": 36,
+    "cells_transcribed": 34,
+    "cells_in_right_column": 34
+  },
+  {
+    "unit": "hv-CRPT-114hrpt205-p115",
+    "track": "house_vision",
+    "sub": "Agriculture",
+    "fy": 2016,
+    "headers": [
+      [
+        "FY 2015 Enacted",
+        "prior_year_enacted"
+      ],
+      [
+        "FY 2016 Request",
+        "budget_estimate"
+      ],
+      [
+        "Bill",
+        "committee_recommendation"
+      ],
+      [
+        "Bill vs. Enacted",
+        "delta_vs_enacted"
+      ],
+      [
+        "Bill vs. Request",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 10,
+    "matched_rows": 10,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 41,
+    "cells_transcribed": 41,
+    "cells_in_right_column": 41
+  },
+  {
+    "unit": "hv-CRPT-114hrpt693-p137",
+    "track": "house_vision",
+    "sub": "State-Foreign-Ops",
+    "fy": 2017,
+    "headers": [
+      [
+        "FY 2016 Enacted",
+        "prior_year_enacted"
+      ],
+      [
+        "FY 2017 Request",
+        "budget_estimate"
+      ],
+      [
+        "Bill",
+        "committee_recommendation"
+      ],
+      [
+        "Bill vs. Enacted",
+        "delta_vs_enacted"
+      ],
+      [
+        "Bill vs. Request",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 11,
+    "matched_rows": 11,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 43,
+    "cells_transcribed": 43,
+    "cells_in_right_column": 43
+  },
+  {
+    "unit": "hv-CRPT-115hrpt948-p179",
+    "track": "house_vision",
+    "sub": "Homeland-Security",
+    "fy": 2019,
+    "headers": [
+      [
+        "FY 2018 Enacted",
+        "prior_year_enacted"
+      ],
+      [
+        "FY 2019 Request",
+        "budget_estimate"
+      ],
+      [
+        "Bill",
+        "committee_recommendation"
+      ],
+      [
+        "Bill vs. Enacted",
+        "delta_vs_enacted"
+      ],
+      [
+        "Bill vs. Request",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 11,
+    "matched_rows": 11,
+    "extra_rows": 2,
+    "adjustment_rows": 0,
+    "cells": 31,
+    "cells_transcribed": 31,
+    "cells_in_right_column": 30
+  },
+  {
+    "unit": "hv-CRPT-116hrpt448-p225",
+    "track": "house_vision",
+    "sub": "Interior-Environment",
+    "fy": 2021,
+    "headers": [
+      [
+        "FY 2020 Enacted",
+        "prior_year_enacted"
+      ],
+      [
+        "FY 2021 Request",
+        "budget_estimate"
+      ],
+      [
+        "Bill",
+        "committee_recommendation"
+      ],
+      [
+        "Bill vs. Enacted",
+        "delta_vs_enacted"
+      ],
+      [
+        "Bill vs. Request",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 18,
+    "matched_rows": 18,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 81,
+    "cells_transcribed": 79,
+    "cells_in_right_column": 79
+  },
+  {
+    "unit": "hv-CRPT-117hrpt99-p303",
+    "track": "house_vision",
+    "sub": "THUD",
+    "fy": 2022,
+    "headers": [
+      [
+        "FY 2021 Enacted",
+        "prior_year_enacted"
+      ],
+      [
+        "FY 2022 Request",
+        "budget_estimate"
+      ],
+      [
+        "Bill",
+        "committee_recommendation"
+      ],
+      [
+        "Bill vs. Enacted",
+        "delta_vs_enacted"
+      ],
+      [
+        "Bill vs. Request",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 5,
+    "matched_rows": 5,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 24,
+    "cells_transcribed": 24,
+    "cells_in_right_column": 24
+  },
+  {
+    "unit": "hv-CRPT-118hrpt120-p50",
+    "track": "house_vision",
+    "sub": "Legislative-Branch",
+    "fy": 2024,
+    "headers": [
+      [
+        "FY 2023 Enacted",
+        "prior_year_enacted"
+      ],
+      [
+        "FY 2024 Request",
+        "budget_estimate"
+      ],
+      [
+        "Bill",
+        "committee_recommendation"
+      ],
+      [
+        "Bill vs. Enacted",
+        "delta_vs_enacted"
+      ],
+      [
+        "Bill vs. Request",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 10,
+    "matched_rows": 8,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 30,
+    "cells_transcribed": 30,
+    "cells_in_right_column": 30
+  },
+  {
+    "unit": "hv-CRPT-118hrpt556-p303",
+    "track": "house_vision",
+    "sub": "Financial-Services",
+    "fy": 2025,
+    "headers": [
+      [
+        "FY 2024 Enacted",
+        "prior_year_enacted"
+      ],
+      [
+        "FY 2025 Request",
+        "budget_estimate"
+      ],
+      [
+        "Bill",
+        "committee_recommendation"
+      ],
+      [
+        "Bill vs. Enacted",
+        "delta_vs_enacted"
+      ],
+      [
+        "Bill vs. Request",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 11,
+    "matched_rows": 11,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 42,
+    "cells_transcribed": 42,
+    "cells_in_right_column": 42
+  },
+  {
+    "unit": "hv-CRPT-119hrpt622-p103",
+    "track": "house_vision",
+    "sub": "MilCon-VA",
+    "fy": 2027,
+    "headers": [
+      [
+        "FY 2026 Enacted",
+        "prior_year_enacted"
+      ],
+      [
+        "Bill",
+        "committee_recommendation"
+      ],
+      [
+        "Bill vs. Enacted",
+        "delta_vs_enacted"
+      ]
+    ],
+    "source_value_rows": 15,
+    "matched_rows": 15,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 43,
+    "cells_transcribed": 43,
+    "cells_in_right_column": 43
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "track": "senate",
+    "sub": "THUD",
+    "fy": 2017,
+    "headers": [
+      [
+        "2016 appropriation",
+        "prior_year_enacted"
+      ],
+      [
+        "Budget estimate",
+        "budget_estimate"
+      ],
+      [
+        "Committee recommendation",
+        "committee_recommendation"
+      ],
+      [
+        "Senate Committee recommendation compared with (+ or -) 2016 appropriation",
+        "delta_vs_enacted"
+      ],
+      [
+        "Senate Committee recommendation compared with (+ or -) Budget estimate",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 27,
+    "matched_rows": 26,
+    "extra_rows": 4,
+    "adjustment_rows": 0,
+    "cells": 73,
+    "cells_transcribed": 73,
+    "cells_in_right_column": 65
+  },
+  {
+    "unit": "se-CRPT-114srpt79-L7459",
+    "track": "senate",
+    "sub": "State-Foreign-Ops",
+    "fy": 2016,
+    "headers": [
+      [
+        "2015 appropriation",
+        "prior_year_enacted"
+      ],
+      [
+        "Budget estimate",
+        "budget_estimate"
+      ],
+      [
+        "Committee recommendation",
+        "committee_recommendation"
+      ],
+      [
+        "Senate Committee recommendation compared with (+ or -) 2015 appropriation",
+        "delta_vs_enacted"
+      ],
+      [
+        "Senate Committee recommendation compared with (+ or -) Budget estimate",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 30,
+    "matched_rows": 30,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 119,
+    "cells_transcribed": 119,
+    "cells_in_right_column": 119
+  },
+  {
+    "unit": "se-CRPT-115srpt275-L8887",
+    "track": "senate",
+    "sub": "Commerce-Justice-Science",
+    "fy": 2019,
+    "headers": [
+      [
+        "2018 appropriation",
+        "prior_year_enacted"
+      ],
+      [
+        "Budget estimate",
+        "budget_estimate"
+      ],
+      [
+        "Committee recommendation",
+        "committee_recommendation"
+      ],
+      [
+        "Senate Committee recommendation compared  with (+ or -) 2018 appropriation",
+        "delta_vs_enacted"
+      ],
+      [
+        "Senate Committee recommendation compared  with (+ or -) Budget estimate",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 28,
+    "matched_rows": 28,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 115,
+    "cells_transcribed": 115,
+    "cells_in_right_column": 115
+  },
+  {
+    "unit": "se-CRPT-117srpt34-L9061",
+    "track": "senate",
+    "sub": "Agriculture",
+    "fy": 2022,
+    "headers": [
+      [
+        "2021 appropriation",
+        "prior_year_enacted"
+      ],
+      [
+        "Budget estimate",
+        "budget_estimate"
+      ],
+      [
+        "Committee recommendation",
+        "committee_recommendation"
+      ],
+      [
+        "Senate Committee recommendation compared with (+ or -) 2021 appropriation",
+        "delta_vs_enacted"
+      ],
+      [
+        "Senate Committee recommendation compared with (+ or -) Budget estimate",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 25,
+    "matched_rows": 25,
+    "extra_rows": 2,
+    "adjustment_rows": 0,
+    "cells": 84,
+    "cells_transcribed": 84,
+    "cells_in_right_column": 84
+  },
+  {
+    "unit": "se-CRPT-118srpt191-L6154",
+    "track": "senate",
+    "sub": "MilCon-VA",
+    "fy": 2025,
+    "headers": [
+      [
+        "2024 appropriation",
+        "prior_year_enacted"
+      ],
+      [
+        "Budget estimate",
+        "budget_estimate"
+      ],
+      [
+        "Committee recommendation",
+        "committee_recommendation"
+      ],
+      [
+        "Senate Committee recommendation compared with (+ or -) 2024 appropriation",
+        "delta_vs_enacted"
+      ],
+      [
+        "Senate Committee recommendation compared with (+ or -) Budget estimate",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 18,
+    "matched_rows": 14,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 52,
+    "cells_transcribed": 52,
+    "cells_in_right_column": 52
+  },
+  {
+    "unit": "se-CRPT-119srpt52-L13802",
+    "track": "senate",
+    "sub": "Defense",
+    "fy": 2026,
+    "headers": [
+      [
+        "2025 appropriation",
+        "prior_year_enacted"
+      ],
+      [
+        "Budget estimate",
+        "budget_estimate"
+      ],
+      [
+        "Committee recommendation",
+        "committee_recommendation"
+      ],
+      [
+        "Senate Committee recommendation compared with (+ or -) 2025 appropriation",
+        "delta_vs_enacted"
+      ],
+      [
+        "Senate Committee recommendation compared with (+ or -) Budget estimate",
+        "delta_vs_estimate"
+      ]
+    ],
+    "source_value_rows": 16,
+    "matched_rows": 16,
+    "extra_rows": 0,
+    "adjustment_rows": 0,
+    "cells": 70,
+    "cells_transcribed": 70,
+    "cells_in_right_column": 70
+  }
+]

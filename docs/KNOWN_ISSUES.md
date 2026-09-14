@@ -1,14 +1,15 @@
 # Known issues
 
-Tracked data-quality issues with a known cause and a deferred proper fix. Each is *flagged*
-in the dataset so it can be filtered today; this file is the backlog for correcting it.
+Tracked data-quality issues: what is wrong, how it was found, what was done, and what remains.
+Fixed and repaired issues stay listed because releases before the fix carry the defect.
+Open issues are isolated in the release where a signature exists, and documented where one does not (#3, #19).
 
 ---
 
 ## 1. Category-split tables mis-mapped into the standard column schema
 
-**Status:** flagged (`column_layout = category_split`), proper fix deferred.
-**Scope:** ~297 rows across ~13 reports — chiefly **Energy-Water** (Bureau of Reclamation /
+**Status:** isolated (`column_layout = category_split`; the four mislabeled columns are emptied in the release and kept in `nonstandard_layout_rows`), proper fix deferred.
+**Scope:** 301 rows across ~13 reports — chiefly **Energy-Water** (Bureau of Reclamation /
 Corps of Engineers "Water and Related Resources" tables); a handful in Labor-HHS, Interior,
 Agriculture, State-Foreign-Ops, THUD.
 
@@ -54,9 +55,8 @@ the five-column comparative shape:
 
 ## 2. Defense procurement quantity-column tables mis-mapped
 
-**Status:** partially flagged (`column_layout = procurement_qty` on the clearest instances),
-proper fix deferred.
-**Scope:** Defense procurement tables (`CRPT-116hrpt453` and other Defense reports). ~185 rows
+**Status:** partially isolated (`column_layout = procurement_qty` on the clearest instances, all amounts emptied in the release), proper fix deferred.
+**Scope:** Defense procurement tables (`CRPT-116hrpt453` and other Defense reports). 197 rows
 carry the unmistakable signature; the true extent is larger (named rows with scattered
 columns are not yet flagged).
 
@@ -378,3 +378,154 @@ With the gate in place, 46 pages were recovered (885 rows, 479 verified, none wi
 
 ### Remaining
 The Nemotron server was not reachable for this fix, so the header mapping and all three signals are covered by unit tests but have not run end to end through `extract_house_hybrid`. Row-offset and merged-row errors of the kind the sign signal missed are not measured outside `CRPT-119hrpt696`. Some recovered edge pages are Defense procurement detail tables whose quantity columns only partly align (#2): enough rows close a delta to pass the gate, and the rest join the mis-mapped rows #2 already describes.
+
+
+---
+
+## 11. FY2026–27 House three-column pages were filed one slot to the left — REPAIRED
+
+**Status:** repaired at output (`column_repair = three_column_shift`), 2026-09-13.
+**Scope:** 647 rows on pages of eight FY2026–27 House reports, among them `CRPT-119hrpt622` (MilCon-VA), `119hrpt697` (Homeland), `119hrpt236` (Financial Services), and `119hrpt686` (THUD).
+
+These statements print `Enacted | Bill | Bill vs. Enacted`.
+On some pages the vision pass filled the first three schema slots in order, so `budget_estimate` held the bill and `committee_recommendation` held the change from enacted.
+The accuracy review found it on its FY2027 MilCon-VA page: 28 of 43 cells in the wrong column.
+
+Every full row on a shifted page satisfies `committee_recommendation == budget_estimate - prior_year_enacted`, which is `delta == bill - enacted`, and correctly read pages of the same reports carry a delta column instead.
+`normalization.column_shift` remaps a page only when every full row satisfies the identity and the page carries no delta of either kind.
+The repaired rows are not marked verified, because the identity that justifies the move is the one a delta check would test.
+
+**Remaining:** pages where the enacted amount stayed in the label (`Aeronautics..... 935,000`, CJS FY2027) are shifted two slots and cannot be remapped; they are isolated as `amount_in_label` (#15).
+
+## 12. Senate rows with blank leading columns slid one column left — FIXED
+
+**Status:** fixed in the parser, 2026-09-13. All 88 Senate reports re-extracted and re-verified.
+**Scope:** 370 rows regained values they had lost, and rows like `Contributions for International Peacekeeping Activities  ....  ....  505,000  +505,000  +505,000` no longer read as request 505,000 / recommendation 505,000 / delta 505,000.
+
+A label long enough to reach the value columns prints no dot leader, so the first dot run on the line is a blank column's placeholder.
+The reader split at the first dot run, swallowed that column, and moved every value one slot left; where the amounts sat on a wrapped continuation line they were dropped.
+A dot run that ends on a column edge is now treated as a placeholder and the row is read by column position.
+Every value on the rows involved string-matched the source, so no gate objected.
+
+Acceptance, per #5: re-parse all 88 reports and diff. 49 byte-identical, no row-count change in any report, 370 rows gained values, none lost one, and each other change was checked against its source line.
+
+**Remaining:** a few rows in `CRPT-114srpt243` (THUD FY2016) still shift, where the column geometry of that statement is irregular. The accuracy review counts them.
+
+## 13. FY2016 Senate statements with a House allowance column — REPAIRED
+
+**Status:** repaired at output (`column_repair = house_allowance_columns`), 2026-09-13.
+**Scope:** 861 rows in `CRPT-114srpt54`, `114srpt57`, `114srpt64`, `114srpt66`, `114srpt75`.
+
+These print seven value columns, with the House allowance and its delta interleaved.
+The reader keeps five in order, so `committee_recommendation` held the House allowance and `delta_vs_enacted` held the Senate recommendation.
+The rows prove it: `delta_vs_estimate == delta_vs_enacted - prior_year_enacted` holds where the standard identity fails.
+The repair moves the recommendation and its delta into place when that identity holds on at least 20 rows and outnumbers the standard one four to one.
+
+**Remaining:** `delta_vs_estimate` is empty on these rows (the reader never kept it), and squeezed rows whose columns were read by geometry keep the wrong values — `Pacific coastal salmon recovery` in `CRPT-114srpt66` shows 7,000 as the prior year. Teaching the reader seven columns was tried and reverted, as in #8.
+
+## 14. Enacted rows with dashes or typographic apostrophes in the label were dropped — FIXED
+
+**Status:** fixed, 2026-09-13. All 16 prints re-extracted.
+**Scope:** 980 rows recovered (`F–22`, `AH–64 Mods`, `Johanna’s Law`, `Garrett Lee Smith—Youth Suicide Prevention`).
+
+The dot-leader pattern's label class stopped at ASCII, so a line whose label contained an en dash, em dash, or curly apostrophe never matched.
+The review found 14 of 54 lines missing from one Defense page.
+Acceptance: every existing row survives, in order, with label, raw text, and value unchanged.
+
+**Remaining:** labels with other characters (`Items Less Than $5 Million`) are still missed.
+Enacted "Program increase—…" lines state a change from the request, not a level; 38 are isolated as `adjustment_detail`.
+
+## 15. Rows whose columns are shifted by an unrepairable parse — ISOLATED
+
+**Status:** isolated, 2026-09-13. The untrusted amounts are emptied, `verification_tier` is `none`, and the extracted values are kept in `nonstandard_layout_rows`.
+
+| Layout | Rows | Signature |
+|---|---:|---|
+| `text_in_amount` | 1,857 | A value cell carried words: header rows read as data, merged multi-line cells, and Community Project Funding tables (project, state, and member names) forced into the comparative columns. `CRPT-118hrpt581` had a village water project at $2.25 billion. |
+| `amount_in_label` | 459 | The label ends in a figure, so the row was split past its first value column. 396 of them had passed a string match. |
+| `signed_level` | 174 | A level column holds an explicit `+`, which only a change figure prints: the delta was read into a level's place. |
+
+None of these can be put right from the extracted values: the figure that belongs in the empty slot was never read.
+Fixing them means re-reading the pages.
+
+## 16. Account keys that were demonstrably wrong — WITHHELD
+
+**Status:** withheld, 2026-09-13 (`normalization.account_gate`).
+**Scope:** 7,687 rows lost a key: 5,361 for jurisdiction (including bureau-level), 1,369 generic labels, 705 tie-breaks, 157 partial single-word labels, 95 headings. 20,881 rows keep one.
+
+The crosswalk and the Tango matcher match on the label alone, so labels that name no particular account resolved to one: "Offsetting collections" became a Treasury refunds account on Interior, Homeland, and Energy-Water rows; "Mission Support" on Homeland rows became NASA; "Trust Funds" on Labor-HHS rows became a State Department account; every Financial Services "Salaries and expenses" became FinCEN because the subcommittee's name contains "Financial".
+A key is now withheld when its agency has no jurisdiction entry, when that agency is not funded by the row's subcommittee (or is funded there only through particular bureaus, and the account is not one of them) and the pairing is not one of two reviewed cross-coded accounts, when every label on the row is boilerplate or a single word that only begins the title and nothing else names the agency, when the row is a heading, or when a tie-break had no evidence.
+
+The first version of the gate admitted a cross-jurisdiction key when two Senate reports carried the same exact match. An independent review showed why that was wrong: repetition of a label-only match is not evidence, and it kept 150 Agriculture "Direct" loan rows on Treasury's Direct E-File Taskforce, 77 Homeland "Mission Support" rows on NASA, 58 Labor-HHS "User Fees" rows on National Park Service filming fees, and Agriculture's CIO on the Homeland Security CIO account. The exception was removed; the only cross-jurisdiction keys are the reviewed list in `account_gate.CROSS_CODED`, and the release build fails if any other appears.
+The same review of same-year conflicts showed that an agency-level jurisdiction is too coarse where an agency is funded in two bills: Interior's hazardous-materials and social-services lines kept USDA and HHS keys because the Forest Service and the Indian Health Service put those agencies in Interior. Those secondary bills now admit only the bureaus that justify them (`BUREAU_JURISDICTION`).
+The rejected key is kept in `account_key_withheld`.
+
+**Remaining:** the gate removes keys it can prove wrong; it does not prove the rest right.
+A short label can still match the right agency's wrong account: NOAA's "Pacific Salmon" program line in the enacted statements carries the Pacific Coastal Salmon Recovery key.
+`account_year_totals` does not take such rows as totals, because the label is not the account's title, but the key stays on the row.
+
+## 17. Report metadata missing on repaired rows — FIXED
+
+**Status:** fixed at output, 2026-09-13.
+**Scope:** 857 House rows had no `fiscal_year` and 362 no `subcommittee` (nine reports, chiefly `CRPT-115hrpt230` and `CRPT-119hrpt215`); all 12,809 enacted rows had no `subcommittee`.
+
+Rows merged in by `scripts/repair_dropped_pages.py` were written without their report's metadata, so they were in the data but invisible to any per-year query.
+Report-level fields are now filled from the catalog, never overwriting a value a row already carries, and enacted rows take the subcommittee of their omnibus division.
+The release build fails if any row lacks a fiscal year or any committee row lacks a subcommittee.
+
+## 18. API longitudinal views double-counted and mixed real with nominal dollars — FIXED
+
+**Status:** fixed, 2026-09-13.
+
+`/api/line_items/compare` summed every non-subtotal row matching an account name per fiscal year — the account line and its program breakdown together, and House, Senate, and enacted figures for the same year into one number.
+Flow and account history picked each account's largest-magnitude row as its total, which promoted a program line whenever the account line was missing.
+`real=true` silently returned nominal dollars for FY2026–27, which have no deflator.
+
+All three now use `normalization.account_totals`: the account's own titled line, or no total.
+`/compare` requires `account_key`, returns one series per chamber and stage, lists unresolved reports, and fails with 422 when a requested real-dollar series has a year without a deflator.
+`inflation.real_dollars` raises for a year outside the series instead of returning nothing.
+A later review found that real-dollar requests for `prior_year_enacted` used the report year's deflator; that column is last year's enacted level, so it is now deflated from `fiscal_year - 1` (an FY2024 report's $100,000 prior-year figure is $102,949 in FY2024 dollars, not $100,000).
+
+Account history summed the same way `/compare` once did: when two reports of one chamber and stage both claimed an account for a year, the history added them, so `/api/accounts/070-0113/history` showed $730.7 million by adding a Homeland Security figure to a wrongly keyed Agriculture one. It now reports that year as a `conflict` with no amount, and conflicted years no longer drive title changes.
+
+**Remaining conflicts.** After the account gate, 12 (account, year, chamber, stage) cells are still claimed by two reports, and both kinds are genuine, not keying errors:
+
+- FY2019 House Homeland Security accounts appear in the committee report (`CRPT-115hrpt948`) and in the report on a later continuing-appropriations bill (`CRPT-116hrpt9`), which reprints them with some different figures.
+- The National Institute of Environmental Health Sciences (`075-0862`) is appropriated in both the Labor-HHS bill and, for its Superfund research, the Interior bill.
+
+Neither sum nor either figure alone is the account's level for that year, so both are left as conflicts; the per-report totals are in `account_year_totals`.
+
+## 19. Printed totals that do not reconcile — DOCUMENTED, NOT PURSUED
+
+**Status:** documented. Eliminating these is out of scope for this release.
+
+`approps reconcile` on the release:
+
+| Track | Checkable totals | OK | Off by ≤2% | Partial read | Unreconciled | Strict pass rate |
+|---|---:|---:|---:|---:|---:|---:|
+| House committee | 10,532 | 7,873 | 484 | 99 | 1,829 | 76.5% |
+| Senate committee | 5,286 | 4,210 | 280 | 32 | 569 | 82.7% |
+| Enacted | 1,178 | 886 | 84 | 0 | 199 | 75.8% |
+| **All** | **16,996** | **12,969** | **848** | **131** | **2,597** | **78.4%** |
+
+The strict rate excludes the 451 `overlapping_view` totals (advance-appropriation and forward-funding lines that are not a contiguous sum by construction).
+928 totals printed no figure and are unchecked.
+
+A total that does not reconcile is not proof its rows are wrong: the reconciler recovers nesting from document order, and unusual table shapes defeat it.
+It is a review item.
+The reports with the most genuine failures are `CRPT-116hrpt9` (82 of 503 totals, the FY2019 Homeland continuing-appropriations report), `CRPT-118srpt207` (61), `CRPT-117hrpt403` (55), `CRPT-117hrpt96` (53), and `CPRT-118HPRT56550` (51).
+The failure classes found in the accuracy review — misread digits, lost values, phantom subtotals on vision pages, and cross-page blocks — account for the House residual; enacted statements flatten hierarchy, which defeats the nesting inference.
+`approps reconcile -p <report_id>` and `approps workbook -p <report_id>` show every failing total.
+
+## 20. FY2026 Senate recommendations overwritten by the delta — FIXED
+
+**Status:** fixed in the parser, 2026-09-13. The six FY2026 Senate reports with comparative statements were re-extracted and re-verified.
+**Scope:** 1,859 rows changed in `CRPT-119srpt37`, `119srpt38`, `119srpt43`, `119srpt44`, `119srpt46`, `119srpt47`: recommendations restored where a dot placeholder or the delta had replaced them, and deltas captured where they had been dropped. No other report changed.
+
+Found by the multi-year check: High Energy Cost Grants in `CRPT-119srpt37` prints `8,000 | 8,000 | ....` and was released with no recommendation.
+These statements print three columns, but the delta column is mostly dot runs, so the header reading counted two columns and mapped them to prior year and recommendation.
+The row's third token then fell back to its position — the recommendation's slot — and overwrote it: with a dot run (the recommendation vanished) or with the delta (`Child nutrition programs` released a recommendation of 3,019,176 for a printed 36,269,402).
+A token that the header reading does not name no longer overwrites a slot already filled.
+KNOWN_ISSUES #8's fix had covered the reading of the names; this was the placement after it.
+
+**Remaining:** 16 rows in these reports still show a `+` in a level column and are isolated as `signed_level` (#15).

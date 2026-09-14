@@ -1,0 +1,134 @@
+[
+ {
+  "check_id": "080-0126-house-committee-2016",
+  "found_on_page": 111,
+  "column_headers": ["FY 2015 Enacted", "FY 2016 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"],
+  "units": "(Amounts in thousands)",
+  "label_as_printed": "Aeronautics",
+  "cells": ["651,000", "571,400", "600,000", "-51,000", "+28,600"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [],
+  "notes": "Page is rotated in the PDF (needed a 90-degree turn). The line sits under the 'National Aeronautics and Space Administration' heading as its own account line, with no sub-lines. The deltas check out: 600,000-651,000=-51,000 and 600,000-571,400=+28,600."
+ },
+ {
+  "check_id": "080-0126-house-committee-2019",
+  "found_on_page": 128,
+  "column_headers": ["FY 2018 Enacted", "FY 2019 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"],
+  "units": "(Amounts in thousands)",
+  "label_as_printed": "Aeronautics",
+  "cells": ["685,000", "633,900", "715,000", "+30,000", "+81,100"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [],
+  "notes": "Page is rotated in the PDF. It is NASA's own account line under TITLE III - SCIENCE. The deltas check out."
+ },
+ {
+  "check_id": "080-0126-house-committee-2022",
+  "found_on_page": 213,
+  "column_headers": ["FY 2021 Enacted", "FY 2022 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"],
+  "units": "(Amounts in thousands)",
+  "label_as_printed": "Aeronautics",
+  "cells": ["828,700", "914,800", "935,000", "+106,300", "+20,200"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [],
+  "notes": "Landscape page, upright as rendered. The deltas check out."
+ },
+ {
+  "check_id": "080-0126-house-committee-2026",
+  "found_on_page": 256,
+  "column_headers": ["FY 2025 Enacted", "Bill", "Bill vs. Enacted"],
+  "units": "(Amounts in thousands)",
+  "label_as_printed": "Aeronautics",
+  "cells": ["935,000", "775,000", "-160,000"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [],
+  "notes": "Page is rotated in the PDF. This table has only 3 value columns: there is no FY2026 Request or Bill vs. Request column, and the title reads 'AUTHORITY FOR 2025 AND AMOUNTS RECOMMENDED IN THE BILL FOR 2026'. The delta checks out."
+ },
+ {
+  "check_id": "012-2042-house-committee-2016",
+  "found_on_page": 123,
+  "column_headers": ["FY 2015 Enacted", "FY 2016 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"],
+  "units": "(Amounts in thousands)",
+  "label_as_printed": "High energy cost grants",
+  "cells": ["10,000", "---", "---", "-10,000", "---"],
+  "is_account_total_line": false,
+  "other_lines_for_account": [],
+  "notes": "Page is rotated in the PDF. The line is a component under 'Rural Utilities Service: / Rural water and waste disposal program account: / Loan subsidies and grants:', not a standalone account heading. It is the only line for this program in the table, so it is effectively the program's amount, but the table nests it inside the RWWD program account, whose 'Total, Loan subsidies and grants' is 464,857 / 483,320 / 473,897 / +9,040 / -9,423. No separate High energy cost grants line on pdf pages 122 or 124."
+ },
+ {
+  "check_id": "012-2042-house-committee-2019",
+  "found_on_page": 169,
+  "column_headers": ["FY 2018 Enacted", "FY 2019 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"],
+  "units": "(Amounts in thousands)",
+  "label_as_printed": "High energy cost grants",
+  "cells": ["10,000", "---", "10,000", "---", "+10,000"],
+  "is_account_total_line": false,
+  "other_lines_for_account": [],
+  "notes": "Page is rotated in the PDF. Component under Rural water and waste disposal program account > Loan subsidies and grants. No separate line for it on pdf pages 168 or 170. The deltas check out."
+ },
+ {
+  "check_id": "012-2042-house-committee-2021",
+  "found_on_page": 171,
+  "column_headers": ["FY 2020 Enacted", "FY 2021 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"],
+  "units": "(Amounts in thousands)",
+  "label_as_printed": "High energy cost grants",
+  "cells": ["10,000", "---", "---", "-10,000", "---"],
+  "is_account_total_line": false,
+  "other_lines_for_account": [],
+  "notes": "Landscape page. Component under 'Loan subsidies and grants:'. The RWWD program-account header is on pdf page 170, so this is a continuation of that block. No separate line for it on pdf pages 170 or 172."
+ },
+ {
+  "check_id": "012-2042-house-committee-2024",
+  "found_on_page": 191,
+  "column_headers": ["FY 2023 Enacted", "FY 2024 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"],
+  "units": "(Amounts in thousands)",
+  "label_as_printed": "High energy cost grants",
+  "cells": ["10,000", "10,000", "---", "-10,000", "-10,000"],
+  "is_account_total_line": false,
+  "other_lines_for_account": [],
+  "notes": "Page is rotated in the PDF and the scan is a little noisy, but the digits are clear. Component under 'Loan subsidies and grants:'. The RWWD program-account header is on pdf page 190. No separate line for it on pdf pages 190 or 192."
+ },
+ {
+  "check_id": "080-0131-house-committee-2016",
+  "found_on_page": 111,
+  "column_headers": ["FY 2015 Enacted", "FY 2016 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"],
+  "units": "(Amounts in thousands)",
+  "label_as_printed": "Space Technology",
+  "cells": ["596,000", "724,800", "625,000", "+29,000", "-99,800"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [],
+  "notes": "Page is rotated in the PDF. NASA's own account line. The deltas check out."
+ },
+ {
+  "check_id": "080-0131-house-committee-2020",
+  "found_on_page": 148,
+  "column_headers": ["FY 2019 Enacted", "FY 2020 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"],
+  "units": "(Amounts in thousands)",
+  "label_as_printed": "Space Technology",
+  "cells": ["926,900", "---", "1,291,600", "+364,700", "+1,291,600"],
+  "is_account_total_line": true,
+  "other_lines_for_account": ["Exploration Technology: ---, 1,014,300, ---, ---, -1,014,300 (the request's name for the account; the request shows --- on the Space Technology line)"],
+  "notes": "Landscape page. The request column is blank ('---') for Space Technology because the FY2020 request is carried on a separate 'Exploration Technology' line (1,014,300). Treat that as a related line rather than the same label. The deltas check out as printed."
+ },
+ {
+  "check_id": "080-0131-house-committee-2022",
+  "found_on_page": 213,
+  "column_headers": ["FY 2021 Enacted", "FY 2022 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"],
+  "units": "(Amounts in thousands)",
+  "label_as_printed": "Space Technology",
+  "cells": ["1,100,000", "1,425,000", "1,280,000", "+180,000", "-145,000"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [],
+  "notes": "Landscape page. The deltas check out."
+ },
+ {
+  "check_id": "080-0131-house-committee-2026",
+  "found_on_page": 256,
+  "column_headers": ["FY 2025 Enacted", "Bill", "Bill vs. Enacted"],
+  "units": "(Amounts in thousands)",
+  "label_as_printed": "Space Technology",
+  "cells": ["1,100,000", "912,827", "-187,173"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [],
+  "notes": "Page is rotated in the PDF. Only 3 value columns, with no request column. The delta checks out: 912,827-1,100,000=-187,173."
+ }
+]

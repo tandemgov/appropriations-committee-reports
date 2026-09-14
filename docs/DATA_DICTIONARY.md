@@ -1,97 +1,151 @@
-# Data dictionary — appropriations line-item dataset
+# Data dictionary
 
-Covers the combined outputs in `data/output/`:
-- `comparative_statements.csv` — line items from comparative statements (Senate/House committee reports) and enacted explanatory statements.
-- `inline_funding_tables.csv` — the inline narrative funding tables found in report bodies.
+Covers every table in the release (`data/release/`, built by `scripts/build_release.py`).
+Each table ships as CSV, Parquet, and JSON (an array of records), written from one in-memory frame and checked to agree row for row and value for value; `manifest.json` records the proof.
+Prefer Parquet: it keeps the integer types that CSV cannot.
 
-All dollar amounts are integers in **whole dollars** (the `in_thousands` source convention is already applied — a source table "(In thousands of dollars)" value of `104,102` is stored as `104102000`). Amounts may be negative (rescissions, offsets). Empty cells mean the field was not present or not captured for that row.
+All amounts are integers in **whole dollars**; the source's "[In thousands of dollars]" convention is already applied, so a printed `104,102` is stored as `104102000`.
+Amounts may be negative (rescissions, offsets).
+An empty cell means the value was not printed, not captured, or deliberately withheld; the columns below say which.
 
-Scope: Congresses 114–119, fiscal years FY2016–FY2027. See `COVERAGE.md` for coverage by stage/chamber/year and `crosswalk_scoping.md` for the account-identity design.
+Scope and gaps are in [COVERAGE.md](COVERAGE.md); how rows were produced and checked is in [../METHODOLOGY.md](../METHODOLOGY.md); open defects are in [KNOWN_ISSUES.md](KNOWN_ISSUES.md).
 
-## `comparative_statements.csv`
+## `comparative_statements`
 
-| Column | Type | Description |
-|---|---|---|
-| `report_id` | string | GovInfo package ID of the source document (e.g. `CRPT-118srpt83`, `CPRT-117HPRT50347`). |
-| `congress` | int | Congress number (114–119). |
-| `chamber` | enum | `senate` or `house`. Enacted explanatory-statement prints are House-numbered, so they carry `house`; use `stage` to separate them. |
-| `fiscal_year` | int | Fiscal year the appropriation is for (FY2016–FY2027). The analytic time key. |
-| `subcommittee` | string | One of the 12 appropriations subcommittees (e.g. `Defense`, `State-Foreign-Ops`). Empty for enacted omnibus rows — use `title_name` (division) until the division→subcommittee crosswalk lands. |
-| `stage` | enum | Legislative stage: `committee` (chamber committee report) or `enacted` (final, from the Joint Explanatory Statement). `subcommittee`/`conference` are defined but not populated. |
-| `title_name` | string | Top hierarchy label. For enacted rows this is the omnibus division (e.g. `DIVISION A—AGRICULTURE…`). |
-| `department` | string | Department, where captured (committee rows; ~49%). |
-| `agency` | string | Agency/bureau, where captured (committee rows; sparse, ~17%). |
-| `account` | string | Appropriations account name **as it appears in the source**. Empty for House committee rows (vision extraction did not capture hierarchy) and ~75% of enacted rows. Raw, un-normalized — see `account_inferred` (House) and `account_key`. |
-| `account_inferred` | string | Account grouping **recovered for House vision rows** from a reconciling subtotal block: set only when the block's line amounts sum exactly to the `Subtotal,/Total, <name>` amount, so it is arithmetic-verified, never guessed. Nested — a reconciled inner subtotal rolls up into its parent, so leaves resolve to their account-level name; tolerates one OCR-mangled column, rollup rows the `is_subtotal` flag missed, and parenthesized non-add memo amounts (limitations/transfers) excluded from the block sum. Additive — `account` is left untouched (empty here for Senate/enacted rows, which already carry `account`). Populated on ~19,500 rows (≈31% of value-bearing House line items) — the arithmetic base reconciler plus the Gemini non-add double-gate (see `is_memo`); feeds `account_key` matching as a fallback after `account`. |
-| `is_memo` | bool | True when the row's amount is a **memo** rather than an ordinary line item, by either signal: (1) the Gemini non-add double-gate flagged it as a non-add sub-detail (arithmetic-verified — excluding exactly the flagged rows makes the block reconcile), or (2) its `committee_recommendation` is a **parenthesized memo** (a limitation, transfer authority, or "of which"/GWOT breakout) written `(X)` — positive, no inner sign; `(-X)` rescissions are real negatives and are **not** flagged. 11,562 rows. **The name overstates the case.** A memo is non-add with respect to *some* total, but 2,350 of these rows (20.3%) are added in by the very total that encloses them — a transfer that is genuine additional budget authority at the account level and double-counting at the title level. Filtering all of them out before summing will understate those account totals. `approps reconcile` decides the question per total, arithmetically, and reports it as `memo_mode`. See `DATA.md` and `verification.reconcile`. |
-| `column_layout` | enum | `standard` (the usual prior-year / request / recommendation / delta shape) or a nonstandard table whose columns the standard schema mis-maps — filter to `standard` for the strictly-comparable subset. `category_split` (~297; chiefly Energy-Water Reclamation/Corps "Water and Related Resources"): funding split across category columns — the `committee_recommendation` total is correct, but `prior_year_enacted` / `budget_estimate` / the deltas are mislabeled category columns. `procurement_qty` (~185; Defense procurement quantity-column tables): the program name was lost (the label is a bare line-item number like `30`) and amounts are shifted. See `docs/KNOWN_ISSUES.md` for both. |
-| `program` | string | Program/project/activity line under the account, where present. |
-| `line_item_text` | string | The full line text as it appeared in the source. Always populated; the most reliable label when `account` is empty. |
-| `prior_year_enacted` | int $ | Prior-year enacted amount (comparative-statement column). |
-| `budget_estimate` | int $ | President's budget request. For enacted 2-column tables, the "Budget Request" column. |
-| `committee_recommendation` | int $ | The committee's recommended amount. **For `stage=enacted`, this column holds the final ENACTED amount** ("Final Bill" / agreement). |
-| `delta_vs_enacted` | int $ | recommendation − prior_year_enacted (committee comparative rows). |
-| `delta_vs_estimate` | int $ | recommendation − budget_estimate (committee comparative rows). |
-| `is_subtotal` | bool | True for subtotal/total rows (exclude when summing leaf line items). |
-| `hierarchy_depth` | int | Indentation depth in the source hierarchy (0 = top). |
-| `in_thousands` | bool | Whether the source table was "(In thousands of dollars)". Informational — `*_amount` values are already in whole dollars. |
-| `extraction_method` | enum | `rule_based` (deterministic text/PDF parsing) or `llm` (House vision extraction). |
-| `verified` | bool | Amount(s) on the row passed verification. Senate/inline: exact string-match vs source HTML. House comparative: delta-arithmetic. Enacted: the amount appears verbatim on its source PDF page. Empty/structural rows (no amount) are `false`. |
-| `verification_tier` | enum | *How* the row's amount is independently supported. Three tiers name a primary gate the row passed (equivalent to `verified=true`): `delta_arithmetic` — House vision rows whose row arithmetic closes (33,391); `string_match` — Senate rows whose raw text appears in the source HTML (27,472); `verbatim_page` — enacted statements and House typeset prints whose amount appears verbatim on its source PDF page (14,270). Two more support rows no primary gate reached: `block` (not `verified`, but a value-bearing member of a subtotal block whose amounts reconcile exactly, so the block sum is a second witness — 5,616) and `inline` (its amount **and** account are restated in the report's string-verified inline funding tables — 491). `none` (27,981) means no in-document second witness. Lets you widen "trustworthy" beyond the strict `verified` boolean: for House committee rows the tiers corroborate ~61% vs the 52% that `verified` alone captures. **The first three tiers are row-local.** Each compares a row to itself or to the string it was read from, so none can see a *misinterpretation* of the source — a string match compares raw text, and the delta identity survives a sign flip applied across a row's columns. Only `block`, and the standalone `approps reconcile`, witness a row from outside itself. See `DATA.md` for the Senate-parenthesis defect this masked. (Before v1.2.0 all three primary tiers were labelled `delta`, which asserted an arithmetic check that had never run on most of them.) |
-| `account_key` | string | **Authoritative account identity** (federal-account symbol / OMB account code, e.g. `019-0113`) assigned by the crosswalk. Empty when unmatched. The stable key for longitudinal and cross-stage/cross-chamber joins. |
-| `account_key_title` | string | Canonical account title for `account_key`. |
-| `account_match` | enum | How `account_key` was assigned: `exact` (unique token-prefix match), `agency_scoped`, `ambiguous`, `fuzzy` (suggestion only — gated out of the key), `unmatched`, or — for rows the primary crosswalk left unkeyed — `tango` / `tango_scoped` (matched to Tango's federal-account reference by title containment, resolving to a single account outright or after narrowing to the subcommittee's agency scope; see `docs/DELIVERABLES.md` and `approps.normalization.tango_crosswalk`). |
-| `account_key_agency` | string | Reporting agency of the matched federal account (from the Tango crosswalk). Fills the agency hierarchy for House committee rows, which carry no extracted agency. Populated only when `account_match` starts with `tango`. |
-| `account_key_bureau` | string | Budget bureau of the matched federal account (from the Tango crosswalk). Same provenance as `account_key_agency`. |
-| `designation` | enum | Funding designation parsed as a separate dimension: `base` (default), `OCO`, `emergency`, `disaster`, `rescission`, `CHIMP`. Lets base vs OCO/emergency rows for the same `account_key` be summed or split. |
-| `real_factor_2024` | float | Multiply any nominal amount on the row by this factor to get **constant FY2024 dollars** (CPI-U, BLS CUUR0000SA0). Empty if the fiscal year is outside the deflator series. |
+One row per line of a comparative statement (committee stage) or an explanatory-statement table (enacted stage), in document order.
+Rows are line items, subtotals, and headings as the source printed them: **do not sum rows to get an account total** — use `account_year_totals`.
 
-### Stage semantics for the amount columns
-
-- **committee** rows: the three amount columns are prior-year enacted, the President's request, and the chamber committee's recommendation — i.e. a *proposal* with its comparison baseline.
-- **enacted** rows: `committee_recommendation` = the final enacted amount; `budget_estimate` = the request (only when the source used a 2-column Request/Final-Bill table); `prior_year_enacted` and the deltas are usually empty.
-
-## `inline_funding_tables.csv`
-
-Inline narrative funding tables (the short prior-year / estimate / recommendation blocks embedded in report prose).
+### Identity and provenance
 
 | Column | Type | Description |
 |---|---|---|
-| `report_id` | string | Source GovInfo package ID. |
-| `congress` | int | Congress number. |
-| `chamber` | enum | `senate` or `house`. |
-| `fiscal_year` | int | Fiscal year. |
-| `subcommittee` | string | Subcommittee. |
-| `context_heading` | string | The narrative heading the table appeared under. |
-| `account_name` | string | Account/program the table describes, where identifiable. |
-| `prior_year_amount` | int $ | Prior-year enacted amount. |
-| `budget_estimate` | int $ | Budget request. |
-| `committee_recommendation` | int $ | Committee recommendation. |
-| `delta_vs_enacted` | int $ | recommendation − prior_year_amount. |
-| `delta_vs_estimate` | int $ | recommendation − budget_estimate. |
-| `raw_text_block` | string | The verbatim source text block (provenance; may contain embedded newlines). |
-| `verified` | bool | Amounts string-matched against the source HTML. |
+| `row_id` | string | `<report_id>:<ordinal>`, the row's position in its report. Joins this table to `nonstandard_layout_rows` and `account_year_totals.row_ids`. Stable for a given extraction, not across re-extractions. |
+| `report_id` | string | GovInfo package ID (`CRPT-118srpt83`, `CPRT-117HPRT50347`). |
+| `congress` | int | 114–119. |
+| `chamber` | enum | `house` or `senate`. Enacted rows carry `house` because the explanatory-statement prints are House Rules Committee prints; they are the final cross-chamber level. Use `stage` to separate them. |
+| `fiscal_year` | int | The fiscal year the bill funds. Always populated: rows merged in by page repair inherit it from the report catalog. |
+| `subcommittee` | string | One of the twelve ids in `data/reference/subcommittees.json`. Committee rows take the report's subcommittee; enacted rows take the subcommittee of their omnibus division. Empty only for enacted rows in divisions that are not a regular bill. |
+| `stage` | enum | `committee` or `enacted`. There is no subcommittee stage; see COVERAGE.md. |
+| `title_name`, `department`, `agency`, `account`, `program` | string | Hierarchy context as the source's headings gave it. Sparse on House vision rows, which carry no extracted hierarchy. Raw text, not normalized. |
+| `account_inferred` | string | House vision rows only: the account a row belongs to, taken from a `Total, <name>` row whose block of line items sums to it exactly. Set only when the arithmetic closes. |
+| `line_item_text` | string | The line's label as printed. Always populated. |
+| `hierarchy_depth` | int | Indentation depth as extracted. Unreliable on House vision and enacted rows. |
+| `in_thousands` | bool | Whether the source table was printed in thousands. Provenance only; amounts are already whole dollars. |
+| `extraction_method` | enum | `rule_based` (Senate HTML, enacted PDF text, House typeset PDF text) or `llm` (House scanned pages). |
 
-## `account_authority.csv`
-
-A derived analytical artifact produced by `approps trace` (not part of the core dataset): it follows each crosswalk-keyed account across fiscal years and emits **one row per title change** — a year in which the account's dominant source label changed under an unchanged `account_key`. Its purpose is twofold: surfacing genuine account renames, and flagging crosswalk over-merges (a `reword` change is equally a signal that two distinct programs were folded under one key). Only rows carrying a trusted `account_key` participate; the coarser attribution tiers have no stable cross-year identity. See `METHODOLOGY.md` (Cross-year account tracing) for the method.
+### Amounts
 
 | Column | Type | Description |
 |---|---|---|
-| `account_key` | string | Authoritative account identity (as in `comparative_statements.csv`) — the stable key the account is followed by. |
-| `canonical_title` | string | Canonical crosswalk title for `account_key` (constant across years; the anchor the drifting labels are compared against). |
-| `first_fy` | int | Earliest fiscal year the account was observed. |
-| `last_fy` | int | Latest fiscal year the account was observed. |
-| `n_years` | int | Number of distinct fiscal years the account appears in. |
-| `change_fy` | int | Fiscal year in which this title change took effect (the first year the new dominant label appears). |
-| `from_title` | string | The dominant source label in the year before the change. |
-| `to_title` | string | The dominant source label from `change_fy` onward. |
-| `kind` | enum | Change class: `prefix` (one label is a leading token-run of the other — an expansion/contraction) or `reword` (a substantive change — a rename candidate, or a crosswalk over-merge). Case/punctuation-only drift is suppressed and never emitted. |
+| `prior_year_enacted` | int $ | Prior-year enacted level. |
+| `budget_estimate` | int $ | President's request. Empty where the statement prints no request column (FY2026–27 three-column statements). |
+| `committee_recommendation` | int $ | Committee's recommended level. **On enacted rows this is the final enacted level.** |
+| `delta_vs_enacted` | int $ | Recommendation minus prior year, as printed. |
+| `delta_vs_estimate` | int $ | Recommendation minus request, as printed. |
+| `is_subtotal` | bool | A `Total`/`Subtotal` row. |
+| `is_memo` | bool | A memo line (limitation, transfer, "of which") — by a parenthesized amount or by the House non-add check. Says what the row is, not whether its printed total adds it: about a fifth of memo rows are added in by their enclosing total. |
+| `designation` | enum | `base`, `OCO`, `emergency`, `disaster`, `rescission`, `CHIMP`, read from parentheticals and suffixes only. |
+| `real_factor_2024` | float | Converts the row's **report-year** amounts — `budget_estimate` and `committee_recommendation` — to FY2024 dollars (CPI-U). **It does not apply to `prior_year_enacted`**, which is in the previous year's dollars: use the factor for `fiscal_year - 1` (`data/reference/deflators.csv`, or `real_factor_2024` on any row of that year). Do not deflate the delta columns; they mix two years. **Empty for FY2026 and FY2027**, which have no annual CPI-U yet; do not treat empty as 1. |
 
-## Known limitations
+### Can this row's numbers be trusted?
 
-See `COVERAGE.md` for the authoritative, up-to-date coverage list. In brief:
-- **Coverage:** committee stage Senate FY2016–FY2026 (complete) + House FY2016–FY2027 (vision); enacted FY2016–FY2024. FY2021/FY2023 have no Senate committee reports (omnibus years). FY2025 enacted does not exist (full-year CR).
-- **Hierarchy:** `account`/`agency` are sparse on House (vision) and enacted rows. For House rows, `account_inferred` recovers the account grouping where a subtotal block reconciles (arithmetic-verified). Join on `account_key` once populated, else fall back to `account_inferred` / `line_item_text`.
-- **Enacted prose divisions:** Energy-Water and Homeland Security are under-captured (their detail is in prose, not tables).
-- **Account identity:** `account_key` is assigned by an authoritative-anchored crosswalk; rows marked `account_match=needs_review`/`unmatched` are not yet resolved.
+| Column | Type | Description |
+|---|---|---|
+| `column_layout` | enum | Whether the amount columns mean what they are named. `standard` for ordinary rows. Every other value marks a table shape whose untrusted columns **have been emptied** (the extracted values are in `nonstandard_layout_rows`), with `verified=false` and `verification_tier=none`: `category_split` (only `committee_recommendation` kept), `procurement_qty`, `text_in_amount`, `amount_in_label`, `signed_level`, `adjustment_detail` (all amounts emptied). Definitions below. |
+| `column_repair` | enum | Set when values were moved into the slots the source prints them in, because the rows' own arithmetic proves the mapping: `three_column_shift` (FY2026–27 House pages) or `house_allowance_columns` (FY2016 Senate statements). Repaired rows are not marked verified by the repair. |
+| `verified` | bool | The row passed its track's primary gate (below). Structural rows with no amount are `false`. |
+| `verification_method` | enum | The gate that set `verified`: `delta_arithmetic`, `string_match`, `verbatim_page`, or `none`. |
+| `verification_tier` | enum | The strongest evidence for the row's amount. For verified rows, the gate that passed. Otherwise `block` (a member of a subtotal block that reconciles exactly), `inline` (amount and account restated in the report's string-verified prose tables), or `none`. |
+
+The first three tiers compare a row with itself or with the text it was read from.
+They prove transcription, not interpretation: a string match passes when a correctly transcribed figure sits in the wrong column, and the delta identity survives a sign flip across a row.
+`block` and `approps reconcile` are the only checks that look outside the row.
+The bounded review in [ACCURACY_REVIEW.md](ACCURACY_REVIEW.md) measures what the gates miss.
+
+`column_layout` values:
+
+- `category_split` — funding split across category columns that sum to the line total, with the deltas echoing them (chiefly Energy-Water). Only the total is real.
+- `procurement_qty` — a Defense quantity-and-amount table read as five columns; the label is a bare line number and the amounts are shifted.
+- `text_in_amount` — a value cell held words: a header row, merged multi-line cells, or a project list (Community Project Funding) forced into the comparative columns.
+- `amount_in_label` — the label ends in a figure (`Aeronautics..... 935,000`), so the row was split past its first column and the rest are shifted.
+- `signed_level` — a level column holds an explicit `+`, which only a change figure prints.
+- `adjustment_detail` — an enacted "Program increase—…" line, whose amount is a change from the request, not a level.
+
+### Account identity
+
+| Column | Type | Description |
+|---|---|---|
+| `account_key` | string | Federal account symbol (e.g. `080-0126`) — the join key across years, chambers, and stages. Empty unless a conservative match passed every check in `normalization.account_gate`. |
+| `account_key_title` | string | Authoritative title of `account_key`. |
+| `account_key_agency`, `account_key_bureau` | string | Agency and bureau of the key, when it came from the Tango reference. |
+| `account_match` | enum | How the key was decided. Assigned: `exact`, `agency_scoped`, `tango`, `tango_scoped`. Not assigned: `unmatched`, `ambiguous`, `fuzzy` (a suggestion, never trusted). **Withheld** (a key was proposed and rejected): `withheld_unmapped_agency` (the account's agency has no jurisdiction entry), `withheld_jurisdiction` (the account's agency is not funded by this subcommittee and the pairing is not a reviewed cross-coded account), `withheld_generic` (a boilerplate label such as "Salaries and expenses" or "Trust Funds" with nothing on the row naming the agency), `withheld_partial_label` (a single word that only begins the account's title, such as "Direct"), `withheld_heading` (a department, title, or division heading), `withheld_ambiguous` (a tie-break among same-titled accounts with no evidence on the row). |
+| `account_key_withheld` | string | The key that was proposed and withheld, for review. Never use it as a join key. |
+
+## `nonstandard_layout_rows`
+
+The values the release removed from rows with a nonstandard `column_layout`, so the change is auditable and reversible.
+One row per isolated row.
+
+| Column | Type | Description |
+|---|---|---|
+| `row_id`, `report_id`, `column_layout`, `line_item_text` | | As in `comparative_statements`. |
+| `verified`, `verification_method` | | What the primary gate recorded before isolation. |
+| `<amount>` / `<amount>_raw_text` | int $ / string | For each of the five amount columns, the extracted value and the source text it was parsed from — as mislabeled as the layout says. |
+
+## `account_year_totals`
+
+One row per (report, `account_key`): the account's total in that report, selected by `normalization.account_totals`.
+This is the table for longitudinal analysis.
+
+| Column | Type | Description |
+|---|---|---|
+| `account_key`, `account_key_title` | string | The account. |
+| `report_id`, `fiscal_year`, `chamber`, `stage`, `subcommittee` | | The report the total comes from. **Compare within one `chamber` + `stage`**: a House recommendation, a Senate recommendation, and an enacted level for the same year are different figures, never parts of one. |
+| `method` | enum | Several reports can hold a total for the same account, year, chamber, and stage (12 cells: a duplicated FY2019 Homeland report, and NIEHS, which two bills fund). Series built from this table should treat those as conflicts, as `/compare` and account history do, not add them. `single_line` — the report's only eligible keyed row, and its label is the account's own title. `account_line` — several keyed rows, and exactly one per designation is titled as the account; those are summed. `unresolved` — neither; **no total is given**. |
+| `n_lines` | int | Eligible keyed rows that competed. |
+| `row_ids` | string | `;`-separated rows the total was taken from. |
+| `designations` | string | `;`-separated designations summed. |
+| `prior_year_enacted`, `budget_estimate`, `committee_recommendation` | int $ | The total. Empty when `unresolved`, or when the source line prints no figure in that column. |
+| `verified_lines` | int | How many of the chosen rows carry a verification tier other than `none`. |
+
+Eligible rows carry a trusted key and a level amount, are not subtotals, rollups, or memo lines, and have a `standard` or `category_split` layout.
+
+## `account_title_changes`
+
+Derived from `account_year_totals`: for each account seen in at least two fiscal years, every year in which the label carrying the most money changed.
+Years in which two reports of the same chamber and stage both claim the account are conflicts and are left out, so a wrongly keyed report cannot pass for a rename.
+A `reword` is a rename candidate or a crosswalk over-merge; a `prefix` is an expansion or contraction.
+
+| Column | Type | Description |
+|---|---|---|
+| `account_key`, `canonical_title` | string | The account and its authoritative title. |
+| `first_fy`, `last_fy`, `n_years` | int | Years observed. |
+| `change_fy` | int | First year of the new label. |
+| `from_title`, `to_title` | string | Dominant labels before and after. |
+| `kind` | enum | `prefix` or `reword`. |
+
+## `inline_funding_tables`
+
+The short funding summaries in report prose (`Appropriations, 2023 … / Budget estimate, 2024 … / Committee recommendation …`), a second, independent extraction.
+String-matched against the source text.
+
+| Column | Type | Description |
+|---|---|---|
+| `report_id`, `congress`, `chamber`, `fiscal_year`, `subcommittee` | | As above. |
+| `context_heading` | string | The nearest heading above the block; heuristic. |
+| `account_name` | string | The account or program the block describes, where identifiable. |
+| `prior_year_amount`, `budget_estimate`, `committee_recommendation`, `delta_vs_enacted`, `delta_vs_estimate` | int $ | As printed. |
+| `raw_text_block` | string | The verbatim block. |
+| `verified` | bool | Every amount string-matched the source. |
+
+## `manifest.json`
+
+| Key | Contents |
+|---|---|
+| `version` | Package version. |
+| `code` | `git_commit`, `git_dirty` (a dirty build is not a release), Python version. |
+| `source_snapshot` | Count and combined SHA-256 of the extracted report files the build read, plus a hash of each reference file. |
+| `tables` | Per table: rows, columns, and whether the CSV, Parquet, and JSON copies matched the source frame. |
+| `counts` | Rows by stage and chamber, reports, and distributions of `verification_tier`, `column_layout`, `column_repair`, `account_match`, and `account_year_totals.method`. |
+| `checks` | Each release check with its value, expectation, and pass/fail. The build refuses to finish if any fails. |
+| `files` | SHA-256 and size of every file. `SHA256SUMS` repeats the hashes in `sha256sum` format. |

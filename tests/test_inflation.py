@@ -26,10 +26,15 @@ def test_older_dollars_are_worth_more_in_later_dollars():
     assert out > 100_000_000
 
 
-def test_real_dollars_handles_missing():
+def test_real_dollars_handles_missing_inputs():
     assert real_dollars(None, 2020, 2024) is None
     assert real_dollars(1_000_000, None, 2024) is None
-    assert real_dollars(1_000_000, 1990, 2024) is None  # year outside the series
+
+
+def test_year_without_a_deflator_fails_loudly():
+    # Returning None (or the nominal figure) would let real and nominal dollars mix in one series.
+    with pytest.raises(KeyError, match="2027"):
+        real_dollars(1_000_000, 2027, 2024)
 
 
 def test_unsupported_method():

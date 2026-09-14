@@ -88,14 +88,23 @@ def test_series_is_chamber_and_stage_aware():
 
 
 def test_double_count_avoided_account_total_vs_program_row():
-    # Same report + key: an account total (1000) and one program sub-row (400),
-    # both non-subtotal. The representative is the larger — never their sum.
+    # Same report + key: the account's own line (1000) and a program sub-row (400), both non-subtotal.
+    # The account line is the total — never their sum.
     rows = [
         _row(report_id="R", account="Operations and Support", committee_recommendation=1000),
-        _row(report_id="R", account="Operations and Support", committee_recommendation=400),
+        _row(report_id="R", account="Operations and Support", line_item_text="Mission Support", committee_recommendation=400),
     ]
     (auth,) = trace_accounts(rows)
     assert [p.amount for p in auth.series] == [1000]
+
+
+def test_breakdown_line_is_not_promoted_when_the_account_line_is_missing():
+    # Two program rows and no account line: the larger is not the account's total, so no series point is invented.
+    rows = [
+        _row(report_id="R", line_item_text="Mission Support", committee_recommendation=1000),
+        _row(report_id="R", line_item_text="Field Operations", committee_recommendation=400),
+    ]
+    assert trace_accounts(rows) == []
 
 
 def test_rollup_rows_are_ignored():
@@ -187,3 +196,38 @@ def test_metric_selects_the_money_column():
     (auth,) = trace_accounts(rows, metric="prior_year_enacted")
     assert [p.amount for p in auth.series] == [90, 95]
     assert auth.metric == "prior_year_enacted"
+
+
+def test_two_reports_in_one_year_are_a_conflict_not_a_sum():
+    # A Homeland report and a wrongly keyed Agriculture report both claim FY2020 House committee: neither figure, and not their sum.
+    rows = [
+        _row(report_id="DHS20", committee_recommendation=700),
+        _row(report_id="AG20", committee_recommendation=30),
+        _row(report_id="DHS21", fiscal_year=2021, committee_recommendation=710),
+    ]
+    (auth,) = trace_accounts(rows)
+    by_year = {p.fiscal_year: p for p in auth.series}
+    assert by_year[2020].amount is None and by_year[2020].conflict == ("AG20", "DHS20")
+    assert by_year[2021].amount == 710
+    assert auth.to_dict()["series"][0]["conflict"] == ["AG20", "DHS20"]
+
+
+def test_conflicted_years_do_not_drive_title_changes():
+    rows = [
+        _row(report_id="A19", fiscal_year=2019, account="Operations and Support"),
+        _row(report_id="A20", fiscal_year=2020, account="Operations and Support"),
+        _row(report_id="B20", fiscal_year=2020, account="Chief Information Officer"),
+        _row(report_id="A21", fiscal_year=2021, account="Operations and Support"),
+    ]
+    (auth,) = trace_accounts(rows)
+    assert auth.title_changes == ()
+
+
+def test_report_count_includes_reports_in_conflicted_years():
+    rows = [
+        _row(report_id="DHS20", committee_recommendation=700),
+        _row(report_id="AG20", committee_recommendation=30),
+        _row(report_id="DHS21", fiscal_year=2021, committee_recommendation=710),
+    ]
+    (auth,) = trace_accounts(rows)
+    assert auth.report_count == 3

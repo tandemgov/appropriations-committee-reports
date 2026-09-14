@@ -6,18 +6,18 @@ Extract line-item appropriations data from Congressional committee reports into 
 
 Congressional appropriations data is locked inside committee report PDFs and HTML documents. This tool extracts it into structured CSV/JSON, enabling longitudinal analysis of federal spending decisions.
 
-> **Just want the data?** Download it from the [latest release](https://github.com/tandemgov/appropriations-committee-reports/releases/latest) — 115,413 line items, FY2016–FY2027, CC0. **Read [DATA.md](DATA.md) first:** 27% of rows carry no independent corroboration and are flagged as such, so filter before you cite a number.
+> **Just want the data?** Download it from the [latest release](https://github.com/tandemgov/appropriations-committee-reports/releases/latest) — 116,393 rows, FY2016–FY2027, CC0. **Read [DATA.md](DATA.md) first:** 27% of rows have no check behind their amount, some table shapes are isolated, and the measured error rates are in [docs/ACCURACY_REVIEW.md](docs/ACCURACY_REVIEW.md). Filter before you cite a number.
 
 **Extracted data includes:**
 - Comparative statements of new budget authority (the dense multi-page tables at the back of each report showing every line item with prior year enacted, budget estimate, and committee recommendation)
 - Inline narrative funding tables (the 3-line funding summaries throughout the report body)
 
 **Coverage targets:**
-- All 12 appropriations subcommittees in both chambers
-- Committee and enactment stages (subcommittee marks are rarely published separately)
-- 12 fiscal years (FY2016–FY2027)
+- All 12 appropriations subcommittees in both chambers, in the years each chamber reported them
+- Committee and enacted stages (subcommittee marks are not published as line-item statements)
+- House committee FY2016–FY2027, Senate committee FY2016–FY2026 with gaps, enacted FY2016–FY2024
 
-**Deliverables:** start with **[docs/DELIVERABLES.md](docs/DELIVERABLES.md)** (what each dataset is and how it was verified), **[docs/COVERAGE.md](docs/COVERAGE.md)** (the stage × chamber × fiscal-year matrix), and **[docs/DATA_DICTIONARY.md](docs/DATA_DICTIONARY.md)** (per-field schema).
+**Deliverables:** start with **[docs/DELIVERABLES.md](docs/DELIVERABLES.md)** (what was delivered and how to rebuild it), **[docs/COVERAGE.md](docs/COVERAGE.md)** (stage × chamber × subcommittee × fiscal year), **[docs/DATA_DICTIONARY.md](docs/DATA_DICTIONARY.md)** (every column), **[docs/ACCURACY_REVIEW.md](docs/ACCURACY_REVIEW.md)** (measured accuracy), and **[docs/KNOWN_ISSUES.md](docs/KNOWN_ISSUES.md)**.
 
 ## Architecture
 
@@ -31,13 +31,13 @@ GovInfo (HTML/PDF) → Discovery → Download → Extraction → Verification �
 
 | Source | Format | Method | Primary gate |
 |--------|--------|--------|----------|
-| Senate comparative statements | Text in HTML | Deterministic fixed-width parser | 100% string-match |
-| Inline narrative tables (both chambers) | Text in HTML | Regex-based extraction | 100% string-match |
+| Senate comparative statements | Text in HTML | Deterministic fixed-width parser | String match |
+| Inline narrative tables (both chambers) | Text in HTML | Regex-based extraction | String match |
 | House comparative statements | TIFF images in PDF | Hybrid: Nemotron-Parse bulk + Gemini cleanup | Delta-arithmetic gate |
 | House typeset committee prints | Born-digital PDF text | Deterministic text parser | Reconciles to RECAPITULATION totals |
-| Enacted line items | Born-digital PDF text (CPRT) | Regex parser, self-verifying | 100% verbatim-on-page |
+| Enacted line items | Born-digital PDF text (CPRT) | Regex parser | Verbatim on page |
 
-The gate is not the accuracy. A 100% string match proves every amount was *transcribed* correctly; it says nothing about whether it was *interpreted* correctly, and the Senate track scored 100% on it while misreading a source convention on 3,970 rows. Only [reconciliation](#reconciliation--the-gate-that-checks-the-others) checks a row against something other than itself.
+The gate is not the accuracy. A string match proves an amount was *transcribed*; it says nothing about whether it landed in the right column, and every defect in [KNOWN_ISSUES](docs/KNOWN_ISSUES.md) passed its gate. Measured accuracy is in [docs/ACCURACY_REVIEW.md](docs/ACCURACY_REVIEW.md). Only [reconciliation](#reconciliation--the-gate-that-checks-the-others) checks a row against something other than itself.
 
 ### Key finding
 
@@ -55,8 +55,9 @@ approps extract-file report.htm -c senate --fy 2024 --csv
 # Extract a House report (needs Gemini API key for comparative statements)
 approps extract-file report.htm -c house --fy 2025 --csv
 
-# Run verification
-approps verify --all
+# Rebuild the release from extracted data (see docs/DELIVERABLES.md)
+approps output
+python scripts/build_release.py
 
 # Start the API server
 approps serve
@@ -100,9 +101,9 @@ GOVINFO_API_KEY=your-key
 | `GET /api/reports/{id}` | Report metadata |
 | `GET /api/reports/{id}/line_items` | Extracted line items for a report |
 | `GET /api/line_items` | Query line items across all reports |
-| `GET /api/line_items/compare` | Longitudinal comparison: one account's money across fiscal years |
+| `GET /api/line_items/compare` | One account's totals across fiscal years, one series per chamber and stage (`account_key` required; `real=true` deflates each point from its price year and fails for years without a deflator) |
 | `GET /api/accounts` | Cross-year account authorities; filter to `changed_only`/`kind=reword` for rename candidates |
-| `GET /api/accounts/{account_key}/history` | One account followed through time: money series, label timeline, title changes |
+| `GET /api/accounts/{account_key}/history` | One account followed through time: money series (a year two reports both claim is a `conflict` with no amount), label timeline, title changes |
 | `POST /api/parse_report` | On-demand extraction (stub) |
 
 ## Project structure
@@ -130,10 +131,14 @@ src/approps/
 │   ├── cross_check.py          # Per-row delta identities
 │   └── audit_report.py         # Verification summary statistics
 ├── normalization/              # Account crosswalk (USASpending-anchored), CPI-U inflation, account-name hygiene
+│   ├── account_gate.py         # Withholds account keys that fail jurisdiction/label checks
+│   ├── account_totals.py       # One total per report and account: the titled account line, or none
+│   ├── column_shift.py         # Repairs column layouts the rows' own arithmetic proves
+│   ├── report_metadata.py      # Fills fiscal year / subcommittee from the report catalog
 │   └── account_authority.py    # Cross-year account tracing: money series, label timeline, title changes
 ├── output/
 │   ├── schemas.py              # Pydantic models for all data types
-│   ├── csv_writer.py           # CSV generation
+│   ├── csv_writer.py           # Output table: enrichment, layout isolation, sidecar
 │   ├── xlsx_writer.py          # Per-report Excel workbooks with live =SUM() proofs
 │   └── metadata.py             # Provenance tracking
 └── api/                        # FastAPI application
@@ -141,7 +146,7 @@ src/approps/
 
 ## Verification methodology
 
-Every extracted dollar amount is verified against the source text using three-tier string matching (modeled after [cgorski/congress-appropriations](https://github.com/cgorski/congress-appropriations)):
+Amounts on text-based tracks are checked against the source text using three-tier string matching (modeled after [cgorski/congress-appropriations](https://github.com/cgorski/congress-appropriations)):
 
 1. **Exact match**: raw extracted text appears verbatim in source
 2. **Normalized match**: after collapsing whitespace
@@ -166,16 +171,16 @@ This gate found a sign defect that had shipped in every prior release, on 9,629 
 
 ## Current results
 
-**246 report-stages, 115,413 comparative line items (78,105 passing a primary gate), 13,853 inline funding records**, spanning committee (both chambers) and enacted stages, FY2016–FY2027. Full breakdown by stage × chamber × fiscal year in **[docs/COVERAGE.md](docs/COVERAGE.md)**.
+**246 reports, 116,393 comparative-statement rows (85,045 with a verification tier), 13,853 inline funding records**, committee (both chambers) and enacted stages, FY2016–FY2027. Full matrix in **[docs/COVERAGE.md](docs/COVERAGE.md)**.
 
-| Stage | Reports | Rows | Primary gate | Rows passing it | Printed totals that reconcile¹ |
-|---|---:|---:|---|---:|---:|
-| Senate committee (HTML text) | 87 | 29,105 | `string_match` | 27,499 | 81.7% |
-| House committee (vision) | 143 | 72,038 | `delta_arithmetic` | 36,336 | 76.5% |
-| House committee (typeset text) | — | 2,441 | `verbatim_page` | 2,441 | — |
-| Enacted (House CPRT explanatory statements) | 16 | 11,829 | `verbatim_page` | 11,829 | 60.3% |
+| Track | Reports | Rows | Primary gate | Rows passing it | Printed totals that reconcile¹ | Accuracy review² |
+|---|---:|---:|---|---:|---:|---|
+| Senate committee (HTML text) | 87 | 29,105 | `string_match` | 27,163 | 82.7% | 96.5% rows found · 98.4% right column |
+| House committee (scanned + typeset) | 143 | 74,479 | `delta_arithmetic` / `verbatim_page` | 38,736 | 76.5% | 97.8% rows found · 99.7% right column |
+| Enacted (explanatory statements) | 16 | 12,809 | `verbatim_page` | 12,761 | 75.8% | 97.7% rows found · 100% right column |
 
-¹ `approps reconcile`, strict rate — the share of printed subtotals whose line items sum to them exactly, excluding advance-appropriation totals that are not the sum of any contiguous block by construction. A total that reconciles independently corroborates every line item beneath it.
+¹ `approps reconcile`, strict rate — the share of printed subtotals whose line items sum to them exactly, excluding advance-appropriation views. Unreconciled totals are documented in KNOWN_ISSUES #19.
+² Blind transcription of sampled source pages compared cell by cell; small samples, see [docs/ACCURACY_REVIEW.md](docs/ACCURACY_REVIEW.md).
 
 ## Related work
 
@@ -196,6 +201,6 @@ No released, open dataset was found that extracts program/line-item detail from 
 
 ```bash
 uv sync --all-extras
-uv run pytest tests/ -v
+uv run pytest tests/
 uv run ruff check src/ tests/
 ```

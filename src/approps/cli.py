@@ -718,14 +718,36 @@ def output(output_format: str) -> None:
         click.echo("No extracted data found. Run 'approps extract' first.", err=True)
         sys.exit(1)
 
+    from collections import Counter
+
+    from approps.normalization.column_shift import (
+        repair_house_allowance_columns,
+        repair_three_column_pages,
+    )
+    from approps.normalization.report_metadata import (
+        FillResult,
+        fill_report_metadata,
+        load_report_authority,
+    )
+
     all_comp: list[ComparativeStatementLine] = []
     all_inline: list[InlineFundingTable] = []
     inferred_total = 0
+    authority = load_report_authority()
+    metadata = FillResult()
+    column_repairs: Counter = Counter()
 
     for path in json_files:
         data = json_mod.loads(path.read_text())
         # Drop 302(b) compliance / outlay-projection back-matter tables — not line items.
         comp_items = drop_summary_rows(data.get("comparative_lines", []))
+        # Rows merged in by page repair carry no fiscal year or subcommittee of their own.
+        fill_report_metadata(data, comp_items, authority, metadata)
+        fill_report_metadata(data, data.get("inline_tables", []), authority, metadata)
+        # Value columns filed into the wrong slots, where the rows prove the right mapping. Before
+        # block inference, which sums the recommendation column.
+        column_repairs["three_column_shift"] += repair_three_column_pages(comp_items)
+        column_repairs["house_allowance_columns"] += repair_house_allowance_columns(comp_items)
         # Recover account groupings for House vision rows from reconciling subtotal
         # blocks (arithmetic-verified; `account` untouched). Per report, in order.
         inferred_total += infer_block_accounts(comp_items)
@@ -735,6 +757,10 @@ def output(output_format: str) -> None:
             all_inline.append(InlineFundingTable(**item))
 
     click.echo(f"Loaded {len(all_comp)} comparative lines, {len(all_inline)} inline tables")
+    click.echo(f"  report metadata filled: {dict(metadata.filled)}")
+    if metadata.conflicts:
+        click.secho(f"  WARNING: {len(metadata.conflicts)} rows contradict their report's metadata, e.g. {metadata.conflicts[:3]}", fg="red")
+    click.echo(f"  column repairs: {dict(column_repairs)}")
     if inferred_total:
         click.echo(
             f"  account_inferred set on {inferred_total} rows (arithmetic-verified subtotal blocks)"

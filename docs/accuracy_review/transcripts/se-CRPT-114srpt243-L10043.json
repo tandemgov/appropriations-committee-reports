@@ -1,0 +1,421 @@
+{
+ "unit_id": "se-CRPT-114srpt243-L10043",
+ "report_id": "CRPT-114srpt243",
+ "html_line_start": 10043,
+ "html_line_end": 10086,
+ "units_header": "[In thousands of dollars]",
+ "column_headers": [
+  "2016 appropriation",
+  "Budget estimate",
+  "Committee recommendation",
+  "Senate Committee recommendation compared with (+ or -) 2016 appropriation",
+  "Senate Committee recommendation compared with (+ or -) Budget estimate"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "(Liquidation of contract authorization)",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "(2,300,000)",
+    "",
+    "",
+    "(-2,300,000)"
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "(Limitation on obligations)",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "",
+    "(2,300,000)",
+    "",
+    "",
+    "(-2,300,000)"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Northeast Corridor Grants",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "345,000",
+    "+345,000",
+    "+345,000"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "National Network",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "1,075,000",
+    "+1,075,000",
+    "+1,075,000"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Subtotal",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "1,390,000",
+    "",
+    "1,420,000",
+    "+30,000",
+    "+1,420,000"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "Consolidated rail infrastructure and safety improvements",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "50,000",
+    "+50,000",
+    "+50,000"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Federal State Partnership for State of Good Repair",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "20,000",
+    "+20,000",
+    "+20,000"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Restoration and enhancement grants",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "15,000",
+    "+15,000",
+    "+15,000"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Subtotal",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "",
+    "",
+    "85,000",
+    "+85,000",
+    "+85,000"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Administrative Provisions",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Transportation Technology Center financing (Sec. 151)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "Rail unobligated balances (rescission) (Sec. 152)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "-1,960",
+    "",
+    "",
+    "+1,960",
+    ""
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "RRIF application expenses (Sec. 152)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,960",
+    "",
+    "",
+    "-1,960",
+    ""
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Rail unobligated balances (rescission) (Sec. 153)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "-19,163",
+    "",
+    "",
+    "+19,163",
+    ""
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "Northeast Corridor Capital grants (Sec. 153)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "19,163",
+    "",
+    "",
+    "-19,163",
+    ""
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "Total, Federal Railroad Administration",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "1,678,100",
+    "266,798",
+    "1,753,600",
+    "+75,500",
+    "+1,486,802"
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "(Limitation on obligations)",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "",
+    "6,000,000",
+    "",
+    "",
+    "-6,000,000"
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "Total, budgetary resources",
+   "indent_level": 3,
+   "is_total": true,
+   "cells": [
+    "1,678,100",
+    "6,266,798",
+    "1,753,600",
+    "+75,500",
+    "-4,513,198"
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "Federal Transit Administration",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "Administrative expenses",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "108,000",
+    "",
+    "110,665",
+    "+2,665",
+    "+110,665"
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "Transit formula grants (Hwy Trust Fund, Mass Transit Account ) (Liqiuidation of contract authorization)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "(10,400,000)",
+    "(10,800,000)",
+    "(10,800,000)",
+    "(+400,000)",
+    ""
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "(Limitation on obligations)",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "(9,347,605)",
+    "(9,733,706)",
+    "(9,733,706)",
+    "(+386,101)",
+    ""
+   ]
+  },
+  {
+   "seq": 23,
+   "label": "Supplementary transit formula grants (legislative proposal) (Liquidation of contract authorization)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "(5,860,000)",
+    "",
+    "",
+    "(-5,860,000)"
+   ]
+  },
+  {
+   "seq": 24,
+   "label": "(Limitation on obligations)",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "(5,860,000)",
+    "",
+    "",
+    "(-5,860,000)"
+   ]
+  },
+  {
+   "seq": 25,
+   "label": "Rapid-Growth Transit Program (legislative proposal) (Liquidation of contract authorization)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "(525,000)",
+    "",
+    "",
+    "(-525,000)"
+   ]
+  },
+  {
+   "seq": 26,
+   "label": "(limitation on obligations)",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "(525,000)",
+    "",
+    "",
+    "(-525,000)"
+   ]
+  },
+  {
+   "seq": 27,
+   "label": "Capital investment grants",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,177,000",
+    "",
+    "2,338,063",
+    "+161,063",
+    "+2,338,063"
+   ]
+  },
+  {
+   "seq": 28,
+   "label": "(Liquidation of contract authorization)",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "(3,500,000)",
+    "",
+    "",
+    "(-3,500,000)"
+   ]
+  },
+  {
+   "seq": 29,
+   "label": "(Limitation on obligations)",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "",
+    "(3,500,000)",
+    "",
+    "",
+    "(-3,500,000)"
+   ]
+  },
+  {
+   "seq": 30,
+   "label": "Washington Metropolitan Area Transit Authority Capital and Preventive Maintenance",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "150,000",
+    "150,000",
+    "150,000",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 31,
+   "label": "Administrative Provisions",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Columns from header at lines 9881-9885 (table title at 9877). Window starts mid-Federal Railroad Administration block; row 1 '(Liquidation of contract authorization)' belongs to an account whose label is above the window. Wrapped labels joined: rows 21 (10071-10072), 23 (10074-10075), 25 (10077-10078), 30 (10083-10084). Row 21 label transcribed as printed, including stray space in 'Mass Transit Account )' and typo 'Liqiuidation'; on line 10071 the label fills the leader area so no dot leader is printed, but amounts still align under the five column positions. Row 11 is a dot-leader-only row. Rows 10, 19, 31 are centered headings. Row 17 '(Limitation on obligations)' under the Total prints 6,000,000 and -6,000,000 without parentheses; copied as printed. indent_level = leading spaces // 4; centered headings set to 0."
+}

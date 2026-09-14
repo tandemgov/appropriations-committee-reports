@@ -115,27 +115,60 @@ Gemini 3 Pro Preview was selected for the paid cleanup leg. It correctly handles
 
 **Method** (`extraction/comparative_enacted.py`): two table shapes are handled — single-column "Program ......... $amount" dot-leader tables (the single amount is the final enacted level → `committee_recommendation`), and two-column "Budget Request | Final Bill" adjustment tables (ALL-CAPS account rows give the absolute levels; the lowercase "Program increase/decrease—…" delta rows are skipped so they cannot pollute absolute amounts). Each line is **self-verified**: its amount must appear verbatim on its source page, so enacted rows ship `verified=true` without a companion HTML document.
 
-**Result:** 11,829 enacted line items across FY2016–FY2024, 100% self-verified. The enacted stage fills the committee track's omnibus-year gaps (FY2021/FY2023 have no Senate committee reports but carry 1,306/1,516 enacted lines). Limitation: prose-only divisions (Energy-Water, Homeland Security) are under-captured because their detail is in narrative sentences rather than tables; FY2025 is a genuine gap (full-year CR, no explanatory statement).
+**Result:** 12,809 enacted rows across FY2016–FY2024; 12,761 pass the verbatim-on-page gate (the rest are isolated layouts). Verbatim-on-page proves a figure is on the page, not that it was read into the right line: the accuracy review found 3 of 131 source lines missing on its six sampled pages. The enacted stage fills the committee track's omnibus-year gaps. Limitations: divisions whose detail is prose (Energy-Water, Homeland Security) are under-captured; FY2025 is a genuine gap (full-year CR, no explanatory statement). See [docs/COVERAGE.md](docs/COVERAGE.md).
 
 ## Normalization and crosswalk
 
 To support longitudinal analysis, extracted accounts are resolved to a stable identity and amounts can be expressed in constant dollars. Design and findings: `docs/crosswalk_scoping.md`.
 
-- **Account crosswalk** (`normalization/crosswalk.py`): each account is anchored to an authoritative **USASpending federal-account code** (`data/reference/federal_accounts.json`, 2,261 Treasury-sourced accounts). Anchoring — rather than fuzzy self-clustering — is essential: naive fuzzy matching conflates distinct accounts (e.g. African vs Asian Development Bank). The matcher is conservative (exact/prefix-unique and agency-scoped matches are trusted; fuzzy hits are flagged `needs_review` and gated out of the key). Coverage is gated by account-extraction quality: ~29% of account-bearing committee rows receive a trusted `account_key`; program-level rows and accounts absent from the reference are left blank with `account_match` recording why. `approps crosswalk` emits the distinct-account crosswalk + review queue.
+- **Account crosswalk** (`normalization/crosswalk.py`, `normalization/tango_crosswalk.py`): each account is anchored to an authoritative **federal account symbol** (`data/reference/federal_accounts.json`, and Tango's account reference for rows the first pass leaves unkeyed). Anchoring — rather than fuzzy self-clustering — keeps distinct accounts apart (African vs Asian Development Bank). Exact, prefix-unique, and agency-scoped matches are proposed; fuzzy hits are recorded and never trusted. `approps crosswalk` emits the distinct-account crosswalk and review queue.
+- **Account gate** (`normalization/account_gate.py`): both matchers match on the label alone, so boilerplate labels resolved to arbitrary accounts. After matching, a key is withheld when its agency has no entry in the jurisdiction table (every agency in the corpus has one, keyed by CGAC prefix), when that agency is not funded by the row's subcommittee — or is funded there only through particular bureaus (Forest Service in Interior, FDA in Agriculture, Reclamation in Energy-Water, military construction in MilCon-VA) and the account is not one of them — and the pairing is not one of the reviewed cross-coded accounts (Legal Services Corporation in CJS, Council on Environmental Quality in Interior), when every label on the row is boilerplate or a single word that only begins the account's title and nothing else on the row names the agency, when the row is a heading, or when an agency tie-break had no evidence. There is no data-driven exception: the same label-only match repeated across reports is not evidence. 20,881 rows keep a key; 7,687 had one withheld (`account_key_withheld`). See [KNOWN_ISSUES #16](docs/KNOWN_ISSUES.md).
 - **Designation** dimension (`normalization/account_names.py`): base/OCO/emergency/disaster/rescission/CHIMP, parsed only from parentheticals/suffixes so account names are not misread.
-- **Inflation** (`normalization/inflation.py`, `data/reference/deflators.csv`): a CPI-U series (BLS CUUR0000SA0) drives the `real_factor_2024` column emitted by the output layer — multiply any nominal amount for FY2024 constant dollars.
+- **Inflation** (`normalization/inflation.py`, `data/reference/deflators.csv`): a CPI-U series (BLS CUUR0000SA0, calendar-year averages as an approximation for fiscal years) drives `real_factor_2024`. The series ends at 2025 (provisional), so FY2026–27 rows have no factor. The factor is for the row's report year; `prior_year_enacted` is priced a year earlier, and `/api/line_items/compare?real=true` deflates it from `fiscal_year - 1`. Nothing substitutes a default: `real_dollars` raises and the API returns 422 for a price year without a deflator.
+
+## Report metadata and column repairs
+
+The output build (`approps output`) corrects two things before any row is written, each from evidence in the data rather than a guess.
+
+- **Report metadata** (`normalization/report_metadata.py`): `fiscal_year`, `subcommittee`, `congress`, `chamber`, and `stage` are properties of the report. Rows missing them (those merged in by page repair) take the catalog's values; enacted rows take the subcommittee of their omnibus division. A row's existing value is never overwritten, and contradictions are reported.
+- **Column repairs** (`normalization/column_shift.py`): two layouts file values into the wrong slots in a way the rows' own arithmetic proves — FY2026–27 House three-column pages (`committee_recommendation == budget_estimate - prior_year_enacted` on every full row of a page with no delta column) and FY2016 Senate statements with a House allowance column. Values are moved into place and the row records `column_repair`. The repair is not counted as verification. See KNOWN_ISSUES #11 and #13.
+
+## Isolating nonstandard layouts
+
+Some rows come from tables whose columns do not mean what the schema names them, or from parses that shifted a row's values: category-split tables, Defense quantity tables, cells holding words, labels holding a figure, level columns holding a `+`, and enacted program-increase lines.
+`output.csv_writer._column_layout` recognizes each from the row's own text, and the build **empties the untrusted columns**, sets `verified = false` and `verification_tier = none`, and writes the extracted values to `nonstandard_layout_rows` keyed by `row_id`.
+Flagging alone was not enough: a mislabeled figure with a verification tier looks trustworthy to anyone who does not filter.
+3,026 rows are isolated; see [docs/DATA_DICTIONARY.md](docs/DATA_DICTIONARY.md) for each layout and KNOWN_ISSUES #1, #2, and #15.
+
+## Account totals
+
+A comparative statement prints an account's own line and, often, its program breakdown beneath it, all as ordinary rows sharing one `account_key`.
+Summing them double-counts; taking the largest (the earlier rule) promotes a program line to a total whenever the account line is missing or keyed elsewhere.
+
+`normalization/account_totals.py` selects, per report and account, only lines the source presents as the account:
+
+1. `single_line` — the report's only eligible keyed row, and its label is the account's own title (the authoritative title starts with it, ignoring designation and citation parentheticals but not other qualifiers, so `Child Nutrition Programs (Entitlement Commodities)` is not the whole account);
+2. `account_line` — several keyed rows, and exactly one per designation is titled as the account; those are summed;
+3. `unresolved` — otherwise, and no total is given.
+
+Eligible rows carry a trusted key and a level amount and are not subtotals, rollups, memo lines, or isolated layouts.
+Totals are per report and are never combined across chambers or stages: a House recommendation, a Senate recommendation, and an enacted level are different figures.
+The release's `account_year_totals` resolves 6,163 of 9,154 report-account pairs.
+The same function drives `/api/line_items/compare`, the flow view, and account history, so the API and the file cannot disagree.
+
+The rule is conservative, not complete: it declines where the source's structure is ambiguous, and it trusts the key. The multi-year check in [docs/ACCURACY_REVIEW.md](docs/ACCURACY_REVIEW.md) tests it against the source documents.
 
 ### Cross-year account tracing
 
 Once accounts carry a stable `account_key`, an account can be followed through time by that key even as its source label changes — the report-stage analogue of tracing an appropriation across enacted bills by its Treasury/OMB account symbol (the approach in `cgorski/congress-appropriations`). `normalization/account_authority.py` groups every crosswalk-keyed line item by `account_key` and reconstructs three things per account, exposed via `approps trace`, `GET /api/accounts`, and `GET /api/accounts/{account_key}/history`.
 
-1. **Money series** across fiscal years, broken out by chamber and stage. To avoid the account-total-vs-program double-count that comparative statements create (an account lists both its own total and its program breakdown as non-subtotal rows), each `(report, account_key)` is collapsed to its single largest-magnitude leaf — the account total, `>=` any child part — the same rule the flow layer uses. Rollup rows the `is_subtotal` flag missed are dropped.
+1. **Money series** across fiscal years, broken out by chamber and stage, from the account totals above. Reports whose total is unresolved contribute no point.
 
 2. **Label timeline** — every distinct label the source documents gave the account and the years each appeared.
 
 3. **Title changes** between consecutive years, comparing the dominant label (the one carrying the most money) year over year. Each change is classified: `prefix` (one label is a leading token-run of the other — an expansion or contraction) or `reword` (a substantive change). Case- and punctuation-only drift is normalized away and never emitted.
 
-Two honest caveats. Only trusted `account_key` rows participate — the coarser attribution tiers (`account_inferred`, `account_recovered`) have no stable cross-year identity, so they are out of scope by design and cross-year coverage inherits the crosswalk's ~29% ceiling. And a `reword` change is **not** always a real rename: because the crosswalk sometimes folds distinct programs under one code, a `reword` equally flags a crosswalk over-merge — which makes `approps trace` a useful QA lens on the crosswalk (and on extraction artifacts such as amounts bleeding into a title), not only a rename detector.
+Two honest caveats. Only trusted `account_key` rows participate — the coarser attribution tiers (`account_inferred`, `account_recovered`) have no stable cross-year identity, so they are out of scope by design and cross-year coverage inherits the crosswalk's ceiling (20,881 keyed rows, about a fifth of the corpus). And a `reword` change is **not** always a real rename: because the crosswalk sometimes folds distinct programs under one code, a `reword` equally flags a crosswalk over-merge — which makes `approps trace` a useful QA lens on the crosswalk (and on extraction artifacts such as amounts bleeding into a title), not only a rename detector.
 
 ## Verification
 
@@ -149,7 +182,7 @@ Every extracted dollar amount is verified against the source text using three ti
 
 If all three tiers fail, the amount is flagged as unverified.
 
-**Results on Senate and inline extractions:** every extracted dollar amount across the 87 Senate committee reports and both chambers' inline funding tables is checked this way. Rows that carry an amount verify at ~100% by exact string match; the corpus-wide `verified` fractions (Senate committee 92.7%, the remainder being structural/no-amount rows) are in [COVERAGE.md](docs/COVERAGE.md). An early 5-report validation run was 8,815 amounts at 100%, zero failures.
+**Results:** every amount on the Senate comparative rows and both chambers' inline funding tables is checked this way. 27,163 of 29,105 Senate rows pass (the rest carry no amount or are isolated layouts), and 13,707 of 13,853 inline records. A pass proves the figure is in the source text. It does not prove the figure is in the right column or on the right line: the accuracy review found 8 of 513 Senate cells in the wrong column, every one of them string-matched.
 
 ### Cross-validation for House PDF extractions
 
@@ -200,10 +233,12 @@ The **strict pass rate** excludes `overlapping_view`, and is the honest denomina
 
 | Track | Checkable | Tie exactly | Strict |
 |---|---:|---:|---:|
-| house | 9,871 | 73.0% | 74.8% |
-| senate | 5,198 | 77.7% | 80.7% |
-| enacted | 1,138 | 59.1% | 60.3% |
-| **all** | **16,207** | **73.5%** | **75.7%** |
+| house | 10,532 | 74.8% | 76.5% |
+| senate | 5,286 | 79.6% | 82.7% |
+| enacted | 1,178 | 75.2% | 75.8% |
+| **all** | **16,996** | **76.3%** | **78.4%** |
+
+The unreconciled residual is documented in [KNOWN_ISSUES #19](docs/KNOWN_ISSUES.md).
 
 A total that reconciles corroborates every line item beneath it. A total that does *not* reconcile is a review item, not a proven error — the reconciler infers nesting, and unusual table shapes defeat it.
 
@@ -225,59 +260,18 @@ This is the point of the whole exercise. A parsed dataset earns adoption not by 
 
 ## Known limitations
 
+The authoritative, current list is [docs/KNOWN_ISSUES.md](docs/KNOWN_ISSUES.md); the measured error rates are in [docs/ACCURACY_REVIEW.md](docs/ACCURACY_REVIEW.md).
+
 1. **House PDF extraction is non-deterministic.** Vision model outputs may vary between runs. Cross-validation against inline tables mitigates this.
 
 2. **Vision extraction is rate- and cost-bound.** The hybrid keeps the paid Gemini leg to the ~⅓ of pages the free Nemotron bulk pass can't self-verify; even so, large reports (Defense/THUD run hundreds of image pages) are throughput-limited by per-model quotas. See `docs/vision-model-eval-brief.md` for the measured cost profile.
 
 3. **Heading detection for inline tables is heuristic.** The backward-search algorithm occasionally picks up a nearby heading from a different section, especially in House reports where heading styles vary.
 
-4. **Account crosswalk coverage is partial and gated by extraction quality.** Accounts are anchored to authoritative USASpending codes, but only ~29% of account-bearing committee rows currently receive a trusted `account_key`; program-level lines, OCR/wording drift, and accounts absent from the reference are flagged for review rather than force-matched. Coverage grows as account-level extraction is cleaned up (see `docs/crosswalk_scoping.md`).
+4. **Account crosswalk coverage is partial, and a key is not proof of identity.** 20,881 rows carry a trusted `account_key`; the gate withholds keys it can show are wrong but cannot prove the rest right. See KNOWN_ISSUES #16.
 
 5. **Only the comparative statement and PPA detail tables from image pages are extracted.** Vote roll call pages (which are also images in House PDFs) are processed but correctly return 0 items.
 
 ## Data dictionary
 
-The full, current field-by-field data dictionary for the combined dataset is **`docs/DATA_DICTIONARY.md`** (every column, stage semantics, the crosswalk/designation/real-dollar fields, verification meaning, and limitations). The canonical types live in the Pydantic schemas in `src/approps/output/schemas.py`. The legacy summary below is retained for reference:
-
-### comparative_statements.csv
-
-| Field | Type | Description |
-|-------|------|-------------|
-| report_id | string | GovInfo package ID (e.g., CRPT-118srpt83) |
-| congress | int | Congress number (114-119) |
-| chamber | string | "house" or "senate" |
-| fiscal_year | int | Target fiscal year of the bill |
-| subcommittee | string | Canonical subcommittee name |
-| stage | string | "committee" or "enacted" |
-| title_name | string | Title heading (e.g., "TITLE I--DEPARTMENT OF THE INTERIOR") |
-| department | string | Department/agency name |
-| account | string | Account/bureau name |
-| program | string | Program/sub-account (if applicable) |
-| line_item_text | string | Full text of the line item |
-| prior_year_enacted | float | Prior year enacted amount (dollars) |
-| budget_estimate | float | President's budget estimate (dollars) |
-| committee_recommendation | float | Committee recommendation (dollars) |
-| delta_vs_enacted | float | Committee rec minus prior year (dollars) |
-| delta_vs_estimate | float | Committee rec minus budget estimate (dollars) |
-| is_subtotal | bool | Whether this is a subtotal/total line |
-| hierarchy_depth | int | Depth in hierarchy (0=title, 1=dept, ...) |
-| in_thousands | bool | Whether source values were in thousands |
-| extraction_method | string | "rule_based" or "llm" |
-| verified | bool | Whether amount was verified against source |
-
-### inline_funding_tables.csv
-
-| Field | Type | Description |
-|-------|------|-------------|
-| report_id | string | GovInfo package ID |
-| congress | int | Congress number |
-| chamber | string | Chamber |
-| fiscal_year | int | Target fiscal year |
-| subcommittee | string | Canonical subcommittee name |
-| context_heading | string | Nearest heading above the table |
-| account_name | string | Inferred account/program name |
-| prior_year_amount | float | Prior year appropriation (dollars) |
-| budget_estimate | float | Budget estimate (dollars) |
-| committee_recommendation | float | Committee recommendation (dollars) |
-| raw_text_block | string | Verbatim text of the funding block |
-| verified | bool | Amount verification status |
+Every column of every release table is defined in [docs/DATA_DICTIONARY.md](docs/DATA_DICTIONARY.md); the canonical types are the Pydantic schemas in `src/approps/output/schemas.py`.

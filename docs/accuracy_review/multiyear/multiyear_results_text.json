@@ -1,0 +1,282 @@
+[
+ {
+  "check_id": "080-0126-house-enacted-2017",
+  "location": "pdf page 198 (printed page 192), CPRT-115HPRT25289",
+  "column_headers": ["Program", "Amount"],
+  "units": "(in thousands of dollars)",
+  "label_as_printed": "Aeronautics:",
+  "cells": ["660,000"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "bill text (pdf p155-156): AERONAUTICS ... $660,000,000, to remain available until September 30, 2018.",
+   "prose pdf p199: This Act includes $660,000,000 for Aeronautics. Within these amounts, up to $169,400,000 is provided for the Airspace Operations and Safety Program"
+  ],
+  "notes": "Explanatory-statement NASA program table (single Amount column), table title 'NATIONAL AERONAUTICS AND SPACE ADMINISTRATION', Total, NASA $19,653,300. Aeronautics is a standalone line with no sub-items, so it is the account's own line. No multi-column Final Bill comparative table containing NASA found in this print. Render confirmed the figure is in the Amount column. No rescission or emergency line for Aeronautics seen on this page."
+ },
+ {
+  "check_id": "080-0126-house-enacted-2021",
+  "location": "pdf page 284 (printed page 278), CPRT-117HPRT43749",
+  "column_headers": ["Program", "Amount"],
+  "units": "(In thousands of dollars)",
+  "label_as_printed": "Aeronautics",
+  "cells": ["828,700"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "bill text (pdf p184-185): AERONAUTICS ... $828,700,000, to remain available until September 30, 2022.",
+   "prose pdf p287: The agreement includes $828,700,000 for Aeronautics."
+  ],
+  "notes": "Explanatory-statement NASA program table, Total, NASA $23,271,278. Standalone line, no sub-items. No multi-column Final Bill table containing NASA found in this print. Render confirmed."
+ },
+ {
+  "check_id": "080-0126-house-enacted-2024",
+  "location": "pdf page 452 (printed page 443), CPRT-118HPRT56550",
+  "column_headers": ["Program", "Amount ($000)"],
+  "units": "(In thousands of dollars)",
+  "label_as_printed": "Aeronautics",
+  "cells": ["935,000"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "bill text (pdf p379-380): AERONAUTICS ... $935,000,000, to remain available until September 30, 2025.",
+   "prose pdf p455: The agreement includes $935,000,000 for Aeronautics."
+  ],
+  "notes": "Explanatory-statement NASA program table, Total, NASA $24,875,000 (prose: $24,875,000,000 for NASA). Standalone line. No multi-column Final Bill table containing NASA found. Render confirmed."
+ },
+ {
+  "check_id": "080-0126-senate-committee-2016",
+  "location": "html line 7711, CRPT-114srpt66",
+  "column_headers": ["Item", "2015 appropriation", "Budget estimate", "House allowance", "Committee recommendation", "Senate Committee recommendation compared with (+ or -): 2015 appropriation", "Budget estimate", "House allowance"],
+  "units": "[In thousands of dollars]",
+  "label_as_printed": "Aeronautics......................",
+  "cells": ["651,000", "571,400", "600,000", "524,700", "-126,300", "-46,700", "-75,300"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "html line 5701-5705 account heading: Appropriations, 2015 $651,000,000; Budget estimate, 2016 571,400,000; House allowance 600,000,000; Committee recommendation 524,700,000"
+  ],
+  "notes": "Comparative statement header at lines 7428-7436 (FY2015 appropriation vs FY2016). Under TITLE III--SCIENCE / National Aeronautics and Space Administration. Single-line account, no components."
+ },
+ {
+  "check_id": "080-0126-senate-committee-2018",
+  "location": "html line 7891, CRPT-115srpt139",
+  "column_headers": ["Item", "2017 appropriation", "Budget estimate", "Committee recommendation", "Senate Committee recommendation compared with (+ or -): 2017 appropriation", "Budget estimate"],
+  "units": "[In thousands of dollars]",
+  "label_as_printed": "Aeronautics...................................................",
+  "cells": ["660,000", "624,000", "650,000", "-10,000", "+26,000"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "html line 6122-6126 account heading: Appropriations, 2017 $660,000,000; Budget estimate, 2018 624,000,000; Committee recommendation 650,000,000"
+  ],
+  "notes": "Comparative statement header at lines 7667-7675. No House allowance column. Single-line account."
+ },
+ {
+  "check_id": "080-0126-senate-committee-2024",
+  "location": "html line 13167, CRPT-118srpt62",
+  "column_headers": ["Item", "2023 appropriation", "Budget estimate", "Committee recommendation", "Senate Committee recommendation compared with (+ or -): 2023 appropriation", "Budget estimate"],
+  "units": "[In thousands of dollars]",
+  "label_as_printed": "Aeronautics...................................................",
+  "cells": ["935,000", "995,800", "935,000", "................", "-60,800"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "html line 9539-9542 account heading: Appropriations, 2023 $935,000,000; Budget Estimate, 2024 995,800,000; Committee recommendation 935,000,000"
+  ],
+  "notes": "Comparative statement header at lines 12870-12878. Dotted leader cell in the vs-2023 column means zero/no change. No emergency line for Aeronautics (emergency lines exist only for Deep Space Exploration Systems and Construction)."
+ },
+ {
+  "check_id": "080-0126-senate-committee-2026",
+  "location": "html line 12564, CRPT-119srpt44",
+  "column_headers": ["Item", "2025 appropriation", "Committee recommendation", "Senate Committee recommendation compared with (+ or -) 2025 appropriation"],
+  "units": "[In thousands of dollars]",
+  "label_as_printed": "Aeronautics.........................................",
+  "cells": ["935,000", "950,000", "+15,000"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "html line 8554-8557 account heading: Appropriations, 2025 $935,000,000; Committee recommendation 950,000,000"
+  ],
+  "notes": "Comparative statement header at lines 12285-12293 (no Budget estimate column). Single-line account; emergency lines nearby are for Exploration and Construction only."
+ },
+ {
+  "check_id": "012-2042-house-enacted-2016",
+  "location": "pdf page 79 (printed page 73), CPRT-114HPRT98155",
+  "column_headers": [],
+  "units": "(Dollars in Thousands)",
+  "label_as_printed": "High energy cost grants",
+  "cells": ["10,000"],
+  "is_account_total_line": false,
+  "other_lines_for_account": [
+   "bill text pdf p36 (Rural Water and Waste Disposal Program Account): Provided further, That $10,000,000 of the amount appropriated under this heading shall be transferred to, and merged with, the Rural Utilities Service, High Energy Cost Grants Account"
+  ],
+  "notes": "Table under RURAL WATER AND WASTE DISPOSAL PROGRAM ACCOUNT ('The agreement provides $522,365,000'), sub-heading 'Subsidies and grants:'; Total, subsidies and grants $522,365. The table prints no column-header row, just one unlabeled amount column. The line is a component of the RWWD Program Account table, not a standalone account table, although the bill text transfers the $10,000,000 into the separate High Energy Cost Grants Account. Render confirmed."
+ },
+ {
+  "check_id": "012-2042-house-enacted-2020",
+  "location": "pdf page 329 (printed page 323), CPRT-116HPRT38679",
+  "column_headers": [],
+  "units": "(Dollars in Thousands)",
+  "label_as_printed": "High energy cost grants",
+  "cells": ["10,000"],
+  "is_account_total_line": false,
+  "other_lines_for_account": [
+   "bill text pdf p280: Provided further, That $10,000,000 of the amount appropriated under this heading shall be transferred to, and merged with, the Rural Utilities Service, High Energy Cost Grants Account"
+  ],
+  "notes": "Table under RURAL WATER AND WASTE DISPOSAL PROGRAM ACCOUNT ('The agreement provides $659,480,000'), sub-heading 'Subsidies and grants:'; table continues to pdf p330 (Total, subsidies and grants $659,480). No column-header row printed. Component line of the RWWD table; funds transferred to the HECG account per bill text. Render confirmed."
+ },
+ {
+  "check_id": "012-2042-house-enacted-2024",
+  "location": "pdf page 223 (printed page 214), CPRT-118HPRT56550",
+  "column_headers": [],
+  "units": "(Dollars in thousands)",
+  "label_as_printed": "High energy cost grants",
+  "cells": ["8,000"],
+  "is_account_total_line": false,
+  "other_lines_for_account": [
+   "bill text pdf p173: Provided further, That $8,000,000 of the amount appropriated under this heading shall be transferred to, and merged with, the Rural Utilities Service, High Energy Cost Grants Account"
+  ],
+  "notes": "Table begins on pdf p222 under RURAL WATER AND WASTE DISPOSAL PROGRAM ACCOUNT ('The agreement provides $595,972,000'), sub-heading 'Subsidies and grants:'; continued on p223 with repeated '(Dollars in thousands)'; Total, subsidies and grants $595,972. No column-header row printed. Component line of the RWWD table. Render confirmed."
+ },
+ {
+  "check_id": "012-2042-senate-committee-2016",
+  "location": "html line 5779, CRPT-114srpt82",
+  "column_headers": ["Item", "2015 appropriation", "Budget estimate", "Committee recommendation", "Senate Committee recommendation compared with (+ or -): 2015 appropriation", "Budget estimate"],
+  "units": "[In thousands of dollars]",
+  "label_as_printed": "High energy cost grants................................",
+  "cells": ["10,000", "...............", "10,000", "...............", "+10,000"],
+  "is_account_total_line": false,
+  "other_lines_for_account": [
+   "html line 3722 (RWWD body table, 'Loan levels and budget authority in thousands of dollars', cols FY2015 appropriation / 2016 budget request / Committee recommendation): High energy cost grants 10,000 | ........ | 10,000"
+  ],
+  "notes": "Comparative statement header at lines 5414-5422. Line sits under Rural Utilities Service > Rural Water and Waste Disposal Program Account > Loan subsidies and grants (Total, Loan subsidies and grants 464,857 / 483,320 / 496,738). Component line; the budget estimate cell is a dotted leader (no request)."
+ },
+ {
+  "check_id": "012-2042-senate-committee-2019",
+  "location": "html line 6833, CRPT-115srpt259",
+  "column_headers": ["Item", "2018 appropriation", "Budget estimate", "Committee recommendation", "Senate Committee recommendation compared with (+ or -): 2018 appropriation", "Budget estimate"],
+  "units": "[In thousands of dollars]",
+  "label_as_printed": "High energy cost grants................................",
+  "cells": ["10,000", "...............", "10,000", "...............", "+10,000"],
+  "is_account_total_line": false,
+  "other_lines_for_account": [
+   "html line 4255 (RWWD body table, FY2018 enacted / FY2019 budget request / Committee recommendation): High energy cost grants 10,000 | ........ | 10,000"
+  ],
+  "notes": "Comparative statement header at lines 6484-6492. Component of RWWD Loan subsidies and grants (Total 560,263 / 18,149 / 558,183)."
+ },
+ {
+  "check_id": "012-2042-senate-committee-2022",
+  "location": "html line 8862, CRPT-117srpt34",
+  "column_headers": ["Item", "2021 appropriation", "Budget estimate", "Committee recommendation", "Senate Committee recommendation compared with (+ or -): 2021 appropriation", "Budget estimate"],
+  "units": "[In thousands of dollars]",
+  "label_as_printed": "High energy cost grants....................................",
+  "cells": ["10,000", "10,000", "10,000", "...............", "..............."],
+  "is_account_total_line": false,
+  "other_lines_for_account": [
+   "html line 5522 (RWWD body table, FY2021 enacted / FY2022 budget request / Committee recommendation): High energy cost grants 10,000 | 10,000 | 10,000"
+  ],
+  "notes": "Comparative statement header at lines 8463-8471. Component of RWWD Loan subsidies and grants (Total 621,567 / 716,557 / 665,702)."
+ },
+ {
+  "check_id": "012-2042-senate-committee-2026",
+  "location": "html line 11287, CRPT-119srpt37",
+  "column_headers": ["Item", "2025 appropriation", "Committee recommendation", "Senate Committee recommendation compared with (+ or -) 2025 appropriation"],
+  "units": "[In thousands of dollars]",
+  "label_as_printed": "High energy cost grants.................",
+  "cells": ["8,000", "8,000", ".................."],
+  "is_account_total_line": false,
+  "other_lines_for_account": [
+   "html line 6049 (RWWD body table): High energy cost grants 8,000 | 8,000",
+   "html line 5652 prose: High Energy Cost Grants.--The Committee directs the Rural ... (no amount on that line)"
+  ],
+  "notes": "Comparative statement header at lines 10857-10865 (no Budget estimate column). Component of RWWD Loan subsidies and grants (Total 478,487 / 443,776)."
+ },
+ {
+  "check_id": "080-0131-house-enacted-2017",
+  "location": "pdf page 198 (printed page 192), CPRT-115HPRT25289",
+  "column_headers": ["Program", "Amount"],
+  "units": "(in thousands of dollars)",
+  "label_as_printed": "Space Technology:",
+  "cells": ["686,500"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "bill text pdf p156: SPACE TECHNOLOGY ... $686,500,000, to remain available until September 30, 2018",
+   "prose pdf p199: This Act includes $686,500,000 for Space Technology."
+  ],
+  "notes": "Same NASA program table as the 2017 Aeronautics check. Standalone line. Render confirmed."
+ },
+ {
+  "check_id": "080-0131-house-enacted-2020",
+  "location": "pdf page 535 (printed page 531), CPRT-116HPRT38678",
+  "column_headers": ["Program", "Amount"],
+  "units": "[in thousands of dollars]",
+  "label_as_printed": "Space Technology",
+  "cells": ["1,100,000"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "bill text pdf p486: SPACE TECHNOLOGY ... $1,100,000,000, to remain available until September 30, 2021",
+   "prose pdf p537: The agreement includes $1,100,000,000 for Space Technology."
+  ],
+  "notes": "Explanatory-statement NASA program table, Total, NASA $22,629,000 (prose $22,629,000,000). Same page shows Aeronautics 783,900. Standalone line. Render confirmed."
+ },
+ {
+  "check_id": "080-0131-house-enacted-2024",
+  "location": "pdf page 452 (printed page 443), CPRT-118HPRT56550",
+  "column_headers": ["Program", "Amount ($000)"],
+  "units": "(In thousands of dollars)",
+  "label_as_printed": "Space Technology",
+  "cells": ["1,100,000"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "bill text (pdf p379-380): SPACE TECHNOLOGY ... $1,100,000,000, to remain available until September 30, 2025.",
+   "prose pdf p456: The agreement includes $1,100,000,000 for Space Technology."
+  ],
+  "notes": "Same NASA program table as the 2024 Aeronautics check. Standalone line. Bill-text page given as a range because it was found in a p378-382 extract. Render confirmed."
+ },
+ {
+  "check_id": "080-0131-senate-committee-2016",
+  "location": "html line 7712, CRPT-114srpt66",
+  "column_headers": ["Item", "2015 appropriation", "Budget estimate", "House allowance", "Committee recommendation", "Senate Committee recommendation compared with (+ or -): 2015 appropriation", "Budget estimate", "House allowance"],
+  "units": "[In thousands of dollars]",
+  "label_as_printed": "Space technology.................",
+  "cells": ["596,000", "724,800", "625,000", "600,000", "+4,000", "-124,800", "-25,000"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "html line 5741-5745 account heading: Appropriations, 2015 $596,000,000; Budget estimate, 2016 724,800,000; House allowance 625,000,000; Committee recommendation 600,000,000"
+  ],
+  "notes": "Comparative statement header at lines 7428-7436. Label printed in lowercase 'technology'. Single-line account."
+ },
+ {
+  "check_id": "080-0131-senate-committee-2018",
+  "location": "html line 7892, CRPT-115srpt139",
+  "column_headers": ["Item", "2017 appropriation", "Budget estimate", "Committee recommendation", "Senate Committee recommendation compared with (+ or -): 2017 appropriation", "Budget estimate"],
+  "units": "[In thousands of dollars]",
+  "label_as_printed": "Space technology..............................................",
+  "cells": ["686,500", "678,600", "700,000", "+13,500", "+21,400"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "html line 6172-6176 account heading: Appropriations, 2017 $686,500,000; Budget estimate, 2018 678,600,000; Committee recommendation 700,000,000"
+  ],
+  "notes": "Comparative statement header at lines 7667-7675. Single-line account."
+ },
+ {
+  "check_id": "080-0131-senate-committee-2024",
+  "location": "html line 13168, CRPT-118srpt62",
+  "column_headers": ["Item", "2023 appropriation", "Budget estimate", "Committee recommendation", "Senate Committee recommendation compared with (+ or -): 2023 appropriation", "Budget estimate"],
+  "units": "[In thousands of dollars]",
+  "label_as_printed": "Space Technology..............................................",
+  "cells": ["1,200,000", "1,391,600", "1,118,000", "-82,000", "-273,600"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "html line 9618-9621 account heading: Appropriations, 2023 $1,200,000,000; Budget Estimate, 2024 1,391,600,000; Committee recommendation 1,118,000,000"
+  ],
+  "notes": "Comparative statement header at lines 12870-12878. Single-line account, no emergency line."
+ },
+ {
+  "check_id": "080-0131-senate-committee-2026",
+  "location": "html line 12565, CRPT-119srpt44",
+  "column_headers": ["Item", "2025 appropriation", "Committee recommendation", "Senate Committee recommendation compared with (+ or -) 2025 appropriation"],
+  "units": "[In thousands of dollars]",
+  "label_as_printed": "Space Technology....................................",
+  "cells": ["1,100,000", "975,000", "-125,000"],
+  "is_account_total_line": true,
+  "other_lines_for_account": [
+   "html line 8603-8606 account heading: Appropriations, 2025 $1,100,000,000; Committee recommendation 975,000,000"
+  ],
+  "notes": "Comparative statement header at lines 12285-12293. Single-line account."
+ }
+]

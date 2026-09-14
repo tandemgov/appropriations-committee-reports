@@ -1,0 +1,211 @@
+{
+ "unit_id": "en-CPRT-115HPRT25289-p1587",
+ "report_id": "CPRT-115HPRT25289",
+ "pdf_page": 1587,
+ "units_header": "[Budget authority in thousands of dollars]",
+ "column_headers": [
+  "Budget Authority"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "HIV/AIDS (USAID)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "330,000"
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Microbicides",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "[45,000]"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "HIV/AIDS (Department of State)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "5,670,000"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "The Global Fund to Fight AIDS, Tuberculosis and Malaria",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "[1,350,000]"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "UNAIDS",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "[45,000]"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "Family Planning/Reproductive Health (USAID)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "523,950"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Other Infectious Diseases (USAID)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,238,500"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Pandemic Influenza and Other Emerging Threats",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "[142,500]"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "of which, Emergency Reserve Fund",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "[70,000]"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Malaria",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "[755,000]"
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Tuberculosis",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "[241,000]"
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "of which, Global TB Drug Facility",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "[15,000]"
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "Neglected Tropical Diseases",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "[100,000]"
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Total",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "8,724,950"
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "Combating child marriage",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "11,000"
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "Global Crop Diversity Trust",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "15,000"
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "Leahy War Victims Fund",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "13,500"
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "Reconciliation programs",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "16,000"
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "Trade capacity building",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "10,000"
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "USAID Advisor for Indigenous Peoples Issues",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "3,500"
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "Victims of torture",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "11,750"
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "Wheelchairs",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "5,000"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Two tables on printed page 1581, both with units line '[Budget authority in thousands of dollars]' and a single 'Budget Authority' column. Table 1: 'GLOBAL HEALTH PROGRAMS—Continued' (Program/Activity), seq 1-14, continued from the previous page, ends with 'Total 8,724,950' (Total label is indented in print). Italic bracketed rows are sub-allocations; 'of which, Emergency Reserve Fund' and 'of which, Global TB Drug Facility' are printed at the same indent as the other italic sub-rows (logically they are sub-items of Pandemic Influenza and Tuberculosis respectively, but indent_level reflects print). Table 2: 'DEVELOPMENT ASSISTANCE' (Global Programs), seq 15-22, no total row printed (table ends with a rule). Prose amount $2,995,465,000 not transcribed. Text layer and rendered image agree."
+}

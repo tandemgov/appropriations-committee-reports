@@ -1,0 +1,447 @@
+{
+ "unit_id": "se-CRPT-114srpt79-L7459",
+ "report_id": "CRPT-114srpt79",
+ "html_line_start": 7459,
+ "html_line_end": 7502,
+ "units_header": "[In thousands of dollars]",
+ "column_headers": [
+  "2015 appropriation",
+  "Budget estimate",
+  "Committee recommendation",
+  "Senate Committee recommendation compared with (+ or -) 2015 appropriation",
+  "Senate Committee recommendation compared with (+ or -) Budget estimate"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "Sec. 7050 Visa Fraud Prevention & Detection Fees",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Economic Support Fund Unexpended Balances (rescission) (Sec. 7084)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "-205,125",
+    "-205,125",
+    "-205,125"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "International Narcotics Control and Law enforcement (rescission) (Sec. 7084)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "-159,691",
+    "-159,691",
+    "-159,691"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "Amendment to Vietnam Education Foundation Act (Sec. 7086)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "4,000",
+    "",
+    "",
+    "-4,000",
+    ""
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Total, title VII, General Provisions",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "-26,000",
+    "22,000",
+    "-364,816",
+    "-338,816",
+    "-386,816"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "TITLE VIII--OVERSEAS CONTINGENCY OPERATIONS [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Diplomatic and consular programs [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,350,803",
+    "1,507,422",
+    "1,884,569",
+    "+533,766",
+    "+377,147"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "(Worldwide security protection) [OCO]",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "(989,706)",
+    "(1,067,963)",
+    "(1,300,393)",
+    "(+310,687)",
+    "(+232,430)"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "(Transfer to other agencies)",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "(-35,000)",
+    "(-10,000)",
+    "(-10,000)",
+    "(+25,000)",
+    ""
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Conflict stabilization operations [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "15,000",
+    "",
+    "10,000",
+    "-5,000",
+    "+10,000"
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Office of Inspector General [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "56,900",
+    "56,900",
+    "66,600",
+    "+9,700",
+    "+9,700"
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "Embassy security, construction, and maintenance [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "260,800",
+    "134,800",
+    "134,800",
+    "-126,000",
+    ""
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "Contributions to int'l organizations [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "74,400",
+    "",
+    "52,100",
+    "-22,300",
+    "+52,100"
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Contributions for International Peacekeeping Activities, current year assessment [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "505,000",
+    "+505,000",
+    "+505,000"
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "Peace Operations Response Mechanism [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "150,000",
+    "",
+    "",
+    "-150,000"
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "Broadcasting board of governors [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "10,700",
+    "",
+    "6,300",
+    "-4,400",
+    "+6,300"
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "Operating expenses of USAID [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "125,464",
+    "65,000",
+    "139,262",
+    "+13,798",
+    "+74,262"
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "International Disaster Assistance [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,335,000",
+    "810,000",
+    "1,037,000",
+    "-298,000",
+    "+227,000"
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "Transition Initiatives [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "20,000",
+    "",
+    "20,000",
+    "",
+    "+20,000"
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "Complex Crises fund [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "30,000",
+    "",
+    "",
+    "-30,000",
+    ""
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "Economic Support Fund [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,114,266",
+    "2,183,330",
+    "2,019,034",
+    "-95,232",
+    "-164,296"
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "Assistance to Europe, Eurasia and Central Asia [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "410,869",
+    "+410,869",
+    "+410,869"
+   ]
+  },
+  {
+   "seq": 23,
+   "label": "Migration and Refugee assistance (MRA) [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,127,114",
+    "819,000",
+    "1,251,114",
+    "-876,000",
+    "+432,114"
+   ]
+  },
+  {
+   "seq": 24,
+   "label": "International narcotics control and law enforcement [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "443,195",
+    "226,000",
+    "284,000",
+    "-159,195",
+    "+58,000"
+   ]
+  },
+  {
+   "seq": 25,
+   "label": "Nonproliferation, Anti-terrorism, Demining and Related programs [NADR] [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "99,240",
+    "390,000",
+    "262,521",
+    "+163,281",
+    "-127,479"
+   ]
+  },
+  {
+   "seq": 26,
+   "label": "Peacekeeping Operations [PKO] [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "328,698",
+    "65,000",
+    "210,000",
+    "-118,698",
+    "+145,000"
+   ]
+  },
+  {
+   "seq": 27,
+   "label": "Foreign Military Financing program [OCO]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "866,420",
+    "640,000",
+    "1,186,868",
+    "+320,448",
+    "+546,868"
+   ]
+  },
+  {
+   "seq": 28,
+   "label": "Economic Support Fund (rescission) [OCO] (Sec. 8005)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "-194,540",
+    "-194,540",
+    "-194,540"
+   ]
+  },
+  {
+   "seq": 29,
+   "label": "International Narcotics Control and Law Enforcement (rescission) [OCO] (Sec. 8005)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "-27,497",
+    "-27,497",
+    "-27,497"
+   ]
+  },
+  {
+   "seq": 30,
+   "label": "Total, Title VIII, Overseas Contingency Operations",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "9,258,000",
+    "7,047,452",
+    "9,258,000",
+    "",
+    "+2,210,548"
+   ]
+  },
+  {
+   "seq": 31,
+   "label": "(Overseas contingency operations)",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "(9,258,000)",
+    "(7,047,452)",
+    "(9,480,037)",
+    "(+222,037)",
+    "(+2,432,585)"
+   ]
+  },
+  {
+   "seq": 32,
+   "label": "(Rescissions Overseas contingency operations)",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "(-222,037)",
+    "(-222,037)",
+    "(-222,037)"
+   ]
+  },
+  {
+   "seq": 33,
+   "label": "TITLE IX--HUMANITARIAN AND EMERGENCY RESPONSE",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Columns from header at lines 7161-7165 (table title at 7157). Wrapped labels joined: rows 2 (7460-7461), 3 (7462-7463), 14 (7477-7478), 25 (7489-7490), 29 (7494-7495). Row 1 is a dot-leader-only row (all five columns are dot placeholders). Rows 6 and 33 are centered title headings with no amounts. Separator lines (=== / ---) and blank lines not transcribed. indent_level = leading spaces // 4; centered headings set to 0."
+}

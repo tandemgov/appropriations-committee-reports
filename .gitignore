@@ -30,6 +30,7 @@ data/verified/
 data/output/
 data/release/
 data/_archive_flat_extracted/
+data/handoff/
 
 # Generated crosswalk review queue (regenerable via `approps crosswalk`)
 data/reference/account_crosswalk.csv

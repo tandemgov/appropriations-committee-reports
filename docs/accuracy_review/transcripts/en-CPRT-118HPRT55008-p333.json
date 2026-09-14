@@ -1,0 +1,715 @@
+{
+ "unit_id": "en-CPRT-118HPRT55008-p333",
+ "report_id": "CPRT-118HPRT55008",
+ "pdf_page": 333,
+ "units_header": "",
+ "column_headers": [
+  ""
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "Aircraft Procurement, Navy:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Common Ground Equipment",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "1,428,000"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Procurement of Ammunition, Navy and Marine Corps:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "Infantry Weapons Ammunition",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "1,012,000"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Shipbuilding and Conversion, Navy:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "T–AGOS: Construction",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "158,300,000"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Procurement, Marine Corps:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Radio Systems",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "7,100,000"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Aircraft Procurement, Air Force:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "F–22",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "83,261,000"
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Procurement, Defense-Wide:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "PCMV",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "204,000"
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "2023 Appropriations:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Operation and Maintenance, Defense-Wide:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "DSCA Security Cooperation",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "85,000,000"
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "Counter-ISIS Train and Equip Fund:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "Counter-Islamic State of Iraq and Syria Train and Equip",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "50,000,000"
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "Aircraft Procurement, Army:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "AH–64 Mods",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "3,372,000"
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "Missile Procurement, Army:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "TOW 2 System Summary",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "2,713,000"
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "Procurement of Weapons and Tracked Combat Vehicles, Army:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 23,
+   "label": "Improved Recovery Vehicle (M88A2 Hercules)",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "7,799,000"
+   ]
+  },
+  {
+   "seq": 24,
+   "label": "Location & Azimuth Determination System",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "2,573,000"
+   ]
+  },
+  {
+   "seq": 25,
+   "label": "Other Procurement, Army:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 26,
+   "label": "COTS Communication Equipment",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "25,000,000"
+   ]
+  },
+  {
+   "seq": 27,
+   "label": "Information Systems",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "23,962,000"
+   ]
+  },
+  {
+   "seq": 28,
+   "label": "Automated Data Processing Equipment",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "10,000,000"
+   ]
+  },
+  {
+   "seq": 29,
+   "label": "Disaster Incident Response Communications Terminal",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "4,066,000"
+   ]
+  },
+  {
+   "seq": 30,
+   "label": "Procurement of Ammunition, Army:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 31,
+   "label": "Mines & Clearing Charges, All Types",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "2,176,000"
+   ]
+  },
+  {
+   "seq": 32,
+   "label": "Demolition Munitions, All Types",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "1,047,000"
+   ]
+  },
+  {
+   "seq": 33,
+   "label": "Aircraft Procurement, Navy:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 34,
+   "label": "MQ–25",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "220,650,000"
+   ]
+  },
+  {
+   "seq": 35,
+   "label": "Next Generation Jammer",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "4,673,000"
+   ]
+  },
+  {
+   "seq": 36,
+   "label": "Infrared Search and Track (IRST)",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "20,000,000"
+   ]
+  },
+  {
+   "seq": 37,
+   "label": "F–18 Series",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "44,422,000"
+   ]
+  },
+  {
+   "seq": 38,
+   "label": "C–130 Series",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "10,000,000"
+   ]
+  },
+  {
+   "seq": 39,
+   "label": "T–45 Series",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "5,000,000"
+   ]
+  },
+  {
+   "seq": 40,
+   "label": "Common ECM Equipment",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "15,000,000"
+   ]
+  },
+  {
+   "seq": 41,
+   "label": "Weapons Procurement, Navy:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 42,
+   "label": "Tomahawk",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "40,000,000"
+   ]
+  },
+  {
+   "seq": 43,
+   "label": "Torpedo Support Equipment",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "10,000,000"
+   ]
+  },
+  {
+   "seq": 44,
+   "label": "Procurement of Ammunition, Navy and Marine Corps:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 45,
+   "label": "Air Expendable Countermeasures",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "2,262,000"
+   ]
+  },
+  {
+   "seq": 46,
+   "label": "Shipbuilding and Conversion, Navy:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 47,
+   "label": "DDG–51 Advance Procurement",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "77,300,000"
+   ]
+  },
+  {
+   "seq": 48,
+   "label": "LPD Flight II Advance Procurement",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "250,000,000"
+   ]
+  },
+  {
+   "seq": 49,
+   "label": "Other Procurement, Navy:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 50,
+   "label": "Ship Missile Support Equipment",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "1,101,000"
+   ]
+  },
+  {
+   "seq": 51,
+   "label": "Surface Combatant HM&E",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "2,000,000"
+   ]
+  },
+  {
+   "seq": 52,
+   "label": "Other Navigation Equipment",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "3,000,000"
+   ]
+  },
+  {
+   "seq": 53,
+   "label": "Strategic Platform Support Equipment",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "1,500,000"
+   ]
+  },
+  {
+   "seq": 54,
+   "label": "Items Less Than $5 Million",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "3,000,000"
+   ]
+  },
+  {
+   "seq": 55,
+   "label": "AN/SQQ–89 Surf ASW Combat System",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "4,000,000"
+   ]
+  },
+  {
+   "seq": 56,
+   "label": "Surface Ship Torpedo Defense (SSTD)",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "1,000,000"
+   ]
+  },
+  {
+   "seq": 57,
+   "label": "Shipboard IW Exploit",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "10,000,000"
+   ]
+  },
+  {
+   "seq": 58,
+   "label": "CANES",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "15,000,000"
+   ]
+  },
+  {
+   "seq": 59,
+   "label": "Ship Communications Automation",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "5,000,000"
+   ]
+  },
+  {
+   "seq": 60,
+   "label": "Info Systems Security Program",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "10,000,000"
+   ]
+  },
+  {
+   "seq": 61,
+   "label": "Anti-Ship Missile Decoy System",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "10,000,000"
+   ]
+  },
+  {
+   "seq": 62,
+   "label": "Submarine Training Device Mods",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "3,500,000"
+   ]
+  },
+  {
+   "seq": 63,
+   "label": "Surface Training Equipment",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "20,000,000"
+   ]
+  },
+  {
+   "seq": 64,
+   "label": "Procurement, Marine Corps:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 65,
+   "label": "Radio Systems",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "128,750,000"
+   ]
+  },
+  {
+   "seq": 66,
+   "label": "Marine Corps Enterprise Network (MCEN)",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "12,200,000"
+   ]
+  },
+  {
+   "seq": 67,
+   "label": "Joint Light Tactical Vehicle",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "17,600,000"
+   ]
+  },
+  {
+   "seq": 68,
+   "label": "Aircraft Procurement, Air Force:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 69,
+   "label": "A–10",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "51,720,000"
+   ]
+  },
+  {
+   "seq": 70,
+   "label": "F–15",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "17,300,000"
+   ]
+  },
+  {
+   "seq": 71,
+   "label": "F–22",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "213,742,000"
+   ]
+  },
+  {
+   "seq": 72,
+   "label": "Other Procurement, Air Force:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 73,
+   "label": "General Information Technology—TDNE",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "37,100,000"
+   ]
+  },
+  {
+   "seq": 74,
+   "label": "Procurement, Space Force:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 75,
+   "label": "National Security Space Launch",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "44,200,000"
+   ]
+  },
+  {
+   "seq": 76,
+   "label": "Special Space Activities",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "36,287,000"
+   ]
+  },
+  {
+   "seq": 77,
+   "label": "Procurement, Defense Wide:",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 78,
+   "label": "PCMV",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "211,000"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Printed page 323. Whole page is a continuation of the Section 8046 (RESCISSIONS) list that begins on pdf page 332 ('Section 8046 rescinds $2,595,522,000 from the following programs:'); the table has no column header and no units line on either page (amounts are full dollars of rescission, printed as positive numbers). Rows at top of page (seq 1-12) continue the '2022 Appropriations:' fiscal-year group from page 332, so they carry indent 1/2 with no level-0 parent on this page. Indent 0 = appropriation year, 1 = account, 2 = line item. No total rows on this page. Account headings carry no amounts. Dashes in labels (T–AGOS, F–22, AH–64, MQ–25, etc.) are en dashes as in the text layer; 'General Information Technology—TDNE' uses an em dash. Note 'Procurement, Defense-Wide:' (2022 group) vs 'Procurement, Defense Wide:' (2023 group, no hyphen) as printed."
+}

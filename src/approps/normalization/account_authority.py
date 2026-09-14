@@ -120,15 +120,20 @@ class MoneyPoint:
     fiscal_year: int
     chamber: str | None
     stage: str | None
-    amount: float
+    amount: float | None
+    # Reports that each claim this account for the same year, chamber, and stage; `amount` is then None, never their sum.
+    conflict: tuple[str, ...] = ()
 
     def to_dict(self) -> dict:
-        return {
+        d = {
             "fiscal_year": self.fiscal_year,
             "chamber": self.chamber,
             "stage": self.stage,
             "amount": self.amount,
         }
+        if self.conflict:
+            d["conflict"] = list(self.conflict)
+        return d
 
 
 @dataclass(frozen=True)
@@ -190,29 +195,23 @@ class AccountAuthority:
 
 
 def _representatives(rows: list[dict], metric: str) -> list[dict]:
-    """One representative row per (report, account_key): the largest-magnitude leaf.
+    """One row per (report, account_key), carrying the account's total for `metric`.
 
-    Comparative statements list an account's own total *and* its program
-    breakdown, both as non-subtotal rows; summing both double-counts. Keeping the
-    single largest-|metric| row per (report_id, account_key) selects the account
-    total (>= any child part) — the same rule the flow layer uses
-    (`api.data.dedupe_to_account_grain`). Rollup rows and rows lacking the metric,
-    a fiscal year, or a key are skipped.
+    Comparative statements list an account's own line *and* its program breakdown, both as ordinary rows; summing both double-counts.
+    The total is chosen by `normalization.account_totals` — the account's own line, or nothing — the same rule the flow layer and `/compare` use.
+    Accounts it cannot resolve, and rows lacking the metric or a fiscal year, are skipped.
     """
-    best: dict[tuple, dict] = {}
-    for r in rows:
-        key = r.get("account_key")
-        if not key or _is_rollup_row(r):
+    from approps.normalization.account_totals import account_totals
+
+    reps = []
+    for t in account_totals([r for r in rows if not _is_rollup_row(r)]):
+        value = getattr(t, metric)
+        if t.method == "unresolved" or value is None or t.fiscal_year is None:
             continue
-        val = _num(r.get(metric))
-        fy = _fiscal_year(r)
-        if val is None or fy is None:
-            continue
-        k = (r.get("report_id"), key)
-        cur = best.get(k)
-        if cur is None or abs(val) > abs(_num(cur.get(metric)) or 0.0):
-            best[k] = r
-    return list(best.values())
+        rep = dict(t.chosen[0])
+        rep[metric] = value
+        reps.append(rep)
+    return reps
 
 
 def _dominant_label_by_year(group: list[dict], metric: str) -> dict[int, str]:
@@ -265,17 +264,21 @@ def trace_accounts(
             None,
         )
 
-        # Money series: sum representatives per (fiscal_year, chamber, stage).
-        agg: dict[tuple, float] = collections.defaultdict(float)
+        # Money series: one representative per (fiscal_year, chamber, stage).
+        # Two reports claiming the same cell are a conflict, as in account_totals.account_series: usually one of them is keyed wrongly, and their sum is nobody's figure.
+        cells: dict[tuple, list[dict]] = collections.defaultdict(list)
         for r in group:
-            fy = _fiscal_year(r)
-            agg[(fy, r.get("chamber"), r.get("stage"))] += _num(r.get(metric)) or 0.0
+            cells[(_fiscal_year(r), r.get("chamber"), r.get("stage"))].append(r)
         series = tuple(
-            MoneyPoint(fy, ch, st, round(amt))
-            for (fy, ch, st), amt in sorted(
-                agg.items(), key=lambda kv: (kv[0][0], kv[0][1] or "", kv[0][2] or "")
-            )
+            MoneyPoint(fy, ch, st, round(_num(rs[0].get(metric)) or 0.0))
+            if len(rs) == 1
+            else MoneyPoint(fy, ch, st, None, tuple(sorted(str(r.get("report_id")) for r in rs)))
+            for (fy, ch, st), rs in sorted(cells.items(), key=lambda kv: (kv[0][0], kv[0][1] or "", kv[0][2] or ""))
         )
+        report_count = len({r.get("report_id") for r in group})
+        conflicted = {id(r) for rs in cells.values() if len(rs) > 1 for r in rs}
+        # Labels and title changes come only from uncontested cells, so a wrongly keyed report cannot look like a rename.
+        group = [r for r in group if id(r) not in conflicted]
 
         # Label timeline: each observed label and the years it appeared.
         label_years: dict[str, set] = collections.defaultdict(set)
@@ -315,7 +318,7 @@ def trace_accounts(
                 labels=labels,
                 title_changes=tuple(changes),
                 series=series,
-                report_count=len({r.get("report_id") for r in group}),
+                report_count=report_count,
                 metric=metric,
             )
         )

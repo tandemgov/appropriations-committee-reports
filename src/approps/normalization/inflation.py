@@ -54,10 +54,10 @@ def adjust_for_inflation(
 def real_dollars(amount: float | None, from_year: int | None, base_year: int) -> float | None:
     """Convenience wrapper: amount in from_year nominal dollars -> base_year real dollars.
 
-    Returns None if the amount or year is missing, or the year is outside the series."""
+    Returns None only when there is nothing to convert (no amount or no year).
+    A year outside the deflator series raises KeyError: returning the nominal figure, or nothing, would let a caller mix real and nominal dollars in one series without knowing it.
+    FY2026 and FY2027 have no deflator yet (the CPI-U series ends at 2025).
+    """
     if amount is None or from_year is None:
         return None
-    try:
-        return round(adjust_for_inflation(amount, from_year, base_year))
-    except KeyError:
-        return None
+    return round(adjust_for_inflation(amount, from_year, base_year))

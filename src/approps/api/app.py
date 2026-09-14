@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from importlib.metadata import version
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -11,6 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from approps.api.routes import accounts, flow, line_items, parse, reports
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
+VERSION = version("approps")
 
 app = FastAPI(
     title="Appropriations Data API",
@@ -18,7 +20,7 @@ app = FastAPI(
         "Structured line-item data extracted from Congressional appropriations "
         "committee reports. Covers all 12 subcommittees across both chambers."
     ),
-    version="0.1.0",
+    version=VERSION,
 )
 
 # CORS for browser-based consumers
@@ -40,7 +42,7 @@ app.include_router(parse.router)
 def api_root():
     return {
         "name": "Appropriations Data API",
-        "version": "0.1.0",
+        "version": VERSION,
         "docs": "/docs",
         "endpoints": {
             "reports": "/api/reports",
