@@ -1,0 +1,10 @@
+{"unit_id": "hv-CRPT-117hrpt99-p303", "report_id": "CRPT-117hrpt99", "pdf_page": 303, "units_header": "(Amounts in thousands)", "column_headers": ["FY 2021 Enacted", "FY 2022 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"], "rows": [
+{"seq": 1, "label": "Policy Development and Research", "indent_level": 2, "is_total": false, "cells": ["", "", "", "", ""]},
+{"seq": 2, "label": "Research and Technology", "indent_level": 0, "is_total": false, "cells": ["105,000", "145,000", "185,000", "+80,000", "+40,000"]},
+{"seq": 3, "label": "Fair Housing and Equal Opportunity", "indent_level": 2, "is_total": false, "cells": ["", "", "", "", ""]},
+{"seq": 4, "label": "Fair Housing Activities", "indent_level": 0, "is_total": false, "cells": ["72,555", "85,000", "85,000", "+12,445", "---"]},
+{"seq": 5, "label": "Office of Lead Hazard Control and Healthy Homes", "indent_level": 1, "is_total": false, "cells": ["", "", "", "", ""]},
+{"seq": 6, "label": "Lead Hazard Reduction", "indent_level": 0, "is_total": false, "cells": ["360,000", "400,000", "460,000", "+100,000", "+60,000"]},
+{"seq": 7, "label": "Information Technology Fund", "indent_level": 0, "is_total": false, "cells": ["300,000", "323,200", "278,200", "-21,800", "-45,000"]},
+{"seq": 8, "label": "Office of Inspector General", "indent_level": 0, "is_total": false, "cells": ["137,200", "147,000", "145,000", "+7,800", "-2,000"]}
+], "uncertain_cells": [], "notes": "Centered heading rows (seq 1, 3, 5) have no amounts; their indent_level reflects visual centering over the label column rather than a true hierarchy indent. Page is the tail of the table; remaining lower half of page is blank."}

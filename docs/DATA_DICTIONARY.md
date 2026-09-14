@@ -78,7 +78,7 @@ The bounded review in [ACCURACY_REVIEW.md](ACCURACY_REVIEW.md) measures what the
 | `account_key` | string | Federal account symbol (e.g. `080-0126`) — the join key across years, chambers, and stages. Empty unless a conservative match passed every check in `normalization.account_gate`. |
 | `account_key_title` | string | Authoritative title of `account_key`. |
 | `account_key_agency`, `account_key_bureau` | string | Agency and bureau of the key, when it came from the Tango reference. |
-| `account_match` | enum | How the key was decided. Assigned: `exact`, `agency_scoped`, `tango`, `tango_scoped`. Not assigned: `unmatched`, `ambiguous`, `fuzzy` (a suggestion, never trusted). **Withheld** (a key was proposed and rejected): `withheld_jurisdiction` (the account's agency is not funded by this subcommittee), `withheld_generic` (a boilerplate label such as "Salaries and expenses" with nothing on the row naming the agency), `withheld_heading` (a department, title, or division heading), `withheld_ambiguous` (a tie-break decided only by the subcommittee's name). |
+| `account_match` | enum | How the key was decided. Assigned: `exact`, `agency_scoped`, `tango`, `tango_scoped`. Not assigned: `unmatched`, `ambiguous`, `fuzzy` (a suggestion, never trusted). **Withheld** (a key was proposed and rejected): `withheld_unmapped_agency` (the account's agency has no jurisdiction entry), `withheld_jurisdiction` (the account's agency is not funded by this subcommittee and the pairing is not a reviewed cross-coded account), `withheld_generic` (a boilerplate label such as "Salaries and expenses" or "Trust Funds" with nothing on the row naming the agency), `withheld_partial_label` (a single word that only begins the account's title, such as "Direct"), `withheld_heading` (a department, title, or division heading), `withheld_ambiguous` (a tie-break among same-titled accounts with no evidence on the row). |
 | `account_key_withheld` | string | The key that was proposed and withheld, for review. Never use it as a join key. |
 
 ## `nonstandard_layout_rows`
@@ -101,7 +101,7 @@ This is the table for longitudinal analysis.
 |---|---|---|
 | `account_key`, `account_key_title` | string | The account. |
 | `report_id`, `fiscal_year`, `chamber`, `stage`, `subcommittee` | | The report the total comes from. **Compare within one `chamber` + `stage`**: a House recommendation, a Senate recommendation, and an enacted level for the same year are different figures, never parts of one. |
-| `method` | enum | `single_line` — the report's only eligible keyed row, and its label is the account's own title. `account_line` — several keyed rows, and exactly one per designation is titled as the account; those are summed. `unresolved` — neither; **no total is given**. |
+| `method` | enum | Several reports can hold a total for the same account, year, chamber, and stage (12 cells: a duplicated FY2019 Homeland report, and NIEHS, which two bills fund). Series built from this table should treat those as conflicts, as `/compare` and account history do, not add them. `single_line` — the report's only eligible keyed row, and its label is the account's own title. `account_line` — several keyed rows, and exactly one per designation is titled as the account; those are summed. `unresolved` — neither; **no total is given**. |
 | `n_lines` | int | Eligible keyed rows that competed. |
 | `row_ids` | string | `;`-separated rows the total was taken from. |
 | `designations` | string | `;`-separated designations summed. |
@@ -113,6 +113,7 @@ Eligible rows carry a trusted key and a level amount, are not subtotals, rollups
 ## `account_title_changes`
 
 Derived from `account_year_totals`: for each account seen in at least two fiscal years, every year in which the label carrying the most money changed.
+Years in which two reports of the same chamber and stage both claim the account are conflicts and are left out, so a wrongly keyed report cannot pass for a rename.
 A `reword` is a rename candidate or a crosswalk over-merge; a `prefix` is an expansion or contraction.
 
 | Column | Type | Description |

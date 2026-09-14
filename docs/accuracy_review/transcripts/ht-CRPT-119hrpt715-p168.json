@@ -1,0 +1,455 @@
+{
+ "unit_id": "ht-CRPT-119hrpt715-p168",
+ "report_id": "CRPT-119hrpt715",
+ "pdf_page": 168,
+ "units_header": "[In thousands of dollars]",
+ "column_headers": [
+  "Budget Request",
+  "Committee Recommended",
+  "Change from Request"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "138 AIR AND MISSILE DEFENSE RADAR [AMDR] SYSTEM",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "96,642",
+    "96,642",
+    "0"
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "139 ADVANCED ARRESTING GEAR [AAG]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "60,518",
+    "60,518",
+    "0"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "140 NEW DESIGN SSN",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "237,103",
+    "232,553",
+    "-4,550"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "Test and evaluation excess growth",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-4,550",
+    ""
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "142 SHIP CONTRACT DESIGN/ LIVE FIRE T&E",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "19,429",
+    "19,429",
+    "0"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "143 NAVY TACTICAL COMPUTER RESOURCES",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "3,415",
+    "3,415",
+    "0"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "144 MINE DEVELOPMENT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "158,666",
+    "163,566",
+    "4,900"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Program increase—qualification of low-cost pyro flare for turbine engines",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "4,900",
+    ""
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "145 LIGHTWEIGHT TORPEDO DEVELOPMENT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "102,159",
+    "126,459",
+    "24,300"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Program delays",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-5,700",
+    ""
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Program increase—low cost, one-way attritable undersea vehicle for scalable, precision strike and swarming",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "30,000",
+    ""
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "146 JOINT SERVICE EXPLOSIVE ORDNANCE DEVELOPMENT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "8,509",
+    "8,509",
+    "0"
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "147 USMC GROUND COMBAT/SUPPORTING ARMS SYSTEMS—ENG DEV",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "69,478",
+    "69,478",
+    "0"
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "148 PERSONNEL, TRAINING, SIMULATION, AND HUMAN FACTORS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "8,316",
+    "8,316",
+    "0"
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "149 JOINT STANDOFF WEAPON SYSTEMS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,447",
+    "1,447",
+    "0"
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "150 SHIP SELF DEFENSE (DETECT & CONTROL)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "156,167",
+    "156,167",
+    "0"
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "151 SHIP SELF DEFENSE (ENGAGE: HARD KILL)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "296,261",
+    "296,261",
+    "0"
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "152 SHIP SELF DEFENSE (ENGAGE: SOFT KILL/EW)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "196,761",
+    "196,761",
+    "0"
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "153 INTELLIGENCE ENGINEERING",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "6,426",
+    "6,426",
+    "0"
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "154 MEDICAL DEVELOPMENT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "6,900",
+    "6,900",
+    "0"
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "155 NAVIGATION/ID SYSTEM",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "3,388",
+    "3,388",
+    "0"
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "156 SSN(X)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "315,914",
+    "315,914",
+    "0"
+   ]
+  },
+  {
+   "seq": 23,
+   "label": "157 INFORMATION TECHNOLOGY DEVELOPMENT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "14,380",
+    "14,380",
+    "0"
+   ]
+  },
+  {
+   "seq": 24,
+   "label": "158 INFORMATION TECHNOLOGY DEVELOPMENT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "149,089",
+    "237,389",
+    "88,300"
+   ]
+  },
+  {
+   "seq": 25,
+   "label": "Program increase—additive manufacturing for NAVAIR readiness",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "4,000",
+    ""
+   ]
+  },
+  {
+   "seq": 26,
+   "label": "Program increase—critical protection technology for cybersecurity engineering",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "15,300",
+    ""
+   ]
+  },
+  {
+   "seq": 27,
+   "label": "Program increase—cyber supply chain risk management enterprise tool",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "27,000",
+    ""
+   ]
+  },
+  {
+   "seq": 28,
+   "label": "Program increase—digital maintenance and workforce enablement for USN shipyards",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "10,000",
+    ""
+   ]
+  },
+  {
+   "seq": 29,
+   "label": "Program increase—maritime supplier digital uplift",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "7,000",
+    ""
+   ]
+  },
+  {
+   "seq": 30,
+   "label": "Program increase—navy logistic digital acceleration",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "10,000",
+    ""
+   ]
+  },
+  {
+   "seq": 31,
+   "label": "Program increase—operation cattle drive",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "10,000",
+    ""
+   ]
+  },
+  {
+   "seq": 32,
+   "label": "Program increase—shipyard modernization interactive instructions",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "5,000",
+    ""
+   ]
+  },
+  {
+   "seq": 33,
+   "label": "159 ANTI-TAMPER TECHNOLOGY SUPPORT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "3,459",
+    "3,459",
+    "0"
+   ]
+  },
+  {
+   "seq": 34,
+   "label": "160 TACAMO MODERNIZATION",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,662,723",
+    "1,662,723",
+    "0"
+   ]
+  },
+  {
+   "seq": 35,
+   "label": "161 CH–53K RDTE",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "139,273",
+    "111,441",
+    "-27,832"
+   ]
+  },
+  {
+   "seq": 36,
+   "label": "Carryover",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-27,832",
+    ""
+   ]
+  },
+  {
+   "seq": 37,
+   "label": "162 MISSION PLANNING",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "82,618",
+    "82,618",
+    "0"
+   ]
+  },
+  {
+   "seq": 38,
+   "label": "163 COMMON AVIONICS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "133,855",
+    "128,183",
+    "-5,672"
+   ]
+  },
+  {
+   "seq": 39,
+   "label": "Excess growth",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-5,672",
+    ""
+   ]
+  },
+  {
+   "seq": 40,
+   "label": "164 SHIP TO SHORE CONNECTOR [SSC]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "4,519",
+    "4,519",
+    "0"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Single table: mid-page continuation 'EXPLANATION OF PROJECT LEVEL ADJUSTMENTS—Continued' (Navy RDT&E by program content); line-number column headed 'R–1'. No total rows on this page; table continues before and after. Line 141 absent as printed. Two consecutive rows both labeled 'INFORMATION TECHNOLOGY DEVELOPMENT' (157 and 158) as printed. In the pdftotext layer the 'Excess growth' sub-row under 163 is displaced below the page-margin text, but the image shows it directly under 163. Negative amounts are printed with a typographic minus sign followed by a thin space (e.g. '− 61,770'); transcribed as ASCII '-' with no space. Text layer encodes them as 'Ø' (bold) and '¥' (light). Adjustment sub-rows (light type, indented, no line number) carry their amount in the Committee Recommended column as printed; their other cells are blank. Leading line numbers are kept in the label."
+}

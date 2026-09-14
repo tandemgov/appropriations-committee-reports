@@ -1,0 +1,277 @@
+{
+ "unit_id": "hv-CRPT-116hrpt448-p225",
+ "report_id": "CRPT-116hrpt448",
+ "pdf_page": 225,
+ "units_header": "(Amounts in thousands)",
+ "column_headers": [
+  "FY 2020 Enacted",
+  "FY 2021 Request",
+  "Bill",
+  "Bill vs. Enacted",
+  "Bill vs. Request"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "TITLE II - ENVIRONMENTAL PROTECTION AGENCY",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Science and Technology",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Clean Air",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "116,064",
+    "90,383",
+    "123,539",
+    "+7,475",
+    "+33,156"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "(Atmospheric Protection Program)",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "(7,772)",
+    "---",
+    "(8,018)",
+    "(+246)",
+    "(+8,018)"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Enforcement",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "13,592",
+    "11,723",
+    "14,500",
+    "+908",
+    "+2,777"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "Homeland security",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "33,089",
+    "33,774",
+    "35,483",
+    "+2,394",
+    "+1,709"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Indoor air and Radiation",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "5,149",
+    "5,214",
+    "5,149",
+    "---",
+    "-65"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "IT / Data management / Security",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "3,072",
+    "2,890",
+    "2,890",
+    "-182",
+    "---"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Operations and administration",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "65,372",
+    "67,908",
+    "67,908",
+    "+2,536",
+    "---"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Pesticide licensing",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "5,886",
+    "5,743",
+    "5,743",
+    "-143",
+    "---"
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Research: Air and energy",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "94,496",
+    "33,543",
+    "98,000",
+    "+3,504",
+    "+64,457"
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "Research: Chemical safety and sustainability",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "126,268",
+    "91,646",
+    "130,769",
+    "+4,501",
+    "+39,123"
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "(Research:  Computational toxicology)",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "(21,409)",
+    "(18,181)",
+    "(21,409)",
+    "---",
+    "(+3,228)"
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "(Research:  Endocrine disruptor)",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "(16,253)",
+    "(10,775)",
+    "(16,253)",
+    "---",
+    "(+5,478)"
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "Research: National priorities",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "6,000",
+    "---",
+    "7,000",
+    "+1,000",
+    "+7,000"
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "Research: Safe and sustainable water resources",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "110,890",
+    "78,948",
+    "114,500",
+    "+3,610",
+    "+35,552"
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "Research: Sustainable and healthy communities",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "132,477",
+    "58,597",
+    "135,500",
+    "+3,023",
+    "+76,903"
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "Water: Human health protection",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "4,094",
+    "4,364",
+    "4,364",
+    "+270",
+    "---"
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "Total, Science and Technology",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "716,449",
+    "484,733",
+    "745,345",
+    "+28,896",
+    "+260,612"
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "(by transfer from Hazardous Substance Superfund)",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "(30,747)",
+    "(19,075)",
+    "(30,755)",
+    "(+8)",
+    "(+11,680)"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Page scanned rotated 90 degrees. No COMPARATIVE STATEMENT title block on this page, only the (Amounts in thousands) line and column headers. TITLE II and Science and Technology are centered headings with no amounts (indent given as 0). Memo labels print with two spaces after 'Research:'. Minus signs print as short hyphens. All digits clearly legible."
+}

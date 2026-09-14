@@ -120,15 +120,20 @@ class MoneyPoint:
     fiscal_year: int
     chamber: str | None
     stage: str | None
-    amount: float
+    amount: float | None
+    # Reports that each claim this account for the same year, chamber, and stage; `amount` is then None, never their sum.
+    conflict: tuple[str, ...] = ()
 
     def to_dict(self) -> dict:
-        return {
+        d = {
             "fiscal_year": self.fiscal_year,
             "chamber": self.chamber,
             "stage": self.stage,
             "amount": self.amount,
         }
+        if self.conflict:
+            d["conflict"] = list(self.conflict)
+        return d
 
 
 @dataclass(frozen=True)
@@ -259,17 +264,20 @@ def trace_accounts(
             None,
         )
 
-        # Money series: sum representatives per (fiscal_year, chamber, stage).
-        agg: dict[tuple, float] = collections.defaultdict(float)
+        # Money series: one representative per (fiscal_year, chamber, stage).
+        # Two reports claiming the same cell are a conflict, as in account_totals.account_series: usually one of them is keyed wrongly, and their sum is nobody's figure.
+        cells: dict[tuple, list[dict]] = collections.defaultdict(list)
         for r in group:
-            fy = _fiscal_year(r)
-            agg[(fy, r.get("chamber"), r.get("stage"))] += _num(r.get(metric)) or 0.0
+            cells[(_fiscal_year(r), r.get("chamber"), r.get("stage"))].append(r)
         series = tuple(
-            MoneyPoint(fy, ch, st, round(amt))
-            for (fy, ch, st), amt in sorted(
-                agg.items(), key=lambda kv: (kv[0][0], kv[0][1] or "", kv[0][2] or "")
-            )
+            MoneyPoint(fy, ch, st, round(_num(rs[0].get(metric)) or 0.0))
+            if len(rs) == 1
+            else MoneyPoint(fy, ch, st, None, tuple(sorted(str(r.get("report_id")) for r in rs)))
+            for (fy, ch, st), rs in sorted(cells.items(), key=lambda kv: (kv[0][0], kv[0][1] or "", kv[0][2] or ""))
         )
+        conflicted = {id(r) for rs in cells.values() if len(rs) > 1 for r in rs}
+        # Labels and title changes come only from uncontested cells, so a wrongly keyed report cannot look like a rename.
+        group = [r for r in group if id(r) not in conflicted]
 
         # Label timeline: each observed label and the years it appeared.
         label_years: dict[str, set] = collections.defaultdict(set)

@@ -122,7 +122,7 @@ Gemini 3 Pro Preview was selected for the paid cleanup leg. It correctly handles
 To support longitudinal analysis, extracted accounts are resolved to a stable identity and amounts can be expressed in constant dollars. Design and findings: `docs/crosswalk_scoping.md`.
 
 - **Account crosswalk** (`normalization/crosswalk.py`, `normalization/tango_crosswalk.py`): each account is anchored to an authoritative **federal account symbol** (`data/reference/federal_accounts.json`, and Tango's account reference for rows the first pass leaves unkeyed). Anchoring — rather than fuzzy self-clustering — keeps distinct accounts apart (African vs Asian Development Bank). Exact, prefix-unique, and agency-scoped matches are proposed; fuzzy hits are recorded and never trusted. `approps crosswalk` emits the distinct-account crosswalk and review queue.
-- **Account gate** (`normalization/account_gate.py`): both matchers match on the label alone, so boilerplate labels resolved to arbitrary accounts. After matching, a key is withheld when its agency is not funded by the row's subcommittee (a CGAC-prefix jurisdiction table, with Senate attestation for cross-coded accounts), when every label on the row is boilerplate and nothing on the row names the agency, when the row is a heading, or when an agency tie-break rested only on the subcommittee's name. 22,852 rows keep a key; 5,716 had one withheld (`account_key_withheld`). See [KNOWN_ISSUES #16](docs/KNOWN_ISSUES.md).
+- **Account gate** (`normalization/account_gate.py`): both matchers match on the label alone, so boilerplate labels resolved to arbitrary accounts. After matching, a key is withheld when its agency has no entry in the jurisdiction table (every agency in the corpus has one, keyed by CGAC prefix), when that agency is not funded by the row's subcommittee — or is funded there only through particular bureaus (Forest Service in Interior, FDA in Agriculture, Reclamation in Energy-Water, military construction in MilCon-VA) and the account is not one of them — and the pairing is not one of the reviewed cross-coded accounts (Legal Services Corporation in CJS, Council on Environmental Quality in Interior), when every label on the row is boilerplate or a single word that only begins the account's title and nothing else on the row names the agency, when the row is a heading, or when an agency tie-break had no evidence. There is no data-driven exception: the same label-only match repeated across reports is not evidence. 20,881 rows keep a key; 7,687 had one withheld (`account_key_withheld`). See [KNOWN_ISSUES #16](docs/KNOWN_ISSUES.md).
 - **Designation** dimension (`normalization/account_names.py`): base/OCO/emergency/disaster/rescission/CHIMP, parsed only from parentheticals/suffixes so account names are not misread.
 - **Inflation** (`normalization/inflation.py`, `data/reference/deflators.csv`): a CPI-U series (BLS CUUR0000SA0, calendar-year averages as an approximation for fiscal years) drives `real_factor_2024`. The series ends at 2025 (provisional), so FY2026–27 rows have no factor. Nothing substitutes a default: `real_dollars` raises and `/api/line_items/compare?real=true` returns 422 for a year without a deflator.
 
@@ -153,7 +153,7 @@ Summing them double-counts; taking the largest (the earlier rule) promotes a pro
 
 Eligible rows carry a trusted key and a level amount and are not subtotals, rollups, memo lines, or isolated layouts.
 Totals are per report and are never combined across chambers or stages: a House recommendation, a Senate recommendation, and an enacted level are different figures.
-The release's `account_year_totals` resolves 6,667 of 9,974 report-account pairs.
+The release's `account_year_totals` resolves 6,163 of 9,154 report-account pairs.
 The same function drives `/api/line_items/compare`, the flow view, and account history, so the API and the file cannot disagree.
 
 The rule is conservative, not complete: it declines where the source's structure is ambiguous, and it trusts the key. The multi-year check in [docs/ACCURACY_REVIEW.md](docs/ACCURACY_REVIEW.md) tests it against the source documents.
@@ -168,7 +168,7 @@ Once accounts carry a stable `account_key`, an account can be followed through t
 
 3. **Title changes** between consecutive years, comparing the dominant label (the one carrying the most money) year over year. Each change is classified: `prefix` (one label is a leading token-run of the other — an expansion or contraction) or `reword` (a substantive change). Case- and punctuation-only drift is normalized away and never emitted.
 
-Two honest caveats. Only trusted `account_key` rows participate — the coarser attribution tiers (`account_inferred`, `account_recovered`) have no stable cross-year identity, so they are out of scope by design and cross-year coverage inherits the crosswalk's ceiling (22,852 keyed rows, about a fifth of the corpus). And a `reword` change is **not** always a real rename: because the crosswalk sometimes folds distinct programs under one code, a `reword` equally flags a crosswalk over-merge — which makes `approps trace` a useful QA lens on the crosswalk (and on extraction artifacts such as amounts bleeding into a title), not only a rename detector.
+Two honest caveats. Only trusted `account_key` rows participate — the coarser attribution tiers (`account_inferred`, `account_recovered`) have no stable cross-year identity, so they are out of scope by design and cross-year coverage inherits the crosswalk's ceiling (20,881 keyed rows, about a fifth of the corpus). And a `reword` change is **not** always a real rename: because the crosswalk sometimes folds distinct programs under one code, a `reword` equally flags a crosswalk over-merge — which makes `approps trace` a useful QA lens on the crosswalk (and on extraction artifacts such as amounts bleeding into a title), not only a rename detector.
 
 ## Verification
 
@@ -268,7 +268,7 @@ The authoritative, current list is [docs/KNOWN_ISSUES.md](docs/KNOWN_ISSUES.md);
 
 3. **Heading detection for inline tables is heuristic.** The backward-search algorithm occasionally picks up a nearby heading from a different section, especially in House reports where heading styles vary.
 
-4. **Account crosswalk coverage is partial, and a key is not proof of identity.** 22,852 rows carry a trusted `account_key`; the gate withholds keys it can show are wrong but cannot prove the rest right. See KNOWN_ISSUES #16.
+4. **Account crosswalk coverage is partial, and a key is not proof of identity.** 20,881 rows carry a trusted `account_key`; the gate withholds keys it can show are wrong but cannot prove the rest right. See KNOWN_ISSUES #16.
 
 5. **Only the comparative statement and PPA detail tables from image pages are extracted.** Vote roll call pages (which are also images in House PDFs) are processed but correctly return 0 items.
 

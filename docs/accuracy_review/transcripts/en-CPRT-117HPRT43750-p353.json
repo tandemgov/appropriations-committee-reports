@@ -1,0 +1,85 @@
+{
+ "unit_id": "en-CPRT-117HPRT43750-p353",
+ "report_id": "CPRT-117HPRT43750",
+ "pdf_page": 353,
+ "units_header": "",
+ "column_headers": [
+  "FY 2021 Agreement"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "National Occupational Research Agenda",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "$117,000,000"
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Agriculture, Forestry, Fishing",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "26,500,000"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Education and Research Centers",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "30,000,000"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "Personal Protective Technology",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "20,000,000"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Mining Research",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "61,500,000"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "National Mesothelioma Registry and Tissue Bank",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,200,000"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Firefighter Cancer Registry",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,500,000"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Other Occupational Safety and Health Research",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "113,100,000"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Single in-prose amount table under NATIONAL INSTITUTE FOR OCCUPATIONAL SAFETY AND HEALTH (NIOSH), printed page 1611. Stub header 'Budget Activity'. No units line; amounts are full dollars ($ sign on first row only). Preceding prose states NIOSH total of $345,300,000 (not a table row, not transcribed); no total row inside the table. 'Agriculture, Forestry, Fishing' is visibly indented under National Occupational Research Agenda. Prose amount $1,500,000 (Total Worker Health) skipped as narrative."
+}

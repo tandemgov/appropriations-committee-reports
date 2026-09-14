@@ -1,0 +1,17 @@
+{"unit_id": "hv-CRPT-118hrpt556-p303", "report_id": "CRPT-118hrpt556", "pdf_page": 303, "units_header": "(Amounts in thousands)", "column_headers": ["FY 2024 Enacted", "FY 2025 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"], "rows": [
+{"seq": 1, "label": "TITLE V - OTHER INDEPENDENT AGENCIES", "indent_level": 2, "is_total": false, "cells": ["", "", "", "", ""]},
+{"seq": 2, "label": "Administrative Conference of the United States", "indent_level": 0, "is_total": false, "cells": ["3,430", "3,523", "3,430", "---", "-93"]},
+{"seq": 3, "label": "Consumer Financial Protection Bureau", "indent_level": 2, "is_total": false, "cells": ["", "", "", "", ""]},
+{"seq": 4, "label": "Salaries and Expenses", "indent_level": 0, "is_total": false, "cells": ["---", "---", "650,000", "+650,000", "+650,000"]},
+{"seq": 5, "label": "CFPB Eliminate Transfers (Sec. 501)", "indent_level": 0, "is_total": false, "cells": ["---", "---", "-775,000", "-775,000", "-775,000"]},
+{"seq": 6, "label": "Total, Consumer Financial Protection Bureau", "indent_level": 2, "is_total": true, "cells": ["---", "---", "-125,000", "-125,000", "-125,000"]},
+{"seq": 7, "label": "Council of the Inspectors General on Integrity and Efficiency", "indent_level": 0, "is_total": false, "cells": ["---", "8,000", "---", "---", "-8,000"]},
+{"seq": 8, "label": "Consumer Product Safety Commission", "indent_level": 0, "is_total": false, "cells": ["150,975", "183,050", "142,000", "-8,975", "-41,050"]},
+{"seq": 9, "label": "Election Assistance Commission", "indent_level": 2, "is_total": false, "cells": ["", "", "", "", ""]},
+{"seq": 10, "label": "Salaries and Expenses", "indent_level": 0, "is_total": false, "cells": ["27,720", "38,000", "20,000", "-7,720", "-18,000"]},
+{"seq": 11, "label": "Election Innovation Grants", "indent_level": 0, "is_total": false, "cells": ["---", "96,000", "---", "---", "-96,000"]},
+{"seq": 12, "label": "Total, Election Assistance Commission", "indent_level": 2, "is_total": true, "cells": ["27,720", "134,000", "20,000", "-7,720", "-114,000"]},
+{"seq": 13, "label": "Federal Communications Commission", "indent_level": 2, "is_total": false, "cells": ["", "", "", "", ""]},
+{"seq": 14, "label": "Salaries and Expenses", "indent_level": 0, "is_total": false, "cells": ["390,192", "448,075", "416,112", "+25,920", "-31,963"]},
+{"seq": 15, "label": "Offsetting fee collections", "indent_level": 0, "is_total": false, "cells": ["-390,192", "-448,075", "-416,112", "-25,920", "+31,963"]}
+], "uncertain_cells": [], "notes": "Dashed single-rule separator lines omitted (not rows). Seq 7 label wraps over two printed lines ('Efficiency' continuation indented). Seq 7 FY 2025 Request cell has a stray speck before it that looks like a leading period ('.8,000'); read as 8,000. Page ends after seq 15 with no total for Federal Communications Commission (table continues on next page)."}

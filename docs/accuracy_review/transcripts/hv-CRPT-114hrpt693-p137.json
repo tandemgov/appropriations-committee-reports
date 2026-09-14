@@ -1,0 +1,199 @@
+{
+ "unit_id": "hv-CRPT-114hrpt693-p137",
+ "report_id": "CRPT-114hrpt693",
+ "pdf_page": 137,
+ "units_header": "(Amounts in thousands)",
+ "column_headers": [
+  "FY 2016 Enacted",
+  "FY 2017 Request",
+  "Bill",
+  "Bill vs. Enacted",
+  "Bill vs. Request"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "Complex Crises fund (OCO/GWOT)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "20,000",
+    "20,000",
+    "---",
+    "-20,000",
+    "-20,000"
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Economic Support Fund (OCO/GWOT)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,422,673",
+    "3,672,153",
+    "2,422,673",
+    "---",
+    "-1,249,480"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Assistance for Europe, Eurasia and Central Asia (OCO/GWOT)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "438,569",
+    "---",
+    "438,569",
+    "---",
+    "+438,569"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "Migration and Refugee assistance (MRA) (OCO/GWOT)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,127,114",
+    "1,876,003",
+    "2,287,904",
+    "+160,790",
+    "+411,901"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "United States Emergency Refugee and Migration Assistance Fund (OCO/GWOT)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "---",
+    "40,000",
+    "50,000",
+    "+50,000",
+    "+10,000"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "International narcotics control and law enforcement (OCO/GWOT)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "371,650",
+    "324,240",
+    "371,661",
+    "+11",
+    "+47,421"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Nonproliferation, Anti-terrorism, Demining and Related programs (NADR) (OCO/GWOT)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "379,091",
+    "214,254",
+    "379,091",
+    "---",
+    "+164,837"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Peacekeeping Operations (PKO) (OCO/GWOT)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "469,269",
+    "349,100",
+    "469,269",
+    "---",
+    "+120,169"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Foreign Military Financing program (OCO/GWOT)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,288,176",
+    "1,012,150",
+    "1,288,176",
+    "---",
+    "+276,026"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Total, Title VIII, OCO/GWOT",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "14,895,000",
+    "14,894,989",
+    "14,895,000",
+    "---",
+    "+11"
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "TITLE IX - OTHER MATTERS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "Multilateral Assistance",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "International Monetary Program",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "International Monetary fund quota increase (emergency)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,180,000",
+    "---",
+    "---",
+    "-1,180,000",
+    "---"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Page scanned rotated 90 degrees. TITLE IX - OTHER MATTERS, Multilateral Assistance, and International Monetary Program are centered headings with no amounts (indent given as 0). The last row has no dot leader. Table continues from prior page (starts mid Title VIII). All digits clearly legible."
+}

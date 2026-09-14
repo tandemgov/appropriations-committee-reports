@@ -196,3 +196,28 @@ def test_metric_selects_the_money_column():
     (auth,) = trace_accounts(rows, metric="prior_year_enacted")
     assert [p.amount for p in auth.series] == [90, 95]
     assert auth.metric == "prior_year_enacted"
+
+
+def test_two_reports_in_one_year_are_a_conflict_not_a_sum():
+    # A Homeland report and a wrongly keyed Agriculture report both claim FY2020 House committee: neither figure, and not their sum.
+    rows = [
+        _row(report_id="DHS20", committee_recommendation=700),
+        _row(report_id="AG20", committee_recommendation=30),
+        _row(report_id="DHS21", fiscal_year=2021, committee_recommendation=710),
+    ]
+    (auth,) = trace_accounts(rows)
+    by_year = {p.fiscal_year: p for p in auth.series}
+    assert by_year[2020].amount is None and by_year[2020].conflict == ("AG20", "DHS20")
+    assert by_year[2021].amount == 710
+    assert auth.to_dict()["series"][0]["conflict"] == ["AG20", "DHS20"]
+
+
+def test_conflicted_years_do_not_drive_title_changes():
+    rows = [
+        _row(report_id="A19", fiscal_year=2019, account="Operations and Support"),
+        _row(report_id="A20", fiscal_year=2020, account="Operations and Support"),
+        _row(report_id="B20", fiscal_year=2020, account="Chief Information Officer"),
+        _row(report_id="A21", fiscal_year=2021, account="Operations and Support"),
+    ]
+    (auth,) = trace_accounts(rows)
+    assert auth.title_changes == ()

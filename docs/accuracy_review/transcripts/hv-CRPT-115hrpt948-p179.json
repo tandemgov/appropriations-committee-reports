@@ -1,0 +1,225 @@
+{
+ "unit_id": "hv-CRPT-115hrpt948-p179",
+ "report_id": "CRPT-115hrpt948",
+ "pdf_page": 179,
+ "units_header": "(Amounts in thousands)",
+ "column_headers": [
+  "FY 2018 Enacted",
+  "FY 2019 Request",
+  "Bill",
+  "Bill vs. Enacted",
+  "Bill vs. Request"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "Federal Assistance",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Federal, State, Local, Territorial, and Tribal Support",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "24,884",
+    "---",
+    "---",
+    "-24,884",
+    "---"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Securing the Cities",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "21,135",
+    "---",
+    "---",
+    "-21,135",
+    "---"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "Subtotal, Federal Assistance",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "46,019",
+    "---",
+    "---",
+    "-46,019",
+    "---"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Total, Domestic Nuclear Detection Office",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "335,440",
+    "---",
+    "---",
+    "-335,440",
+    "---"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "Countering Weapons of Mass Destruction Office",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Operations and Support",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Capability and Operations Support",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "---",
+    "125,943",
+    "130,943",
+    "+130,943",
+    "+5,000"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Mission Support",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "---",
+    "83,321",
+    "83,321",
+    "+83,321",
+    "---"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Subtotal, Operations and Support",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "---",
+    "209,264",
+    "214,264",
+    "+214,264",
+    "+5,000"
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Procurement, Construction, and Improvements",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "Assets and Infrastructure Acquisition",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "---",
+    "74,896",
+    "74,896",
+    "+74,896",
+    "---"
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "Subotal, Procurement, Construction, and Improvements",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "---",
+    "74,896",
+    "74,896",
+    "+74,896",
+    "---"
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Research and Development",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "Research and Development",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "---",
+    "80,443",
+    "80,443",
+    "+80,443",
+    "---"
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "Subtotal, Research and Development",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "---",
+    "80,443",
+    "80,443",
+    "+80,443",
+    "---"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Page is upright landscape (page number rotated at right margin). 'Subotal' misspelling is as printed. 'Total, Domestic Nuclear Detection Office' is indented between item and subtotal level (given as 1). 'Countering Weapons of Mass Destruction Office' is an agency heading with no amounts, indented slightly (given as 1). All digits clearly legible."
+}

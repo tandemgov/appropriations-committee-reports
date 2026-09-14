@@ -10,8 +10,8 @@ Everything in it comes from one snapshot of the extracted data, and `manifest.js
 | Table | Rows | What it is |
 |---|---:|---|
 | `comparative_statements` | 116,393 | Every line of the committee reports' comparative statements and the enacted explanatory statements' tables, with normalization and trust columns. |
-| `account_year_totals` | 9,974 | One total per report and account, for longitudinal analysis. |
-| `account_title_changes` | 701 | Account relabelings across years. |
+| `account_year_totals` | 9,154 | One total per report and account, for longitudinal analysis. |
+| `account_title_changes` | 640 | Account relabelings across years. |
 | `nonstandard_layout_rows` | 3,026 | Values emptied from rows whose columns cannot be trusted. |
 | `inline_funding_tables` | 13,853 | Funding summaries from report prose (a second, independent extraction). |
 | `manifest.json`, `SHA256SUMS` | — | Revision, source snapshot, counts, release checks, file hashes. |
@@ -48,8 +48,8 @@ Report both kinds of number, and do not describe the data as verified without sa
 - **Stages:** committee and enacted only; there is no separately published subcommittee line-item stage. Enacted covers FY2016–FY2024.
 - **Gaps:** see [COVERAGE.md](COVERAGE.md) for every missing report and why.
 - **Completeness:** the review found 2–3.5% of source rows missing per track on its sampled pages; some table shapes are skipped by design (Defense program-adjustment explanations, 302(b) and outlay tables).
-- **Account identity:** 22,852 rows carry a key. It is conservative, not guaranteed.
-- **Account totals:** 3,307 of 9,974 are unresolved and carry no figure.
+- **Account identity:** 20,881 rows carry a key. It is conservative, not guaranteed.
+- **Account totals:** 2,991 of 9,154 are unresolved and carry no figure.
 - **Not reconciled:** 3,576 printed totals do not reconcile ([KNOWN_ISSUES #19](KNOWN_ISSUES.md)); they were documented, not pursued.
 - **Real dollars:** no deflator for FY2026–27.
 

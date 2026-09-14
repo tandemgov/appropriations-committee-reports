@@ -1,0 +1,199 @@
+{
+ "unit_id": "hv-CRPT-114hrpt205-p115",
+ "report_id": "CRPT-114hrpt205",
+ "pdf_page": 115,
+ "units_header": "(Amounts in thousands)",
+ "column_headers": [
+  "FY 2015 Enacted",
+  "FY 2016 Request",
+  "Bill",
+  "Bill vs. Enacted",
+  "Bill vs. Request"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "Risk Management Agency:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "RMA Salaries and Expenses",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "74,829",
+    "76,946",
+    "73,984",
+    "-845",
+    "-2,962"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Total, Farm Assistance Programs",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "1,678,982",
+    "1,656,994",
+    "1,651,825",
+    "-27,157",
+    "-5,169"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "Corporations",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Federal Crop Insurance Corporation:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "Federal crop insurance corporation fund",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "8,930,502",
+    "8,175,224",
+    "8,175,224",
+    "-755,278",
+    "---"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Commodity Credit Corporation Fund:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Reimbursement for net realized losses",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "13,444,728",
+    "10,519,933",
+    "10,519,933",
+    "-2,924,795",
+    "---"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Hazardous waste management (limitation on expenses)",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "(5,000)",
+    "(5,000)",
+    "(5,000)",
+    "---",
+    "---"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Total, Corporations",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "22,375,230",
+    "18,695,157",
+    "18,695,157",
+    "-3,680,073",
+    "---"
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Total, Title I, Agricultural Programs",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "30,446,595",
+    "27,401,704",
+    "26,830,088",
+    "-3,616,507",
+    "-571,616"
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "(By transfer)",
+   "indent_level": 3,
+   "is_total": false,
+   "cells": [
+    "(330,066)",
+    "(333,362)",
+    "(330,066)",
+    "---",
+    "(-3,296)"
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "(Loan authorization)",
+   "indent_level": 3,
+   "is_total": false,
+   "cells": [
+    "(6,402,114)",
+    "(6,402,114)",
+    "(6,402,114)",
+    "---",
+    "---"
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "(Limitation on administrative expenses)",
+   "indent_level": 3,
+   "is_total": false,
+   "cells": [
+    "(115,709)",
+    "(120,982)",
+    "(120,982)",
+    "(+5,273)",
+    "---"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Page scanned rotated 90 degrees (landscape). 'Corporations' is a centered section heading with no amounts (indent given as 0). Title block above table: COMPARATIVE STATEMENT OF NEW BUDGET (OBLIGATIONAL) AUTHORITY FOR 2015 AND BUDGET REQUESTS AND AMOUNTS RECOMMENDED IN THE BILL FOR 2016. All digits clearly legible; no uncertain cells."
+}

@@ -1,0 +1,330 @@
+{
+ "unit_id": "se-CRPT-119srpt52-L13802",
+ "report_id": "CRPT-119srpt52",
+ "html_line_start": 13802,
+ "html_line_end": 13845,
+ "units_header": "[In thousands of dollars]",
+ "column_headers": [
+  "2025 appropriation",
+  "Budget estimate",
+  "Committee recommendation",
+  "Senate Committee recommendation compared with (+ or -) 2025 appropriation",
+  "Senate Committee recommendation compared with (+ or -) Budget estimate"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "Total, title V, Revolving and Management Funds",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "1,840,550",
+    "2,037,937",
+    "2,152,240",
+    "+311,690",
+    "+114,303"
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "TITLE VI",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "OTHER DEPARTMENT OF DEFENSE PROGRAMS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "Defense Health Program:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Operation and maintenance",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "38,300,769",
+    "39,174,590",
+    "39,160,590",
+    "+859,821",
+    "-14,000"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "Procurement",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "398,867",
+    "354,821",
+    "354,821",
+    "-44,046",
+    ""
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Research, development, test and evaluation",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "1,695,436",
+    "972,712",
+    "1,921,212",
+    "+225,776",
+    "+948,500"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Total, Defense Health Program",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "40,395,072",
+    "40,502,123",
+    "41,436,623",
+    "+1,041,551",
+    "+934,500"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Chemical Agents and Munitions Destruction, Defense:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Operation and maintenance",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "20,745",
+    "3,243",
+    "3,243",
+    "-17,502",
+    ""
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Test and evaluation",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "754,762",
+    "210,039",
+    "210,039",
+    "-544,723",
+    ""
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "Total, Chemical Agents",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "775,507",
+    "213,282",
+    "213,282",
+    "-562,225",
+    ""
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "Drug Interdiction and Counter-Drug Activities, Defense",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,110,436",
+    "904,301",
+    "1,014,301",
+    "-96,135",
+    "+110,000"
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Office of the Inspector General",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "539,769",
+    "502,599",
+    "502,599",
+    "-37,170",
+    ""
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "Total, title VI, Other Department of Defense Programs",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "42,820,784",
+    "42,122,305",
+    "43,166,805",
+    "+346,021",
+    "+1,044,500"
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "TITLE VII",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "RELATED AGENCIES",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "Central Intelligence Agency Retirement and Disability System Fund",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "514,000",
+    "514,000",
+    "514,000",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "Intelligence Community Management Account (ICMA)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "629,128",
+    "642,000",
+    "629,128",
+    "",
+    "-12,872"
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "Total, title VII, Related agencies",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "1,143,128",
+    "1,156,000",
+    "1,143,128",
+    "",
+    "-12,872"
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "TITLE VIII",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "GENERAL PROVISIONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 23,
+   "label": "Additional transfer authority (Sec 8005)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "(8,000,000)",
+    "(10,000,000)",
+    "(6,000,000)",
+    "(-2,000,000)",
+    "(-4,000,000)"
+   ]
+  },
+  {
+   "seq": 24,
+   "label": "Rescissions (Sec 8045)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "-1,434,302",
+    "",
+    "-3,157,302",
+    "-1,723,000",
+    "-3,157,302"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Columns from header at lines 13691-13695 (table title at 13687). Row 1 is the Total for Title V (its components are above the window). Rows 2, 3, 16, 17, 21, 22 are centered headings. Rows 4 and 9 are group headings ending in ':'. Wrapped label joined: row 18 (13833-13834). Row 23 is a parenthesized transfer-authority memo row with all five columns in parentheses. indent_level = leading spaces // 4; centered headings set to 0."
+}

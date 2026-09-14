@@ -451,10 +451,13 @@ Fixing them means re-reading the pages.
 ## 16. Account keys that were demonstrably wrong — WITHHELD
 
 **Status:** withheld, 2026-09-13 (`normalization.account_gate`).
-**Scope:** 5,716 rows lost a key: 3,110 for jurisdiction, 1,639 generic labels, 872 tie-breaks, 95 headings. 22,852 rows keep one.
+**Scope:** 7,687 rows lost a key: 5,361 for jurisdiction (including bureau-level), 1,369 generic labels, 705 tie-breaks, 157 partial single-word labels, 95 headings. 20,881 rows keep one.
 
 The crosswalk and the Tango matcher match on the label alone, so labels that name no particular account resolved to one: "Offsetting collections" became a Treasury refunds account on Interior, Homeland, and Energy-Water rows; "Mission Support" on Homeland rows became NASA; "Trust Funds" on Labor-HHS rows became a State Department account; every Financial Services "Salaries and expenses" became FinCEN because the subcommittee's name contains "Financial".
-A key is now withheld when its agency is not funded by the row's subcommittee (unless Senate rows attest the pairing in two reports), when every label on the row is boilerplate and nothing else names the agency, when the row is a heading, or when a tie-break rested only on the subcommittee's name.
+A key is now withheld when its agency has no jurisdiction entry, when that agency is not funded by the row's subcommittee (or is funded there only through particular bureaus, and the account is not one of them) and the pairing is not one of two reviewed cross-coded accounts, when every label on the row is boilerplate or a single word that only begins the title and nothing else names the agency, when the row is a heading, or when a tie-break had no evidence.
+
+The first version of the gate admitted a cross-jurisdiction key when two Senate reports carried the same exact match. An independent review showed why that was wrong: repetition of a label-only match is not evidence, and it kept 150 Agriculture "Direct" loan rows on Treasury's Direct E-File Taskforce, 77 Homeland "Mission Support" rows on NASA, 58 Labor-HHS "User Fees" rows on National Park Service filming fees, and Agriculture's CIO on the Homeland Security CIO account. The exception was removed; the only cross-jurisdiction keys are the reviewed list in `account_gate.CROSS_CODED`, and the release build fails if any other appears.
+The same review of same-year conflicts showed that an agency-level jurisdiction is too coarse where an agency is funded in two bills: Interior's hazardous-materials and social-services lines kept USDA and HHS keys because the Forest Service and the Indian Health Service put those agencies in Interior. Those secondary bills now admit only the bureaus that justify them (`BUREAU_JURISDICTION`).
 The rejected key is kept in `account_key_withheld`.
 
 **Remaining:** the gate removes keys it can prove wrong; it does not prove the rest right.
@@ -481,6 +484,15 @@ Flow and account history picked each account's largest-magnitude row as its tota
 All three now use `normalization.account_totals`: the account's own titled line, or no total.
 `/compare` requires `account_key`, returns one series per chamber and stage, lists unresolved reports, and fails with 422 when a requested real-dollar series has a year without a deflator.
 `inflation.real_dollars` raises for a year outside the series instead of returning nothing.
+
+Account history summed the same way `/compare` once did: when two reports of one chamber and stage both claimed an account for a year, the history added them, so `/api/accounts/070-0113/history` showed $730.7 million by adding a Homeland Security figure to a wrongly keyed Agriculture one. It now reports that year as a `conflict` with no amount, and conflicted years no longer drive title changes.
+
+**Remaining conflicts.** After the account gate, 12 (account, year, chamber, stage) cells are still claimed by two reports, and both kinds are genuine, not keying errors:
+
+- FY2019 House Homeland Security accounts appear in the committee report (`CRPT-115hrpt948`) and in the report on a later continuing-appropriations bill (`CRPT-116hrpt9`), which reprints them with some different figures.
+- The National Institute of Environmental Health Sciences (`075-0862`) is appropriated in both the Labor-HHS bill and, for its Superfund research, the Interior bill.
+
+Neither sum nor either figure alone is the account's level for that year, so both are left as conflicts; the per-report totals are in `account_year_totals`.
 
 ## 19. Printed totals that do not reconcile — DOCUMENTED, NOT PURSUED
 

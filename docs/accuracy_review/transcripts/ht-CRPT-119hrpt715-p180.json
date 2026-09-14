@@ -1,0 +1,521 @@
+{
+ "unit_id": "ht-CRPT-119hrpt715-p180",
+ "report_id": "CRPT-119hrpt715",
+ "pdf_page": 180,
+ "units_header": "[In thousands of dollars]",
+ "column_headers": [
+  "Budget Request",
+  "Committee Recommended",
+  "Change from Request"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "161 B–1B SQUADRONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "273,552",
+    "403,552",
+    "130,000"
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Program increase—supplemental training",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "120,000",
+    ""
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Program increase—TENTaCLE BLOC Kits for B–1B",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "10,000",
+    ""
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "163 B–2 SQUADRONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "418,178",
+    "418,178",
+    "0"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "163 MINUTEMAN SQUADRONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "79,313",
+    "79,313",
+    "0"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "164 WORLDWIDE JOINT STRATEGIC COMMUNICATIONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "44,424",
+    "44,424",
+    "0"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "165 SERVICE SUPPORT TO STRATCOM—GLOBAL STRIKE",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "56,203",
+    "56,203",
+    "0"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "166 ICBM REENTRY VEHICLES",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "733,182",
+    "657,759",
+    "-75,423"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Program carryover",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-28,806",
+    ""
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "NGRV excess growth",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-46,617",
+    ""
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "168 MH–139A",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "7,046",
+    "7,046",
+    "0"
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "169 REGION/SECTOR OPERATION CONTROL CENTER MODERNIZATION PROGRAM",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "709",
+    "30,709",
+    "30,000"
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "Program increase—NCR AI-enabled camera sustainment",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "30,000",
+    ""
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "171 AVIATION SUPPORT EQUIPMENT—GENERAL",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,028",
+    "1,028",
+    "0"
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "172 OPERATIONS SECURITY [OPSEC]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "45,000",
+    "45,000",
+    "0"
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "173 MQ–9 UAV",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "16,723",
+    "16,723",
+    "0"
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "174 JOINT COUNTER RCIED ELECTRONIC WARFARE",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,816",
+    "2,816",
+    "0"
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "175 MULTI-PLATFORM ELECTRONIC WARFARE EQUIPMENT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "0",
+    "8,000",
+    "8,000"
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "Program increase—cognitive AI critical force protection",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "8,000",
+    ""
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "176 F–16 SQUADRONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "527,739",
+    "461,778",
+    "-65,961"
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "Next generation mission computer early to need",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-45,100",
+    ""
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "AESA early to need",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-9,000",
+    ""
+   ]
+  },
+  {
+   "seq": 23,
+   "label": "Program carryover",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-11,861",
+    ""
+   ]
+  },
+  {
+   "seq": 24,
+   "label": "177 F–15E SQUADRONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "322,889",
+    "324,059",
+    "1,170"
+   ]
+  },
+  {
+   "seq": 25,
+   "label": "M–CODE/REGI lack of justification",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-13,630",
+    ""
+   ]
+  },
+  {
+   "seq": 26,
+   "label": "Program increase—wire testing capability for aircraft readiness",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "14,800",
+    ""
+   ]
+  },
+  {
+   "seq": 27,
+   "label": "178 MANNED DESTRUCTIVE SUPPRESSION",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "8,128",
+    "8,128",
+    "0"
+   ]
+  },
+  {
+   "seq": 28,
+   "label": "179 F–22A SQUADRONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "950,375",
+    "913,998",
+    "-36,377"
+   ]
+  },
+  {
+   "seq": 29,
+   "label": "Excess growth",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-26,939",
+    ""
+   ]
+  },
+  {
+   "seq": 30,
+   "label": "Unjustified growth",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-9,438",
+    ""
+   ]
+  },
+  {
+   "seq": 31,
+   "label": "180 F–35 SQUADRONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "47,388",
+    "47,388",
+    "0"
+   ]
+  },
+  {
+   "seq": 32,
+   "label": "181 F–15EX",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "133,274",
+    "281,095",
+    "147,821"
+   ]
+  },
+  {
+   "seq": 33,
+   "label": "Carryover",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-2,179",
+    ""
+   ]
+  },
+  {
+   "seq": 34,
+   "label": "Program increase—F110 upgrades",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "150,000",
+    ""
+   ]
+  },
+  {
+   "seq": 35,
+   "label": "182 TACTICAL AIM MISSILES",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "98,861",
+    "98,861",
+    "0"
+   ]
+  },
+  {
+   "seq": 36,
+   "label": "183 ADVANCED MEDIUM RANGE AIR-TO-AIR MISSILE [AMRAAM]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "53,277",
+    "53,277",
+    "0"
+   ]
+  },
+  {
+   "seq": 37,
+   "label": "184 JOINT ADVANCED TACTICAL MISSILE (JATM)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "500,422",
+    "471,699",
+    "-28,723"
+   ]
+  },
+  {
+   "seq": 38,
+   "label": "Classified adjustment",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-28,723",
+    ""
+   ]
+  },
+  {
+   "seq": 39,
+   "label": "187 SPECIAL PROGRAM APPLICATIONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "35,149",
+    "17,574",
+    "-17,575"
+   ]
+  },
+  {
+   "seq": 40,
+   "label": "Classified adjustment",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-17,575",
+    ""
+   ]
+  },
+  {
+   "seq": 41,
+   "label": "188 AF TENCAP",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "50,913",
+    "50,913",
+    "0"
+   ]
+  },
+  {
+   "seq": 42,
+   "label": "189 PRECISION ATTACK SYSTEMS PROCUREMENT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "14,602",
+    "14,602",
+    "0"
+   ]
+  },
+  {
+   "seq": 43,
+   "label": "190 COMPASS CALL",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "66,514",
+    "66,514",
+    "0"
+   ]
+  },
+  {
+   "seq": 44,
+   "label": "191 AIRCRAFT ENGINE COMPONENT IMPROVEMENT PROGRAM",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "205,938",
+    "205,938",
+    "0"
+   ]
+  },
+  {
+   "seq": 45,
+   "label": "192 JOINT AIR-TO-SURFACE STANDOFF MISSILE [JASSM]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "133,092",
+    "133,092",
+    "0"
+   ]
+  },
+  {
+   "seq": 46,
+   "label": "193 SMALL DIAMETER BOMB [SDB]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "25,497",
+    "25,497",
+    "0"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Single table: mid-page continuation 'EXPLANATION OF PROJECT LEVEL ADJUSTMENTS—Continued' (Air Force RDT&E operational systems development, by program content); line-number column headed 'R–1'. No total rows on this page; table continues before and after. Line number '163' is printed on two consecutive rows (B–2 SQUADRONS and MINUTEMAN SQUADRONS) and 162 is absent; transcribed as printed (likely a typo in the source for one of them). Line numbers 167, 170, 185, 186 absent as printed. Negative amounts are printed with a typographic minus sign followed by a thin space (e.g. '− 61,770'); transcribed as ASCII '-' with no space. Text layer encodes them as 'Ø' (bold) and '¥' (light). Adjustment sub-rows (light type, indented, no line number) carry their amount in the Committee Recommended column as printed; their other cells are blank. Leading line numbers are kept in the label."
+}

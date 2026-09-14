@@ -1,0 +1,455 @@
+{
+ "unit_id": "ht-CRPT-119hrpt715-p126",
+ "report_id": "CRPT-119hrpt715",
+ "pdf_page": 126,
+ "units_header": "[In thousands of dollars]",
+ "column_headers": [
+  "Budget Request",
+  "Committee Recommended",
+  "Change from Request"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "1 B–21 RAIDER",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,230,615",
+    "2,194,537",
+    "-36,078"
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Classified adjustment",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-36,078",
+    ""
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "2 B–21 RAIDER [AP–CY]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,005,667",
+    "1,005,667",
+    "0"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "3 F–35",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,393,723",
+    "2,393,723",
+    "0"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "4 F–35 [AP–CY]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "738,103",
+    "738,103",
+    "0"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "5 COLLABORATIVE COMBAT AIRCRAFT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "996,528",
+    "976,598",
+    "-19,930"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Classified adjustment",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-19,930",
+    ""
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "6 COLLABORATIVE COMBAT AIRCRAFT [AP–CY]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "150,500",
+    "150,500",
+    "0"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "7 F–15EX",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,656,716",
+    "2,656,716",
+    "0"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "9 JOINT SIMULATION ENVIRONMENT",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "52,695",
+    "52,695",
+    "0"
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "10 KC–46A MDAP",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "3,520,530",
+    "3,469,146",
+    "-51,384"
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "Excess support costs",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-51,384",
+    ""
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "11 C–130J",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "636,680",
+    "936,680",
+    "300,000"
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Program increase—additional aircraft for the Air National Guard",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "300,000",
+    ""
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "12 ADVANCED PILOT TRAINING T–7A",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "529,464",
+    "529,464",
+    "0"
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "13 ADVANCED PILOT TRAINING T–7A [AP–CY]",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "69,690",
+    "69,690",
+    "0"
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "14 MH–139A",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "252,949",
+    "252,949",
+    "0"
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "15 COMBAT RESCUE HELICOPTER",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "69,395",
+    "284,395",
+    "215,000"
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "Air Force requested transfer from line 61",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "35,000",
+    ""
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "Program increase—additional aircraft",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "180,000",
+    ""
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "16 C–37A",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "208,000",
+    "0",
+    "-208,000"
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "Air Force requested transfer to RDTE,AF line 279A",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-208,000",
+    ""
+   ]
+  },
+  {
+   "seq": 23,
+   "label": "18 CIVIL AIR PATROL A/C",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "3,219",
+    "21,500",
+    "18,281"
+   ]
+  },
+  {
+   "seq": 24,
+   "label": "Program increase",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "18,281",
+    ""
+   ]
+  },
+  {
+   "seq": 25,
+   "label": "20 TARGET DRONES",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "31,912",
+    "31,912",
+    "0"
+   ]
+  },
+  {
+   "seq": 26,
+   "label": "21 COMPASS CALL",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "660,000",
+    "660,000",
+    "0"
+   ]
+  },
+  {
+   "seq": 27,
+   "label": "24 RQ–20B PUMA",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "15,513",
+    "15,513",
+    "0"
+   ]
+  },
+  {
+   "seq": 28,
+   "label": "25 B–2A",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "178,668",
+    "178,668",
+    "0"
+   ]
+  },
+  {
+   "seq": 29,
+   "label": "26 B–1B",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "146,862",
+    "146,862",
+    "0"
+   ]
+  },
+  {
+   "seq": 30,
+   "label": "27 B–52",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "422,399",
+    "422,399",
+    "0"
+   ]
+  },
+  {
+   "seq": 31,
+   "label": "28 LARGE AIRCRAFT INFRARED COUNTERMEASURES",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "66,638",
+    "66,638",
+    "0"
+   ]
+  },
+  {
+   "seq": 32,
+   "label": "29 COLLABORATIVE COMBAT AIRCRAFT MODS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "822",
+    "822",
+    "0"
+   ]
+  },
+  {
+   "seq": 33,
+   "label": "31 F–15",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "140,204",
+    "125,049",
+    "-15,155"
+   ]
+  },
+  {
+   "seq": 34,
+   "label": "Legion Pods excess growth",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-11,778",
+    ""
+   ]
+  },
+  {
+   "seq": 35,
+   "label": "Carryover",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-3,377",
+    ""
+   ]
+  },
+  {
+   "seq": 36,
+   "label": "32 F–15EX",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "214,176",
+    "214,176",
+    "0"
+   ]
+  },
+  {
+   "seq": 37,
+   "label": "33 F–16 MODIFICATIONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "946,747",
+    "943,185",
+    "-3,562"
+   ]
+  },
+  {
+   "seq": 38,
+   "label": "Early to need",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "",
+    "-3,562",
+    ""
+   ]
+  },
+  {
+   "seq": 39,
+   "label": "34 F–22A",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,052,088",
+    "1,052,088",
+    "0"
+   ]
+  },
+  {
+   "seq": 40,
+   "label": "35 F–35 MODIFICATIONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "335,973",
+    "335,973",
+    "0"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Single table: start of 'EXPLANATION OF PROJECT LEVEL ADJUSTMENTS' for Aircraft Procurement, Air Force; line-number column headed 'P–1'. Table continues on the next page; no total rows on this page. Line numbers skip (8, 17, 19, 22, 23, 30 absent) as printed. Dashes inside designators (B–21, F–35, AP–CY) are printed as en dashes and kept. Negative amounts are printed with a typographic minus sign followed by a thin space (e.g. '− 61,770'); transcribed as ASCII '-' with no space. Text layer encodes them as 'Ø' (bold) and '¥' (light). Adjustment sub-rows (light type, indented, no line number) carry their amount in the Committee Recommended column as printed; their other cells are blank. Leading line numbers are kept in the label."
+}

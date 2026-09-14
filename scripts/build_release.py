@@ -25,7 +25,7 @@ import pandas as pd
 from approps.cli import _primary_json_files
 from approps.config import EXTRACTED_DIR, OUTPUT_DIR, REFERENCE_DIR
 from approps.normalization.account_authority import trace_accounts
-from approps.normalization.account_gate import attested_keys, withhold_reason
+from approps.normalization.account_gate import CROSS_CODED, JURISDICTION, in_jurisdiction
 from approps.normalization.account_totals import account_totals
 from approps.output.csv_writer import UNTRUSTED_COLUMNS, _coerce_int_columns
 from approps.output.schemas import ComparativeStatementRow, InlineFundingRow
@@ -153,10 +153,22 @@ def _checks(comp: pd.DataFrame, tables: dict[str, pd.DataFrame]) -> list[dict]:
     sub_missing = comp[(comp.stage == "committee") & comp.subcommittee.isna()]
     add("committee_subcommittee_present", sub_missing.empty, len(sub_missing), "every committee row has a subcommittee")
 
-    rows = _records(comp)
-    attested = attested_keys(rows)
-    still_failing = sum(1 for r in rows if r.get("account_key") and withhold_reason(r, attested))
-    add("account_keys_pass_gate", still_failing == 0, still_failing, "no released account_key fails normalization.account_gate")
+    # Stated against the jurisdiction table and the reviewed exceptions directly, not by re-running the gate: this asserts the policy, it does not prove any key right.
+    keyed = comp[comp.account_key.notna()]
+    unmapped = int((~keyed.account_key.str[:3].isin(JURISDICTION)).sum())
+    add("account_keys_mapped_agency", unmapped == 0, unmapped, "every released key's agency has a jurisdiction entry")
+    triples = list(zip(keyed.account_key, keyed.subcommittee, keyed.account_key_title))
+    outside = [(k, s) for k, s, _ in triples if isinstance(s, str) and k[:3] in JURISDICTION and s not in JURISDICTION[k[:3]]]
+    unreviewed = [p for p in outside if p not in CROSS_CODED]
+    unreviewed += [(k, s) for k, s, title in triples if isinstance(s, str) and in_jurisdiction(k, s, title) is False and (k, s) not in outside]
+    add("account_keys_in_jurisdiction", not unreviewed, len(unreviewed), "every out-of-jurisdiction key is a reviewed CROSS_CODED account")
+    used = {f"{k} in {s}": outside.count((k, s)) for k, s in sorted(set(outside))}
+    add("account_keys_cross_coded", True, used, "recorded: reviewed exceptions in use")
+
+    totals = tables["account_year_totals"]
+    resolved = totals[totals.method != "unresolved"]
+    multi = int((resolved.groupby(["account_key", "fiscal_year", "chamber", "stage"]).report_id.nunique() > 1).sum())
+    add("account_year_conflicts", True, multi, "recorded: (account, year, chamber, stage) cells claimed by more than one report; series report them as conflicts")
 
     leaked = 0
     for layout, cols in UNTRUSTED_COLUMNS.items():

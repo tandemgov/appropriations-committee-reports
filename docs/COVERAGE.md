@@ -112,5 +112,5 @@ FY2025 was funded by a full-year continuing resolution, which has no explanatory
 
 - A report being present does not mean every line of its statement was extracted. The accuracy review measured completeness at 96–98% of source rows per track; see [ACCURACY_REVIEW.md](ACCURACY_REVIEW.md).
 - A row being present does not mean its amounts are trustworthy. Filter on `column_layout = 'standard'` and a `verification_tier` other than `none`, and read [KNOWN_ISSUES.md](KNOWN_ISSUES.md).
-- An account appearing in several years does not mean it has a total in each. `account_year_totals` resolves 6,667 of 9,974 report-account pairs; the other 3,307 are `unresolved` rather than guessed.
+- An account appearing in several years does not mean it has a total in each. `account_year_totals` resolves 6,163 of 9,154 report-account pairs; the other 2,991 are `unresolved` rather than guessed.
 - House–Senate comparisons are only possible in years both chambers reported the bill; see the tables above.

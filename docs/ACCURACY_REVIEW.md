@@ -98,5 +98,21 @@ The check also tested the totals rule itself:
 
 ## Reproducing
 
-The sample, transcripts, alignment, and adjudication are scratch artifacts of the review session, not part of the repository; the procedure above is complete enough to repeat.
-The alignment compares released rows (by `row_id` order) with transcripts in the source's printed units, and the House scanned-page unit is the set of rows whose extracted `line_number // 100` is the page.
+Everything the rates depend on is in the repository:
+
+| Path | Contents |
+|---|---|
+| `docs/accuracy_review/units.json` | The 24 sampled units: report, track, fiscal year, subcommittee, source file, and PDF page or HTML line range. |
+| `docs/accuracy_review/transcripts/` | One blind transcription per unit: column headers, units line, and every row's cells as printed. |
+| `docs/accuracy_review/multiyear/` | The 33 multi-year checks as given to reviewers (locators only) and the reviewers' readings of each source line. |
+| `scripts/accuracy_review_sample.py` | Draws the sample from the extracted reports (seed `20260913`). Re-running it after re-extraction can select different pages. |
+| `scripts/accuracy_review.py` | Aligns each transcript with the released rows and writes `diff_results.json` (scores per unit) and `disagreements.json` (every disagreement) next to the transcripts. |
+
+```bash
+uv run approps output
+uv run python scripts/accuracy_review.py
+```
+
+The script scores `data/output/comparative_statements.csv`, so it needs the extracted reports the release was built from (hashed in the release manifest).
+Its per-track totals are the table above before adjudication; the adjudication — which disagreements were the transcriber's, which were out of scope — is written out in this document, unit by unit.
+A House scanned-page unit is the set of rows whose extracted `line_number // 100` is the page.

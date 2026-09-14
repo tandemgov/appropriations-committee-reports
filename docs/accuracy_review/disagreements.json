@@ -1,0 +1,813 @@
+[
+  {
+    "unit": "en-CPRT-116HPRT35160-p200",
+    "kind": "omitted_row",
+    "label": "Site development loans (sec. 524)",
+    "cells": [
+      "176"
+    ]
+  },
+  {
+    "unit": "en-CPRT-116HPRT35160-p200",
+    "kind": "omitted_row",
+    "label": "Self-help land development (sec. 523)",
+    "cells": [
+      "431"
+    ]
+  },
+  {
+    "unit": "en-CPRT-118HPRT55008-p333",
+    "kind": "omitted_row",
+    "label": "Items Less Than $5 Million",
+    "cells": [
+      "3,000,000"
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p126",
+    "kind": "omitted_row",
+    "label": "Classified adjustment",
+    "cells": [
+      "",
+      "-36,078",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p126",
+    "kind": "omitted_row",
+    "label": "Classified adjustment",
+    "cells": [
+      "",
+      "-19,930",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p126",
+    "kind": "omitted_row",
+    "label": "Excess support costs",
+    "cells": [
+      "",
+      "-51,384",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p126",
+    "kind": "omitted_row",
+    "label": "Air Force requested transfer from line 61",
+    "cells": [
+      "",
+      "35,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p126",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014additional aircraft",
+    "cells": [
+      "",
+      "180,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p126",
+    "kind": "omitted_row",
+    "label": "Air Force requested transfer to RDTE,AF line 279A",
+    "cells": [
+      "",
+      "-208,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p126",
+    "kind": "omitted_row",
+    "label": "Program increase",
+    "cells": [
+      "",
+      "18,281",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p126",
+    "kind": "omitted_row",
+    "label": "Legion Pods excess growth",
+    "cells": [
+      "",
+      "-11,778",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p126",
+    "kind": "omitted_row",
+    "label": "Carryover",
+    "cells": [
+      "",
+      "-3,377",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p126",
+    "kind": "omitted_row",
+    "label": "Early to need",
+    "cells": [
+      "",
+      "-3,562",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Test and evaluation excess growth",
+    "cells": [
+      "",
+      "-4,550",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014qualification of low-cost pyro flare for turbine engines",
+    "cells": [
+      "",
+      "4,900",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Program delays",
+    "cells": [
+      "",
+      "-5,700",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014low cost, one-way attritable undersea vehicle for scalable, precision strike and swarming",
+    "cells": [
+      "",
+      "30,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014additive manufacturing for NAVAIR readiness",
+    "cells": [
+      "",
+      "4,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014critical protection technology for cybersecurity engineering",
+    "cells": [
+      "",
+      "15,300",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014cyber supply chain risk management enterprise tool",
+    "cells": [
+      "",
+      "27,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014digital maintenance and workforce enablement for USN shipyards",
+    "cells": [
+      "",
+      "10,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014maritime supplier digital uplift",
+    "cells": [
+      "",
+      "7,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014navy logistic digital acceleration",
+    "cells": [
+      "",
+      "10,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014operation cattle drive",
+    "cells": [
+      "",
+      "10,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014shipyard modernization interactive instructions",
+    "cells": [
+      "",
+      "5,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Carryover",
+    "cells": [
+      "",
+      "-27,832",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p168",
+    "kind": "omitted_row",
+    "label": "Excess growth",
+    "cells": [
+      "",
+      "-5,672",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014supplemental training",
+    "cells": [
+      "",
+      "120,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014TENTaCLE BLOC Kits for B\u20131B",
+    "cells": [
+      "",
+      "10,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Program carryover",
+    "cells": [
+      "",
+      "-28,806",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "NGRV excess growth",
+    "cells": [
+      "",
+      "-46,617",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014NCR AI-enabled camera sustainment",
+    "cells": [
+      "",
+      "30,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014cognitive AI critical force protection",
+    "cells": [
+      "",
+      "8,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Next generation mission computer early to need",
+    "cells": [
+      "",
+      "-45,100",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "AESA early to need",
+    "cells": [
+      "",
+      "-9,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Program carryover",
+    "cells": [
+      "",
+      "-11,861",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "M\u2013CODE/REGI lack of justification",
+    "cells": [
+      "",
+      "-13,630",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014wire testing capability for aircraft readiness",
+    "cells": [
+      "",
+      "14,800",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Excess growth",
+    "cells": [
+      "",
+      "-26,939",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Unjustified growth",
+    "cells": [
+      "",
+      "-9,438",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Carryover",
+    "cells": [
+      "",
+      "-2,179",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Program increase\u2014F110 upgrades",
+    "cells": [
+      "",
+      "150,000",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Classified adjustment",
+    "cells": [
+      "",
+      "-28,723",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p180",
+    "kind": "omitted_row",
+    "label": "Classified adjustment",
+    "cells": [
+      "",
+      "-17,575",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p46",
+    "kind": "omitted_row",
+    "label": "Historical unobligated balances",
+    "cells": [
+      "",
+      "-61,770",
+      ""
+    ]
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p46",
+    "kind": "wrong_or_missing_value",
+    "label": "TOTAL, TITLE I, NATIONAL GUARD PERSONNEL, AIR FORCE",
+    "source_slot": "budget_estimate",
+    "value": 5918475,
+    "extracted": {
+      "budget_estimate": 6383572,
+      "committee_recommendation": 6321802,
+      "delta_vs_estimate": -61770
+    },
+    "extracted_label": "TOTAL, NATIONAL GUARD PERSONNEL, AIR FORCE"
+  },
+  {
+    "unit": "ht-CRPT-119hrpt715-p46",
+    "kind": "wrong_or_missing_value",
+    "label": "TOTAL, TITLE I, NATIONAL GUARD PERSONNEL, AIR FORCE",
+    "source_slot": "committee_recommendation",
+    "value": 5856705,
+    "extracted": {
+      "budget_estimate": 6383572,
+      "committee_recommendation": 6321802,
+      "delta_vs_estimate": -61770
+    },
+    "extracted_label": "TOTAL, NATIONAL GUARD PERSONNEL, AIR FORCE"
+  },
+  {
+    "unit": "hv-CRPT-115hrpt948-p179",
+    "kind": "wrong_column",
+    "label": "Securing the Cities",
+    "source_slot": "prior_year_enacted",
+    "value": 21135,
+    "extracted_slots": [
+      "delta_vs_enacted"
+    ],
+    "extracted": {
+      "delta_vs_enacted": -21135
+    }
+  },
+  {
+    "unit": "hv-CRPT-115hrpt948-p179",
+    "kind": "extra_row",
+    "label": "Subtotal, Operations and Support",
+    "extracted": {
+      "budget_estimate": 74896,
+      "committee_recommendation": 74896,
+      "delta_vs_enacted": 74896
+    }
+  },
+  {
+    "unit": "hv-CRPT-115hrpt948-p179",
+    "kind": "extra_row",
+    "label": "Subtotal, Procurement, Construction, and Improvements",
+    "extracted": {
+      "budget_estimate": 80443,
+      "committee_recommendation": 80443,
+      "delta_vs_enacted": 80443
+    }
+  },
+  {
+    "unit": "hv-CRPT-116hrpt448-p225",
+    "kind": "wrong_or_missing_value",
+    "label": "Research: Safe and sustainable water resources",
+    "source_slot": "delta_vs_estimate",
+    "value": 35552,
+    "extracted": {
+      "prior_year_enacted": 110890,
+      "budget_estimate": 78948,
+      "committee_recommendation": 114500,
+      "delta_vs_enacted": 3610,
+      "delta_vs_estimate": 35532
+    },
+    "extracted_label": "Research: Safe and sustainable water resources"
+  },
+  {
+    "unit": "hv-CRPT-116hrpt448-p225",
+    "kind": "wrong_or_missing_value",
+    "label": "Total, Science and Technology",
+    "source_slot": "prior_year_enacted",
+    "value": 716449,
+    "extracted": {
+      "prior_year_enacted": 718449,
+      "budget_estimate": 484733,
+      "committee_recommendation": 745345,
+      "delta_vs_enacted": 28896,
+      "delta_vs_estimate": 260612
+    },
+    "extracted_label": "Total, Science and Technology"
+  },
+  {
+    "unit": "hv-CRPT-118hrpt120-p50",
+    "kind": "omitted_row",
+    "label": "Spending Reduction Account (Sec. 212)",
+    "cells": [
+      "---",
+      "---",
+      "(11,000)",
+      "(+11,000)",
+      "(+11,000)"
+    ]
+  },
+  {
+    "unit": "hv-CRPT-118hrpt120-p50",
+    "kind": "omitted_row",
+    "label": "Total, Title II, General Provisions",
+    "cells": [
+      "2,000",
+      "---",
+      "---",
+      "-2,000",
+      "---"
+    ]
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "wrong_column",
+    "label": "Consolidated rail infrastructure and safety improvements",
+    "source_slot": "committee_recommendation",
+    "value": 50000,
+    "extracted_slots": [
+      "prior_year_enacted",
+      "delta_vs_enacted"
+    ],
+    "extracted": {
+      "prior_year_enacted": 50000,
+      "committee_recommendation": 0,
+      "delta_vs_enacted": -50000
+    }
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "wrong_column",
+    "label": "Consolidated rail infrastructure and safety improvements",
+    "source_slot": "delta_vs_estimate",
+    "value": 50000,
+    "extracted_slots": [
+      "prior_year_enacted",
+      "delta_vs_enacted"
+    ],
+    "extracted": {
+      "prior_year_enacted": 50000,
+      "committee_recommendation": 0,
+      "delta_vs_enacted": -50000
+    }
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "omitted_row",
+    "label": "Transit formula grants (Hwy Trust Fund, Mass Transit Account ) (Liqiuidation of contract authorization)",
+    "cells": [
+      "(10,400,000)",
+      "(10,800,000)",
+      "(10,800,000)",
+      "(+400,000)",
+      ""
+    ]
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "wrong_column",
+    "label": "Supplementary transit formula grants (legislative proposal) (Liquidation of contract authorization)",
+    "source_slot": "budget_estimate",
+    "value": 5860000,
+    "extracted_slots": [
+      "prior_year_enacted",
+      "delta_vs_enacted"
+    ],
+    "extracted": {
+      "prior_year_enacted": 5860000,
+      "committee_recommendation": 0,
+      "delta_vs_enacted": -5860000
+    }
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "wrong_column",
+    "label": "Supplementary transit formula grants (legislative proposal) (Liquidation of contract authorization)",
+    "source_slot": "delta_vs_estimate",
+    "value": -5860000,
+    "extracted_slots": [
+      "prior_year_enacted",
+      "delta_vs_enacted"
+    ],
+    "extracted": {
+      "prior_year_enacted": 5860000,
+      "committee_recommendation": 0,
+      "delta_vs_enacted": -5860000
+    }
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "wrong_column",
+    "label": "Rapid-Growth Transit Program (legislative proposal) (Liquidation of contract authorization)",
+    "source_slot": "budget_estimate",
+    "value": 525000,
+    "extracted_slots": [
+      "prior_year_enacted",
+      "delta_vs_enacted"
+    ],
+    "extracted": {
+      "prior_year_enacted": 525000,
+      "committee_recommendation": 0,
+      "delta_vs_enacted": -525000
+    }
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "wrong_column",
+    "label": "Rapid-Growth Transit Program (legislative proposal) (Liquidation of contract authorization)",
+    "source_slot": "delta_vs_estimate",
+    "value": -525000,
+    "extracted_slots": [
+      "prior_year_enacted",
+      "delta_vs_enacted"
+    ],
+    "extracted": {
+      "prior_year_enacted": 525000,
+      "committee_recommendation": 0,
+      "delta_vs_enacted": -525000
+    }
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "wrong_column",
+    "label": "Washington Metropolitan Area Transit Authority Capital and Preventive Maintenance",
+    "source_slot": "prior_year_enacted",
+    "value": 150000,
+    "extracted_slots": [
+      "budget_estimate"
+    ],
+    "extracted": {
+      "prior_year_enacted": 2409602,
+      "budget_estimate": 150000,
+      "committee_recommendation": 2598728,
+      "delta_vs_enacted": 189126,
+      "delta_vs_estimate": 2448728
+    }
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "wrong_column",
+    "label": "Washington Metropolitan Area Transit Authority Capital and Preventive Maintenance",
+    "source_slot": "committee_recommendation",
+    "value": 150000,
+    "extracted_slots": [
+      "budget_estimate"
+    ],
+    "extracted": {
+      "prior_year_enacted": 2409602,
+      "budget_estimate": 150000,
+      "committee_recommendation": 2598728,
+      "delta_vs_enacted": 189126,
+      "delta_vs_estimate": 2448728
+    }
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "extra_row",
+    "label": "(Liquidation of contract authorization)",
+    "extracted": {
+      "budget_estimate": 3700000,
+      "committee_recommendation": 0,
+      "delta_vs_estimate": -3700000
+    }
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "extra_row",
+    "label": "(Limitation on obligations)",
+    "extracted": {
+      "budget_estimate": 3700000,
+      "committee_recommendation": 0,
+      "delta_vs_estimate": -3700000
+    }
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "extra_row",
+    "label": "Subtotal",
+    "extracted": {
+      "prior_year_enacted": 288100,
+      "budget_estimate": 266798,
+      "committee_recommendation": 248600,
+      "delta_vs_enacted": -39500,
+      "delta_vs_estimate": -18198
+    }
+  },
+  {
+    "unit": "se-CRPT-114srpt243-L10043",
+    "kind": "extra_row",
+    "label": "Rescission (Sec. 166)",
+    "extracted": {
+      "prior_year_enacted": -25398,
+      "committee_recommendation": 0,
+      "delta_vs_enacted": 25398
+    }
+  },
+  {
+    "unit": "se-CRPT-117srpt34-L9061",
+    "kind": "extra_row",
+    "label": "Offset of appropriation pursuant to Section 1002 (b)(3)(B) of the",
+    "extracted": {
+      "prior_year_enacted": -70000,
+      "budget_estimate": -50000,
+      "committee_recommendation": -50000,
+      "delta_vs_enacted": 20000
+    }
+  },
+  {
+    "unit": "se-CRPT-117srpt34-L9061",
+    "kind": "extra_row",
+    "label": "Spending of FDA innovation account (transfer)",
+    "extracted": {
+      "prior_year_enacted": 70000,
+      "budget_estimate": 50000,
+      "committee_recommendation": 50000,
+      "delta_vs_enacted": -20000
+    }
+  },
+  {
+    "unit": "se-CRPT-118srpt191-L6154",
+    "kind": "omitted_row",
+    "label": "Subtotal, Compensation and pensions available in fiscal year",
+    "cells": [
+      "161,850,524",
+      "192,131,214",
+      "192,131,214",
+      "+30,280,690",
+      ""
+    ]
+  },
+  {
+    "unit": "se-CRPT-118srpt191-L6154",
+    "kind": "omitted_row",
+    "label": "Total, Compensation and pensions appropriated in this bill",
+    "cells": [
+      "197,382,903",
+      "214,302,452",
+      "214,302,452",
+      "+16,919,549",
+      ""
+    ]
+  },
+  {
+    "unit": "se-CRPT-118srpt191-L6154",
+    "kind": "omitted_row",
+    "label": "Subtotal, readjustment benefits available in fiscal year",
+    "cells": [
+      "8,827,352",
+      "16,057,461",
+      "16,057,461",
+      "+7,230,109",
+      ""
+    ]
+  },
+  {
+    "unit": "se-CRPT-118srpt191-L6154",
+    "kind": "omitted_row",
+    "label": "Total, Readjustment benefits appropriated in this bill",
+    "cells": [
+      "13,774,657",
+      "20,271,891",
+      "20,271,891",
+      "+6,497,234",
+      ""
+    ]
+  }
+]

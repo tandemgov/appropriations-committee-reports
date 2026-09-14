@@ -1,0 +1,139 @@
+{
+ "unit_id": "en-CPRT-117HPRT47048-p471",
+ "report_id": "CPRT-117HPRT47048",
+ "pdf_page": 471,
+ "units_header": "",
+ "column_headers": [
+  "FY 2022 Agreement"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "Capacity:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Strategic Prevention Framework/Partnerships for Success",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "$127,484,000"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Strategic Prevention Framework Rx",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "10,000,000"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "Federal Drug-Free Workplace",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "4,894,000"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Minority AIDS",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "41,205,000"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "Sober Truth on Preventing Underage Drinking (STOP Act)",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "12,000,000"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "National Adult-Oriented Media Public Service Campaign",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "2,000,000"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Community-based Coalition Enhancement Grants",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "9,000,000"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Intergovernmental Coordinating Committee on the Prevention of Underage Drinking",
+   "indent_level": 2,
+   "is_total": false,
+   "cells": [
+    "1,000,000"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Tribal Behavioral Health Grants",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "20,750,000"
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Science and Service:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "Center for the Application of Prevention Technologies",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "7,493,000"
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "Science and Service Program Coordination",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "4,072,000"
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Minority Fellowship Program",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "321,000"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Single in-prose amount table under SUBSTANCE ABUSE PREVENTION (SAMHSA PRNS), printed page 1797. Stub header 'Budget Activity'. No units line; full dollars ($ on first amount). No total row. Group headings 'Capacity:' and 'Science and Service:' have no amounts. Indent-level-2 rows (Strategic Prevention Framework Rx; National Adult-Oriented Media Public Service Campaign; Community-based Coalition Enhancement Grants; Intergovernmental Coordinating Committee on the Prevention of Underage Drinking) are printed in italics with italic amounts, i.e. non-additive 'of which' sub-amounts of the row above."
+}

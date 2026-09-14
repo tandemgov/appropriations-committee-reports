@@ -1,0 +1,20 @@
+{"unit_id": "hv-CRPT-119hrpt622-p103", "report_id": "CRPT-119hrpt622", "pdf_page": 103, "units_header": "(Amounts in thousands)", "column_headers": ["FY 2026 Enacted", "Bill", "Bill vs. Enacted"], "rows": [
+{"seq": 1, "label": "Vocational rehabilitation loans program account", "indent_level": 0, "is_total": false, "cells": ["45", "35", "-10"]},
+{"seq": 2, "label": "(Limitation on direct loans)", "indent_level": 1, "is_total": false, "cells": ["(1,394)", "(1,227)", "(-167)"]},
+{"seq": 3, "label": "Administrative expenses", "indent_level": 1, "is_total": false, "cells": ["507", "507", "---"]},
+{"seq": 4, "label": "Native American veteran housing loan program account", "indent_level": 0, "is_total": false, "cells": ["", "", ""]},
+{"seq": 5, "label": "Administrative expenses", "indent_level": 1, "is_total": false, "cells": ["5,845", "5,845", "---"]},
+{"seq": 6, "label": "Cost of Direct Loan", "indent_level": 1, "is_total": false, "cells": ["6,865", "2,604", "-4,261"]},
+{"seq": 7, "label": "General operating expenses, VBA", "indent_level": 0, "is_total": false, "cells": ["3,881,000", "3,744,000", "-137,000"]},
+{"seq": 8, "label": "Total, Veterans Benefits Administration", "indent_level": 2, "is_total": true, "cells": ["287,475,831", "335,931,943", "+48,456,112"]},
+{"seq": 9, "label": "Budget year appropriations", "indent_level": 3, "is_total": false, "cells": ["(16,043,885)", "(14,928,092)", "(-1,115,793)"]},
+{"seq": 10, "label": "Advance appropriations, FY 2028", "indent_level": 3, "is_total": false, "cells": ["(271,431,946)", "(307,463,397)", "(+36,031,451)"]},
+{"seq": 11, "label": "Advances from prior year appropriations", "indent_level": 2, "is_total": false, "cells": ["(247,743,619)", "(271,465,571)", "(+23,721,952)"]},
+{"seq": 12, "label": "Veterans Health Administration", "indent_level": 3, "is_total": false, "cells": ["", "", ""]},
+{"seq": 13, "label": "Medical services (MS):", "indent_level": 0, "is_total": false, "cells": ["", "", ""]},
+{"seq": 14, "label": "Budget year appropriations", "indent_level": 1, "is_total": false, "cells": ["-15,889,000", "100,000", "+15,989,000"]},
+{"seq": 15, "label": "Advance from prior year appropriations", "indent_level": 1, "is_total": false, "cells": ["59,150,000", "59,858,000", "+708,000"]},
+{"seq": 16, "label": "Subtotal, MS available in fiscal year", "indent_level": 2, "is_total": true, "cells": ["43,261,000", "59,958,000", "+16,697,000"]},
+{"seq": 17, "label": "Advance appropriations, FY 2028", "indent_level": 2, "is_total": false, "cells": ["59,858,000", "70,700,000", "+10,842,000"]},
+{"seq": 18, "label": "Total, MS appropriated in this bill", "indent_level": 3, "is_total": true, "cells": ["43,969,000", "70,800,000", "+26,831,000"]}
+], "uncertain_cells": [], "notes": "Three-column table (no Request column). Dashed separator lines omitted (not rows). Scan is low-contrast/grainy; VBA total block zoomed and confirmed. Source-side inconsistency noted (not a misread, confirmed by zoom): in seq 8-10 the FY 2026 Enacted column sums (16,043,885 + 271,431,946 = 287,475,831) but the Bill column does not (14,928,092 + 307,463,397 = 322,391,489, not 335,931,943); the Bill vs. Enacted deltas are each internally consistent with their rows. Seq 12 is a centered heading. Page begins mid-table (the VBA account list starts on a prior page)."}

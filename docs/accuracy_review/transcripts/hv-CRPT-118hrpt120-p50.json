@@ -1,0 +1,16 @@
+{"unit_id": "hv-CRPT-118hrpt120-p50", "report_id": "CRPT-118hrpt120", "pdf_page": 50, "units_header": "(Amounts in thousands)", "column_headers": ["FY 2023 Enacted", "FY 2024 Request", "Bill", "Bill vs. Enacted", "Bill vs. Request"], "rows": [
+{"seq": 1, "label": "GOVERNMENT ACCOUNTABILITY OFFICE", "indent_level": 2, "is_total": false, "cells": ["", "", "", "", ""]},
+{"seq": 2, "label": "Salaries and expenses", "indent_level": 0, "is_total": false, "cells": ["846,184", "933,629", "879,980", "+33,796", "-53,649"]},
+{"seq": 3, "label": "Offsetting collections", "indent_level": 1, "is_total": false, "cells": ["-55,865", "-73,976", "-73,976", "-18,111", "---"]},
+{"seq": 4, "label": "Total, Government Accountability Office", "indent_level": 2, "is_total": true, "cells": ["790,319", "859,653", "806,004", "+15,685", "-53,649"]},
+{"seq": 5, "label": "CONGRESSIONAL OFFICE FOR INTERNATIONAL LEADERSHIP FUND", "indent_level": 0, "is_total": false, "cells": ["", "", "", "", ""]},
+{"seq": 6, "label": "Payment to the Congressional Office for International Leadership (COIL) Fund 1/", "indent_level": 0, "is_total": false, "cells": ["6,000", "7,200", "6,000", "---", "-1,200"]},
+{"seq": 7, "label": "JOHN C. STENNIS CENTER FOR PUBLIC SERVICE TRAINING AND DEVELOPMENT", "indent_level": 0, "is_total": false, "cells": ["", "", "", "", ""]},
+{"seq": 8, "label": "Stennis Center for Public Service", "indent_level": 0, "is_total": false, "cells": ["430", "430", "430", "---", "---"]},
+{"seq": 9, "label": "Total, Title I, Legislative Branch", "indent_level": 2, "is_total": true, "cells": ["5,562,229", "5,705,726", "5,301,067", "-261,162", "-404,659"]},
+{"seq": 10, "label": "TITLE II - GENERAL PROVISIONS", "indent_level": 2, "is_total": false, "cells": ["", "", "", "", ""]},
+{"seq": 11, "label": "Adjustments to Compensation (CBO estimate)", "indent_level": 0, "is_total": false, "cells": ["-3,000", "---", "---", "+3,000", "---"]},
+{"seq": 12, "label": "Capitol Complex Health and Safety", "indent_level": 0, "is_total": false, "cells": ["5,000", "---", "---", "-5,000", "---"]},
+{"seq": 13, "label": "Spending Reduction Account (Sec. 212)", "indent_level": 0, "is_total": false, "cells": ["---", "---", "(11,000)", "(+11,000)", "(+11,000)"]},
+{"seq": 14, "label": "Total, Title II, General Provisions", "indent_level": 2, "is_total": true, "cells": ["2,000", "---", "---", "-2,000", "---"]}
+], "uncertain_cells": [], "notes": "Double-rule (=====) separator lines between sections omitted as they are not rows. Seq 6 label wraps over three printed lines; the 'Leadership (COIL) Fund 1/' continuation is indented. Seq 7 label wraps; 'DEVELOPMENT' continuation is centered. Seq 13 Bill-vs-Enacted and Bill-vs-Request cells are printed as (+11,000) in parentheses, which is odd given Bill is (11,000); transcribed as printed."}

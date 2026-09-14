@@ -103,7 +103,7 @@ GOVINFO_API_KEY=your-key
 | `GET /api/line_items` | Query line items across all reports |
 | `GET /api/line_items/compare` | One account's totals across fiscal years, one series per chamber and stage (`account_key` required; `real=true` fails for years without a deflator) |
 | `GET /api/accounts` | Cross-year account authorities; filter to `changed_only`/`kind=reword` for rename candidates |
-| `GET /api/accounts/{account_key}/history` | One account followed through time: money series, label timeline, title changes |
+| `GET /api/accounts/{account_key}/history` | One account followed through time: money series (a year two reports both claim is a `conflict` with no amount), label timeline, title changes |
 | `POST /api/parse_report` | On-demand extraction (stub) |
 
 ## Project structure

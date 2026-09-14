@@ -44,7 +44,7 @@ These are small samples (91 to 144 source rows per track), and pages were chosen
 
 **Do not sum rows.** A statement prints an account's own line and its program breakdown as separate rows.
 
-Use `account_year_totals`: one row per report and account, taken from the line the source presents as the account (`method` = `single_line` or `account_line`), or no total at all (`unresolved`, 3,307 of 9,974). Compare within one `chamber` and one `stage`:
+Use `account_year_totals`: one row per report and account, taken from the line the source presents as the account (`method` = `single_line` or `account_line`), or no total at all (`unresolved`, 2,991 of 9,154). Compare within one `chamber` and one `stage`:
 
 ```python
 t = pd.read_parquet("account_year_totals.parquet")
@@ -53,7 +53,7 @@ series = t[(t.account_key == "080-0126") & (t.chamber == "senate") & (t.stage ==
 
 A House recommendation, a Senate recommendation, and an enacted level for the same year are three different figures.
 
-`account_key` is a federal account symbol, assigned only by a conservative match that passed an additional gate; 5,716 keys that were demonstrably wrong were withheld (`account_key_withheld`). A key is still not proof of identity: see [KNOWN_ISSUES #16](docs/KNOWN_ISSUES.md).
+`account_key` is a federal account symbol, assigned only by a conservative match that passed an additional gate; 7,687 keys that were demonstrably wrong were withheld (`account_key_withheld`). A key is still not proof of identity: see [KNOWN_ISSUES #16](docs/KNOWN_ISSUES.md).
 
 ## Amounts are in whole dollars
 
@@ -77,8 +77,8 @@ The full stage × chamber × subcommittee × year matrix is in [docs/COVERAGE.md
 | File | Rows | Description |
 |---|---:|---|
 | `comparative_statements` | 116,393 | The main table: one row per statement line, in document order. |
-| `account_year_totals` | 9,974 | One total per report and account; the table for longitudinal work. |
-| `account_title_changes` | 701 | Years in which an account's dominant label changed. |
+| `account_year_totals` | 9,154 | One total per report and account; the table for longitudinal work. |
+| `account_title_changes` | 640 | Years in which an account's dominant label changed. |
 | `nonstandard_layout_rows` | 3,026 | The values emptied from isolated rows, with their source text. |
 | `inline_funding_tables` | 13,853 | Funding summaries from report prose, string-matched against the source. |
 | `manifest.json` | — | Code revision, source snapshot hash, counts, every release check, and file hashes. |
@@ -92,7 +92,7 @@ Every column is defined in [docs/DATA_DICTIONARY.md](docs/DATA_DICTIONARY.md).
 
 - **Values moved.** Rows in FY2026–27 House three-column statements, FY2016 Senate statements with a House allowance column, FY2026 Senate statements, and Senate rows with blank leading columns had values in the wrong columns or overwritten; they are corrected. See KNOWN_ISSUES #11–#13 and #20.
 - **Values removed.** 3,026 rows had their untrusted columns emptied (#1, #2, #15).
-- **Account keys removed.** 5,716 keys were withheld (#16).
+- **Account keys removed.** 7,687 keys were withheld (#16).
 - **Rows added.** 980 enacted rows whose labels contain dashes or apostrophes (#14).
 - **API:** `/api/line_items/compare` now requires `account_key`, returns one series per chamber and stage, and returns 422 for real-dollar requests covering FY2026–27 (#18).
 

@@ -1,0 +1,382 @@
+{
+ "unit_id": "se-CRPT-117srpt34-L9061",
+ "report_id": "CRPT-117srpt34",
+ "html_line_start": 9061,
+ "html_line_end": 9104,
+ "units_header": "[In thousands of dollars]",
+ "column_headers": [
+  "2021 appropriation",
+  "Budget estimate",
+  "Committee recommendation",
+  "Senate Committee recommendation compared with (+ or -) 2021 appropriation",
+  "Senate Committee recommendation compared with (+ or -) Budget estimate"
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "Spending of FDA innovation account (transfer)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "(70,000)",
+    "(50,000)",
+    "(50,000)",
+    "(-20,000)",
+    ""
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Total, FDA (w/user fees, including proposals)",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "5,980,296",
+    "6,478,622",
+    "6,231,256",
+    "+250,960",
+    "-247,366"
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Total, FDA (w/enacted user fees only)",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "5,980,296",
+    "6,374,256",
+    "6,231,256",
+    "+250,960",
+    "-143,000"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "FDA user fees",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "-2,765,580",
+    "-2,920,906",
+    "-2,816,540",
+    "-50,960",
+    "+104,366"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Total, Food and Drug Administration (excluding user fees)",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "3,214,716",
+    "3,557,716",
+    "3,414,716",
+    "+200,000",
+    "-143,000"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "INDEPENDENT AGENCIES",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Commodity Futures Trading Commission\\1\\",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "304,000",
+    "278,000",
+    "",
+    "-304,000",
+    "-278,000"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "CFTC fees (legislative proposal)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Total, Commodity Futures Trading Commission",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "304,000",
+    "278,000",
+    "",
+    "-304,000",
+    "-278,000"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Farm Credit Administration (limitation on administrative expenses)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "(80,400)",
+    "(84,200)",
+    "(84,200)",
+    "(+3,800)",
+    ""
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Total, title VI, Related Agencies and Food and Drug Administration",
+   "indent_level": 1,
+   "is_total": true,
+   "cells": [
+    "3,518,716",
+    "3,835,716",
+    "3,414,716",
+    "-104,000",
+    "-421,000"
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "TITLE VII--GENERAL PROVISIONS",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "Rural Energy Savings Program",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "11,000",
+    "",
+    "",
+    "-11,000",
+    ""
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Farm to School",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "12,000",
+    "12,000",
+    "17,000",
+    "+5,000",
+    "+5,000"
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "Healthy Food Financing Initiative",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "5,000",
+    "",
+    "",
+    "-5,000",
+    ""
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "Citrus Greening",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "8,500",
+    "",
+    "",
+    "-8,500",
+    ""
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "Broadband Pilot",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "531,000",
+    "",
+    "650,000",
+    "+119,000",
+    "+650,000"
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "Section 313 funds",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "(104,000)",
+    "(50,000)",
+    "(50,000)",
+    "(-54,000)",
+    ""
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "NIFA Military Veteran Grants",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "5,000",
+    "",
+    "5,000",
+    "",
+    "+5,000"
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "Centers of Excellence",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "10,000",
+    "",
+    "",
+    "-10,000",
+    ""
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "Rural Hospital Technical Assistance",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,000",
+    "",
+    "",
+    "-2,000",
+    ""
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "Protecting Animals with Shelter Grants",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "2,500",
+    "",
+    "",
+    "-2,500",
+    ""
+   ]
+  },
+  {
+   "seq": 23,
+   "label": "Tribal Demonstration Projects",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "3,000",
+    "",
+    "3,000",
+    "",
+    "+3,000"
+   ]
+  },
+  {
+   "seq": 24,
+   "label": "International Agricultural Education Fellowship",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,000",
+    "",
+    "",
+    "-1,000",
+    ""
+   ]
+  },
+  {
+   "seq": 25,
+   "label": "School Breakfast Expansion Grants",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "6,000",
+    "",
+    "",
+    "-6,000",
+    ""
+   ]
+  },
+  {
+   "seq": 26,
+   "label": "Urban Agriculture Office",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "7,000",
+    "",
+    "",
+    "-7,000",
+    ""
+   ]
+  },
+  {
+   "seq": 27,
+   "label": "Food Loss Liaison",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "500",
+    "",
+    "",
+    "-500",
+    ""
+   ]
+  },
+  {
+   "seq": 28,
+   "label": "Healthy Fluid Milk",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "1,000",
+    "",
+    "3,000",
+    "+2,000",
+    "+3,000"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Columns from header at lines 8467-8471 (table title at 8463); this table uses 15-char dot placeholders and a wider label area. Row 10 (line 9081) 'Farm Credit Administration (limitation on administrative expenses)' has its dot leader squeezed to a single '.', which was dropped from the label; its amounts sit under columns 1-4 with a placeholder in column 5. Row 7 label includes footnote marker '\\1\\' as printed. Wrapped label joined: row 11 (9083-9084). Row 8 is a dot-leader-only row. Rows 6 and 12 are centered headings. Rows at 9105+ are outside the window and excluded. indent_level = leading spaces // 4; centered headings set to 0."
+}

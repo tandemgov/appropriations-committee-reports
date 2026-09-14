@@ -1,0 +1,238 @@
+{
+ "unit_id": "en-CPRT-116HPRT35160-p200",
+ "report_id": "CPRT-116HPRT35160",
+ "pdf_page": 200,
+ "units_header": "(Dollars in thousands)",
+ "column_headers": [
+  ""
+ ],
+ "rows": [
+  {
+   "seq": 1,
+   "label": "Loan authorizations:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 2,
+   "label": "Single family housing (sec. 502):",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 3,
+   "label": "Direct",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "$1,000,000"
+   ]
+  },
+  {
+   "seq": 4,
+   "label": "Unsubsidized guaranteed",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "24,000,000"
+   ]
+  },
+  {
+   "seq": 5,
+   "label": "Housing repair (sec. 504)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "28,000"
+   ]
+  },
+  {
+   "seq": 6,
+   "label": "Rental housing (sec. 515)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "40,000"
+   ]
+  },
+  {
+   "seq": 7,
+   "label": "Multi-family guaranteed (sec. 538)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "230,000"
+   ]
+  },
+  {
+   "seq": 8,
+   "label": "Site development loans (sec. 524)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "5,000"
+   ]
+  },
+  {
+   "seq": 9,
+   "label": "Credit sales of acquired property",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "10,000"
+   ]
+  },
+  {
+   "seq": 10,
+   "label": "Self-help housing land development (sec. 523)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "5,000"
+   ]
+  },
+  {
+   "seq": 11,
+   "label": "Farm labor housing",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "27,500"
+   ]
+  },
+  {
+   "seq": 12,
+   "label": "Total, loan authorizations",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "$25,345,500"
+   ]
+  },
+  {
+   "seq": 13,
+   "label": "Loan subsidies, grants & administrative expenses:",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 14,
+   "label": "Single family housing (sec. 502):",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    ""
+   ]
+  },
+  {
+   "seq": 15,
+   "label": "Direct",
+   "indent_level": 1,
+   "is_total": false,
+   "cells": [
+    "$67,700"
+   ]
+  },
+  {
+   "seq": 16,
+   "label": "Housing repair (sec. 504)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "3,419"
+   ]
+  },
+  {
+   "seq": 17,
+   "label": "Rental housing (sec. 515)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "9,484"
+   ]
+  },
+  {
+   "seq": 18,
+   "label": "Farm labor housing (sec. 514)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "6,853"
+   ]
+  },
+  {
+   "seq": 19,
+   "label": "Site development loans (sec. 524)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "176"
+   ]
+  },
+  {
+   "seq": 20,
+   "label": "Self-help land development (sec. 523)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "431"
+   ]
+  },
+  {
+   "seq": 21,
+   "label": "Total, loan subsidies",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "88,063"
+   ]
+  },
+  {
+   "seq": 22,
+   "label": "Farm labor housing grants",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "10,000"
+   ]
+  },
+  {
+   "seq": 23,
+   "label": "Total, loan subsidies and grants",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "98,063"
+   ]
+  },
+  {
+   "seq": 24,
+   "label": "Administrative expenses (transfer to RD)",
+   "indent_level": 0,
+   "is_total": false,
+   "cells": [
+    "412,254"
+   ]
+  },
+  {
+   "seq": 25,
+   "label": "Total, loan subsidies, grants, and administrative expenses",
+   "indent_level": 2,
+   "is_total": true,
+   "cells": [
+    "$510,317"
+   ]
+  }
+ ],
+ "uncertain_cells": [],
+ "notes": "Single table on printed page 191 under RURAL HOUSING SERVICE / RURAL HOUSING INSURANCE FUND PROGRAM ACCOUNT; units line '(Dollars in thousands)'; one amount column with no printed column header (hence empty header string). Section heading rows ('Loan authorizations:', 'Loan subsidies, grants & administrative expenses:') and 'Single family housing (sec. 502):' subheadings have no amount; they are printed flush-left at the same indent as line items. Total rows are printed with a deeper indent (indent_level 2 is a visual choice). '$' signs appear on first and grand-total amounts as copied. The page ends with prose introducing a Rural Housing Assistance Grants table that is not on this page (it begins on the next page). Prose amounts ($510,317,000, $1,331,400,000, $51,500,000, $30,000,000, $45,000,000) not transcribed. Text layer and rendered image agree."
+}
