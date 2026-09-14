@@ -88,14 +88,23 @@ def test_series_is_chamber_and_stage_aware():
 
 
 def test_double_count_avoided_account_total_vs_program_row():
-    # Same report + key: an account total (1000) and one program sub-row (400),
-    # both non-subtotal. The representative is the larger — never their sum.
+    # Same report + key: the account's own line (1000) and a program sub-row (400), both non-subtotal.
+    # The account line is the total — never their sum.
     rows = [
         _row(report_id="R", account="Operations and Support", committee_recommendation=1000),
-        _row(report_id="R", account="Operations and Support", committee_recommendation=400),
+        _row(report_id="R", account="Operations and Support", line_item_text="Mission Support", committee_recommendation=400),
     ]
     (auth,) = trace_accounts(rows)
     assert [p.amount for p in auth.series] == [1000]
+
+
+def test_breakdown_line_is_not_promoted_when_the_account_line_is_missing():
+    # Two program rows and no account line: the larger is not the account's total, so no series point is invented.
+    rows = [
+        _row(report_id="R", line_item_text="Mission Support", committee_recommendation=1000),
+        _row(report_id="R", line_item_text="Field Operations", committee_recommendation=400),
+    ]
+    assert trace_accounts(rows) == []
 
 
 def test_rollup_rows_are_ignored():

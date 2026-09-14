@@ -1,171 +1,109 @@
 # The dataset
 
-Line-item appropriations data extracted from congressional committee reports, FY2016–FY2027: **115,413 line items** across **246 reports**, both chambers, committee and enacted stages.
+Line-item appropriations data extracted from congressional committee reports and enacted explanatory statements, FY2016–FY2027: **116,393 rows** from **246 reports**, both chambers, committee and enacted stages.
 
 Download it from the [latest release](https://github.com/tandemgov/appropriations-committee-reports/releases/latest). Everything here is CC0 — public domain, no attribution required (though it's appreciated).
 
 ## Read this before you use a number
 
-**Not every row is verified.** 27% of rows have no independent corroboration, and a few hundred have values sitting in the wrong columns. Both conditions are flagged in the data. If you are going to cite a dollar figure, filter first:
+This is extracted data, not an official record.
+Most rows are right, some are not, and the columns below tell you which rows have evidence behind them.
+Before citing a figure, filter:
 
 ```python
 import pandas as pd
 
 df = pd.read_parquet("comparative_statements.parquet")
 
-# The subset with a corroborated amount in a standard column layout: 84,555 rows (73.3%).
+# Rows whose columns mean what they say and whose amount some check stands behind: 85,045 rows (73.1%).
 strict = df[(df.column_layout == "standard") & (df.verification_tier != "none")]
 ```
 
-That is the honest default. The other 27% are not junk — they are mostly correct — but nothing in the document independently confirms them, so they should not be quoted without checking the source PDF.
+Then check anything important against the source report; every row names its `report_id`.
 
-### `verification_tier` — what the amount rests on
+What the checks do and do not establish:
 
-Each row names the gate that actually checked it. `verification_method` carries the same value for verified rows; the tier column exists so a single field answers "how do I know this number?", including for rows no primary gate reached.
+- A **verification tier** means a check passed: the figure appears in the source text (`string_match`, `verbatim_page`), the row's own arithmetic closes (`delta_arithmetic`), or a printed subtotal above it reconciles (`block`). The first three compare the row with itself, so they cannot see a correctly transcribed figure placed in the wrong column. A bounded review against the source documents measured what they miss; see [docs/ACCURACY_REVIEW.md](docs/ACCURACY_REVIEW.md).
+- **`column_layout` other than `standard`** marks a table shape or parse whose columns cannot be trusted. Those columns are **already empty** in this release, and the extracted values are in `nonstandard_layout_rows` if you need them (3,026 rows).
+- **`column_repair`** marks 1,508 rows whose values were moved into the right columns because the rows' own arithmetic proves the source layout. Repair is not verification.
 
-| Tier | Rows | What was checked | Can it see a misread convention? |
-|---|---:|---|---|
-| `delta_arithmetic` | 33,391 (30.6%) | House vision rows: `recommendation − prior = delta_vs_enacted`, and likewise for the estimate. | **No** — invariant to a sign flip across the row's columns. |
-| `string_match` | 27,472 (25.2%) | Senate rows: the amount's *raw text* appears in the source HTML. | **No** — proves transcription, says nothing about parsing. |
-| `verbatim_page` | 14,270 (13.1%) | Enacted statements and House typeset prints: the amount appears verbatim on its source PDF page. | **No** — same reason. |
-| `block` | 5,616 (5.1%) | Member of a subtotal block whose amounts sum exactly. | **Yes** — a witness outside the row. |
-| `inline` | 491 (0.5%) | Amount + account restated in the report's string-verified prose. | Partly. |
-| `none` | 27,981 (25.6%) | **No witness at all.** Treat as unconfirmed. | — |
+## Measured accuracy
 
-The `none` rows are overwhelmingly House. The House comparative statements are *scanned images* in the source PDFs and are read by a vision model; the Senate reports are born-digital HTML and are parsed deterministically. That asymmetry is the single biggest driver of data quality here.
+A bounded review transcribed 24 complete source pages or table windows blind, across every extraction track, 11 subcommittees, and FY2016–FY2027, and compared them with the release cell by cell.
 
-#### Why the first three tiers cannot protect you alone
-
-`delta_arithmetic`, `string_match`, and `verbatim_page` all compare a row to *itself*, or to the string it was read from. None can detect a **misinterpretation** of the source as opposed to a **mistranscription** of it:
-
-- A string match compares the *raw text* to the document. If `(24,000)` is transcribed perfectly and then interpreted as −24,000, the raw text still matches.
-- The delta identity is invariant to a sign flip applied across a row's columns: negate `recommendation`, `prior`, and `estimate` together and `rec − prior` still equals the printed delta.
-
-This is not hypothetical — it shipped, on 9,629 amounts, every one of them `verified`. See [Correction — Senate parentheses](#correction--senate-parentheses).
-
-Until this release, all 75,133 of those rows were labelled `delta`, on every track. The label asserted an arithmetic check that had never run on 52% of them. It has been split into the three names above, because a column that describes three different claims with one word is not a corroboration column, it is a reassurance.
-
-The check that *can* see a misread convention compares the line items to a witness outside the row — the total the committee printed. That is `approps reconcile`, and you should weigh a row's reconciliation standing at least as heavily as its tier.
-
-### Does it add up?
-
-Run `approps reconcile` to check every printed subtotal against the line items above it.
-
-| Track | Checkable totals | Tie exactly | Strict¹ |
+| Track | Source rows found | Figures transcribed correctly | In the right column |
 |---|---:|---:|---:|
-| house | 9,871 | 73.0% | 74.8% |
-| senate | 5,198 | 77.7% | 80.7% |
-| enacted | 1,138 | 59.1% | 60.3% |
-| **all** | **16,207** | **73.5%** | **75.7%** |
+| Senate committee (HTML text) | 96.5% | 100.0% | 98.4% |
+| House committee (scanned pages) | 97.8% | 99.4% | 99.7% |
+| House committee (typeset text) | 100.0% | 99.3% | 100.0% |
+| Enacted (explanatory statements) | 97.7% | 100.0% | 100.0% |
 
-¹ Excludes `overlapping_view` totals — advance-appropriation and forward-funding lines that re-aggregate rows already counted under another view, and so are not the sum of any contiguous block by construction.
+These are small samples (91 to 144 source rows per track), and pages were chosen at random, not for difficulty. Read them as "errors of this kind exist at roughly this rate", not as guarantees. Details, every disagreement, and the multi-year check are in [docs/ACCURACY_REVIEW.md](docs/ACCURACY_REVIEW.md).
 
-The Senate checkable count rose (from 4,833) when the reader was taught to recover rows whose dot leader was squeezed out by a long label — 682 line items across 72 of 87 reports, 363 of them `Total` rows the reconciler had been blind to. The strict rate dipped slightly (from 81.4%) because those newly-visible totals are disproportionately cross-block rollups, the hardest kind to reconcile: the corpus now *measures* structure it previously dropped.
+## Account totals and change over time
 
-Roughly a quarter of printed totals do not currently reconcile. Most of that is House vision noise and the enacted explanatory statements' flattened hierarchy. **A total that does not reconcile is not proof its line items are wrong** — the reconciler recovers nesting from document order, and unusual table shapes defeat it. But a total that *does* reconcile is a strong, independent corroboration of every line item beneath it.
+**Do not sum rows.** A statement prints an account's own line and its program breakdown as separate rows.
 
-### Correction — Senate parentheses
+Use `account_year_totals`: one row per report and account, taken from the line the source presents as the account (`method` = `single_line` or `account_line`), or no total at all (`unresolved`, 3,307 of 9,974). Compare within one `chamber` and one `stage`:
 
-Releases before this one stored **9,629 Senate amounts with the wrong sign**, across 3,970 rows.
+```python
+t = pd.read_parquet("account_year_totals.parquet")
+series = t[(t.account_key == "080-0126") & (t.chamber == "senate") & (t.stage == "committee") & (t.method != "unresolved")]
+```
 
-In a comparative statement, parentheses mark a **non-add memo** — a limitation, a transfer authority, an "of which" breakout. They are not the accounting convention for a negative; real negatives print an explicit minus (`-2,000`). The Senate parser applied the accounting reading, so `(By transfer from Disaster Relief)` shipped as −$24,000,000 and a bureau's gross `Appropriations` line shipped as −$8,776,051,000.
+A House recommendation, a Senate recommendation, and an enacted level for the same year are three different figures.
 
-Every one of those rows was marked `verified = true`, at what was then labelled tier `delta` — a label that, on the Senate track, meant only that the raw text `(24,000)` had been found in the HTML. Both gates were structurally blind to the defect, for the reasons above. It surfaced only when the line items were checked against the printed subtotals: Senate reconciliation was 65.1%, and rose to 78.8% once the signs were corrected.
+`account_key` is a federal account symbol, assigned only by a conservative match that passed an additional gate; 5,716 keys that were demonstrably wrong were withheld (`account_key_withheld`). A key is still not proof of identity: see [KNOWN_ISSUES #16](docs/KNOWN_ISSUES.md).
 
-If you have a copy of an earlier release, re-download it, or filter `chamber == "senate" & committee_recommendation < 0` and re-check those rows against the source.
+## Amounts are in whole dollars
 
-### Breaking schema changes in this release
+Every amount is in **whole dollars**; a statement printed `[In thousands of dollars]` showing `6,030` is stored as `6030000`. Do not multiply. `in_thousands` records only how the source printed it.
 
-Two columns were renamed, both because the old name asserted something that was not true of every row it covered. Values did not move.
+Amounts may be negative (rescissions, offsets). Parentheses in the source mark a memo line (a limitation, a transfer, an "of which"), stored as a positive amount with `is_memo = true`. About a fifth of memo rows are added in by the printed total above them, so do not drop memos wholesale before summing.
 
-| Was | Now | Why |
-|---|---|---|
-| `verification_tier == "delta"` | `delta_arithmetic` / `string_match` / `verbatim_page` | One label for three different checks. 52% of `delta` rows were never delta-checked. Also added: `verification_method`, carrying the same value. |
-| `non_add_inferred` | `is_memo` | It named a conclusion about arithmetic ("does not add") that is false for 20% of the rows it flags. `is_memo` names what the row *is*; `approps reconcile`'s `memo_mode` names what the total *did* with it. |
+`real_factor_2024` converts nominal dollars to FY2024 dollars (CPI-U). **It is empty for FY2026 and FY2027**, which have no annual deflator yet; treat empty as unavailable, not as 1.
 
-### `column_layout` — whether the columns mean what they're named
+## Coverage
 
-| Layout | Rows | Meaning |
-|---|---:|---|
-| `standard` | 108,576 | Normal shape: prior-year enacted / request / recommendation / two deltas. |
-| `category_split` | 291 | **`committee_recommendation` is correct; the other amount columns are mislabeled funding categories.** |
-| `procurement_qty` | 185 | Defense procurement tables. The program name was lost and amounts are shifted. |
+- **Stages:** committee (each chamber's report) and enacted (the joint explanatory statement). There is no subcommittee stage: subcommittee marks are not published as line-item statements.
+- **House committee:** FY2016–FY2027, all 12 subcommittees except FY2024 CJS and Labor-HHS (not reported).
+- **Senate committee:** FY2016–FY2026 with gaps. No Senate reports for FY2021, FY2023, or FY2027; only 3 for FY2022.
+- **Enacted:** FY2016–FY2024. FY2025 was a full-year continuing resolution with no explanatory statement. Energy-Water and Homeland Security statements are mostly prose and thinly represented.
 
-See [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) for exactly what goes wrong in each and why the fix is deferred.
+The full stage × chamber × subcommittee × year matrix is in [docs/COVERAGE.md](docs/COVERAGE.md).
 
 ## Files
 
 | File | Rows | Description |
 |---|---:|---|
-| `comparative_statements.{csv,parquet}` | 115,413 | The main table. One row per line item. |
-| `inline_funding_tables.{csv,parquet}` | 13,853 | Narrative funding tables from report prose. String-verified against source text. |
-| `account_authority.{csv,parquet}` | 732 | Federal account reference used by the crosswalk. |
-| `SHA256SUMS` | — | Checksums for all of the above. |
+| `comparative_statements` | 116,393 | The main table: one row per statement line, in document order. |
+| `account_year_totals` | 9,974 | One total per report and account; the table for longitudinal work. |
+| `account_title_changes` | 701 | Years in which an account's dominant label changed. |
+| `nonstandard_layout_rows` | 3,026 | The values emptied from isolated rows, with their source text. |
+| `inline_funding_tables` | 13,853 | Funding summaries from report prose, string-matched against the source. |
+| `manifest.json` | — | Code revision, source snapshot hash, counts, every release check, and file hashes. |
+| `SHA256SUMS` | — | Checksums. |
 
-### Prefer the Parquet
+Every table ships as `.csv`, `.parquet`, and `.json` (records), written from one frame and verified to agree. Prefer Parquet: CSV cannot carry integer types, so `pd.read_csv` returns `2016.0` for years and amounts unless you pass dtypes.
 
-CSV cannot carry a type. `fiscal_year` is written as `2016`, but `pd.read_csv` sees 495 empty cells in that column and infers `float64` — so you get `2016.0` back, and likewise for every nullable amount. The Parquet copies pin the declared `Int64` and are roughly 10× smaller (3.0 MB vs 31.2 MB).
+Every column is defined in [docs/DATA_DICTIONARY.md](docs/DATA_DICTIONARY.md).
 
-If you must use CSV, pass the dtype explicitly:
+## Changes in this release that affect existing analyses
 
-```python
-df = pd.read_csv(
-    "comparative_statements.csv",
-    dtype={"fiscal_year": "Int64", "committee_recommendation": "Int64"},
-    low_memory=False,
-)
-```
+- **Values moved.** Rows in FY2026–27 House three-column statements, FY2016 Senate statements with a House allowance column, FY2026 Senate statements, and Senate rows with blank leading columns had values in the wrong columns or overwritten; they are corrected. See KNOWN_ISSUES #11–#13 and #20.
+- **Values removed.** 3,026 rows had their untrusted columns emptied (#1, #2, #15).
+- **Account keys removed.** 5,716 keys were withheld (#16).
+- **Rows added.** 980 enacted rows whose labels contain dashes or apostrophes (#14).
+- **API:** `/api/line_items/compare` now requires `account_key`, returns one series per chamber and stage, and returns 422 for real-dollar requests covering FY2026–27 (#18).
 
-## Parentheses, and when a memo is actually added
-
-`(35,000)` in a comparative statement is **positive**. It is a memo — a limitation, a transfer authority, an "of which" breakout. Negatives print a minus sign.
-
-`is_memo` flags 11,562 such rows — parenthesized amounts, plus 3,166 House rows the vision non-add double-gate identified without any parentheses. It says what the row **is**, not whether it sums, because **whether a memo is summed is decided by the printed total, not by the parentheses.** In `CRPT-114srpt68`:
-
-```
-Operating expenses ...............................  134,488
-    (By transfer from Disaster Relief) ...........  (24,000)
-  Total, Office of Inspector General .............  158,488     <- 134,488 + 24,000
-```
-
-The transfer is added here. One line further down, `Total, title I` excludes that same 24,000 — the money was appropriated under Disaster Relief, and counting it twice would inflate the bill.
-
-Across the corpus, **1,099 printed totals close only when their memo is added in**, covering 2,350 flagged rows (20.3%). So blanket-filtering `is_memo` before summing will understate those account totals. `approps reconcile` resolves the question per total, by arithmetic, and records the answer as `memo_mode`.
-
-## Amounts are in whole dollars
-
-Every amount is stored in **whole dollars**. The source convention is already applied: a comparative statement printed `[In thousands of dollars]` showing `6,030` is stored as `6030000`. Do not multiply.
-
-`in_thousands` is a provenance flag recording how the *source table* was presented. It does not describe the stored value. Ignore it unless you are auditing extraction.
-
-Amounts may be negative (rescissions, offsets).
-
-`real_factor_2024` is a CPI-U deflator: multiply a nominal amount by it to get constant FY2024 dollars.
-
-## Coverage
-
-- **Fiscal years:** 2016–2027
-- **Chambers:** House 80,179 rows · Senate 29,042 rows
-- **Stages:** `committee` 97,392 · `enacted` 11,829
-- **Accounts:** `account_key` resolves to a canonical federal account symbol on 27,503 rows (25.2%). It is populated only on conservative matches — fuzzy hits are recorded in `account_match` but deliberately withheld from the key.
-
-Reports per year vary because omnibus years produce fewer standalone committee reports. **FY2021, FY2023, and FY2027 carry no Senate reports at all**, and FY2022 has only 3 — so any House-vs-Senate comparison must be scoped to years where both chambers reported. FY2027 is simply incomplete: the Senate had not marked up when this was built. [`docs/COVERAGE.md`](docs/COVERAGE.md) has the full matrix.
-
-## Column reference
-
-Every column is defined in [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md). Method and verification design are in [`METHODOLOGY.md`](METHODOLOGY.md).
+Corrections to earlier releases (Senate parentheses, enacted units, dropped House pages) are in [docs/KNOWN_ISSUES.md](docs/KNOWN_ISSUES.md) and [CHANGELOG.md](CHANGELOG.md).
 
 ## Provenance
 
-Extracted from committee reports published on [GovInfo](https://www.govinfo.gov/). Those reports are works of the United States Government and carry no copyright (17 U.S.C. § 105). This derived dataset is released under [CC0 1.0](LICENSE).
+Extracted from reports published on [GovInfo](https://www.govinfo.gov/). Those reports are works of the United States Government and carry no copyright (17 U.S.C. § 105). This derived dataset is released under [CC0 1.0](LICENSE).
 
-Regenerate it yourself:
-
-```bash
-approps discover && approps download && approps extract && approps output
-uv run --with pyarrow python scripts/build_release.py
-```
+`manifest.json` records the code revision and a hash of the extracted source files the release was built from. To rebuild the release from extracted data, see [docs/DELIVERABLES.md](docs/DELIVERABLES.md#regenerating).
 
 ## Corrections
 
-Found a wrong number? Please [open an issue](https://github.com/tandemgov/appropriations-committee-reports/issues) with the `report_id` and `line_item_text`. Source-document errors and extraction errors are both in scope, and worth distinguishing.
+Found a wrong number? Please [open an issue](https://github.com/tandemgov/appropriations-committee-reports/issues) with the `row_id` (or `report_id` and `line_item_text`). Source-document errors and extraction errors are both in scope, and worth distinguishing.

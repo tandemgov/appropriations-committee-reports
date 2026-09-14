@@ -426,6 +426,11 @@ def extract_senate_comparative(
     # FY2026 statements print three columns, where a positional read files the delta as the recommendation.
     # None keeps the positional reading.
     slots = _column_slots(lines, section_start)
+    ranges = _value_column_ranges(lines, section_start)
+    header_bounds = [i for i in range(section_start, min(section_start + 20, len(lines))) if _SEPARATOR_RE.match(lines[i])]
+    header_text = " ".join(lines[header_bounds[0]:header_bounds[1]]).lower() if len(header_bounds) >= 2 else ""
+    # FY2016 statements add a House allowance and its delta; their busiest five columns can still look like a five-column table.
+    five_columns = ranges is not None and len(ranges) == 5 and "allowance" not in header_text
 
     # Check for "In thousands of dollars"
     in_thousands = False
@@ -491,13 +496,25 @@ def extract_senate_comparative(
         # leader was squeezed out (see _columnar_split) and is tried only when the first fails.
         item_text: str | None = None
         num_tokens: list[str] | None = None
+        # The placeholder test below trusts the five column edges, so it runs only on a five-column table no header reading has re-slotted.
+        # A seven-column FY2016 statement also yields five edges, picked from the busiest of its seven columns.
+        columns_usable = edges is not None and not slots and five_columns
 
         if has_numbers and "..." in line:
             # A data line with a dot leader separating text from numbers. Split at the FIRST
             # dot leader -- everything before is the item name, everything after is the columns.
             # Dots WITHIN the number columns represent "no change" / zero.
             dot_match = re.search(r"\.{3,}", line)
-            if dot_match:
+            # A label long enough to reach the columns prints no leader, so the first dot run is a blank column's placeholder.
+            # Splitting there swallows that column and slides every value one slot left; a placeholder ends on a column edge, a leader does not.
+            if dot_match and columns_usable and any(abs(dot_match.end() - e) <= _EDGE_TOLERANCE for e in edges):
+                split = _columnar_split(line, edges)
+                if split is not None:
+                    item_text, num_tokens = split
+                    dot_match = None
+            if item_text is not None:
+                pass
+            elif dot_match:
                 item_text = line[: dot_match.start()].rstrip()
                 num_tokens = _NUM_TOKEN.findall(line[dot_match.end():])
             else:
@@ -517,8 +534,9 @@ def extract_senate_comparative(
                     i += 1
 
         if item_text is not None and num_tokens is not None:
-            # Pad to 5 columns
-            while len(num_tokens) < 5:
+            # One token per printed value column: five by default, more when the header names extra columns.
+            width = max(5, len(slots)) if slots else 5
+            while len(num_tokens) < width:
                 num_tokens.append("")
 
             # Parse each column. Parentheses in a comparative statement mark a non-add memo --
@@ -534,7 +552,7 @@ def extract_senate_comparative(
             # verification.reconcile and tests/test_comparative_senate.py.
             amounts = [
                 parse_dollar(t, in_thousands=in_thousands, paren_negative=False)
-                for t in num_tokens[:5]
+                for t in num_tokens[:width]
             ]
 
             # Determine hierarchy
@@ -542,10 +560,14 @@ def extract_senate_comparative(
 
             # Without a header reading this is the identity mapping, as every five-column report gets.
             placed: list[str | None] = [None] * 5
-            for idx, amount in enumerate(amounts[:5]):
+            used: set[int] = set()
+            for idx, amount in enumerate(amounts):
                 slot = slots[idx] if slots and idx < len(slots) else idx
-                if slot is not None:
+                # A header reading can name fewer columns than the row prints: FY2026 delta columns are mostly dot runs, so they are not counted.
+                # The surplus token then fell back to its position and overwrote the recommendation with the delta.
+                if slot is not None and slot not in used and slot < 5:
                     placed[slot] = amount
+                    used.add(slot)
 
             # Update hierarchy context
             if level == HierarchyLevel.TITLE:

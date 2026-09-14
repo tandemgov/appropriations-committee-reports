@@ -190,29 +190,23 @@ class AccountAuthority:
 
 
 def _representatives(rows: list[dict], metric: str) -> list[dict]:
-    """One representative row per (report, account_key): the largest-magnitude leaf.
+    """One row per (report, account_key), carrying the account's total for `metric`.
 
-    Comparative statements list an account's own total *and* its program
-    breakdown, both as non-subtotal rows; summing both double-counts. Keeping the
-    single largest-|metric| row per (report_id, account_key) selects the account
-    total (>= any child part) — the same rule the flow layer uses
-    (`api.data.dedupe_to_account_grain`). Rollup rows and rows lacking the metric,
-    a fiscal year, or a key are skipped.
+    Comparative statements list an account's own line *and* its program breakdown, both as ordinary rows; summing both double-counts.
+    The total is chosen by `normalization.account_totals` — the account's own line, or nothing — the same rule the flow layer and `/compare` use.
+    Accounts it cannot resolve, and rows lacking the metric or a fiscal year, are skipped.
     """
-    best: dict[tuple, dict] = {}
-    for r in rows:
-        key = r.get("account_key")
-        if not key or _is_rollup_row(r):
+    from approps.normalization.account_totals import account_totals
+
+    reps = []
+    for t in account_totals([r for r in rows if not _is_rollup_row(r)]):
+        value = getattr(t, metric)
+        if t.method == "unresolved" or value is None or t.fiscal_year is None:
             continue
-        val = _num(r.get(metric))
-        fy = _fiscal_year(r)
-        if val is None or fy is None:
-            continue
-        k = (r.get("report_id"), key)
-        cur = best.get(k)
-        if cur is None or abs(val) > abs(_num(cur.get(metric)) or 0.0):
-            best[k] = r
-    return list(best.values())
+        rep = dict(t.chosen[0])
+        rep[metric] = value
+        reps.append(rep)
+    return reps
 
 
 def _dominant_label_by_year(group: list[dict], metric: str) -> dict[int, str]:

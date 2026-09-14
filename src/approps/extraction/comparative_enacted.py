@@ -42,7 +42,7 @@ from approps.output.schemas import (
 
 # Single-column dot-leader row: label, dot leaders, optional $, comma-grouped amount.
 _DOT_LINE = re.compile(
-    r"^(?P<label>[A-Za-z0-9][\w\s,&()'./\-]+?)\s*\.{2,}\s*(?P<amt>\$?\d{1,3}(?:,\d{3})+)\s*$"
+    r"^(?P<label>[A-Za-z0-9][\w\s,&()'’./\-–—:;%+#\[\]]+?)\s*\.{2,}\s*(?P<amt>\$?\d{1,3}(?:,\d{3})+)\s*$"
 )
 # Subtotal/total line without dot leaders: "Subtotal, Animal Health 395,570".
 _TOTAL_LINE = re.compile(

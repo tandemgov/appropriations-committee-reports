@@ -26,6 +26,7 @@ from approps.normalization.account_inference import (
     _MEMO_ONLY_RE,
     _rollup_name,
 )
+from approps.normalization.account_totals import AccountTotal, account_totals
 
 COMPARATIVE_CSV = OUTPUT_DIR / "comparative_statements.csv"
 
@@ -169,6 +170,7 @@ def _load_from_csv() -> list[dict]:
     with COMPARATIVE_CSV.open(newline="") as fh:
         for r in csv.DictReader(fh):
             row = {
+                "row_id": _norm(r.get("row_id")),
                 "report_id": _norm(r.get("report_id")),
                 "congress": _to_int(r.get("congress")),
                 "chamber": _norm(r.get("chamber")),
@@ -194,10 +196,13 @@ def _load_from_csv() -> list[dict]:
                 "verification_tier": _norm(r.get("verification_tier")) or "none",
                 "verification_method": _norm(r.get("verification_method")) or "none",
                 "column_layout": _norm(r.get("column_layout")) or "standard",
+                "column_repair": _norm(r.get("column_repair")),
                 "extraction_method": _norm(r.get("extraction_method")),
                 # Account crosswalk enrichment
                 "account_key": _norm(r.get("account_key")),
                 "account_key_title": _norm(r.get("account_key_title")),
+                "account_match": _norm(r.get("account_match")),
+                "account_key_withheld": _norm(r.get("account_key_withheld")),
                 "account_key_agency": _norm(r.get("account_key_agency")),
                 "account_key_bureau": _norm(r.get("account_key_bureau")),
                 "designation": _norm(r.get("designation")),
@@ -389,48 +394,40 @@ def account_tier(r: dict) -> str:
     return "unlabeled"
 
 
+@lru_cache
+def load_account_totals() -> list[AccountTotal]:
+    """Every (report, account) total in the dataset, resolved once. See normalization.account_totals."""
+    return account_totals(load_line_items())
+
+
 def dedupe_to_account_grain(rows: list[dict], metric: str) -> tuple[list[dict], dict]:
-    """Collapse each labeled account within a report to one representative row.
+    """Collapse each crosswalk-keyed account within a report to one row carrying its total.
 
-    Two problems make raw summation wrong:
+    An account's own line and its program breakdown are both ordinary rows, so summing rows double-counts.
+    The total comes from `normalization.account_totals`, which takes the line the source presents as the account and declines to guess when it cannot tell; those accounts are counted as `unresolved_accounts` and left out of the flow.
+    This used to keep the largest-magnitude row per account, which silently promoted a breakdown line to a total whenever the account line was missing.
 
-    1. Comparative statements list an account's total *and* its program breakdown,
-       both as non-subtotal rows — summing both double-counts. We keep, per
-       (report_id, account identity), the single largest-magnitude row, which is
-       the account's own total (>= any child part). Rows whose *text* is a rollup
-       the extractor didn't flag (`is_rollup_row`) are dropped for the same reason.
-    2. Rows with no account label at any tier can't be placed in the flow, so they
-       are excluded and counted for the coverage indicator.
-
-    Only the trusted (named) tier enters the flow money. Excluded rows are split
-    for the coverage indicator into `recovered` (structurally attributable to a
-    section by the House recovery pass, but with amounts that don't reconcile — so
-    not summed) and `unlabeled` (no account at any tier).
-
-    Returns (deduped named-tier rows, coverage dict).
+    Rows without a trusted `account_key` cannot be placed and are counted as `unkeyed_rows`.
+    Returns (one row per resolved account, coverage dict).
     """
-    best: dict[tuple, dict] = {}
-    recovered_rows = unlabeled_rows = 0
-    for r in rows:
-        val = r.get(metric)
-        if val is None or r.get("is_rollup_row"):
+    totals = account_totals(rows)
+    deduped = []
+    unresolved = 0
+    for t in totals:
+        value = getattr(t, metric) if metric in ("prior_year_enacted", "budget_estimate", "committee_recommendation") else None
+        if t.method == "unresolved":
+            unresolved += 1
             continue
-        ident = _account_identity(r)
-        if ident is None:
-            if r.get("account_recovered"):
-                recovered_rows += 1
-            else:
-                unlabeled_rows += 1
+        if value is None:
             continue
-        key = (r["report_id"], ident)
-        cur = best.get(key)
-        if cur is None or abs(val) > abs(cur.get(metric) or 0):
-            best[key] = r
-    deduped = list(best.values())
+        rep = dict(t.chosen[0])
+        rep[metric] = value
+        deduped.append(rep)
+    unkeyed = sum(1 for r in rows if not r.get("account_key") and r.get(metric) is not None and not r.get("is_rollup_row"))
     coverage = {
         "accounts": len(deduped),
-        "recovered_attributable_rows": recovered_rows,
-        "unlabeled_rows": unlabeled_rows,
+        "unresolved_accounts": unresolved,
+        "unkeyed_rows": unkeyed,
     }
     return deduped, coverage
 

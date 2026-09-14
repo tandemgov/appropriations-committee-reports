@@ -179,6 +179,8 @@ class ComparativeStatementLine(BaseModel):
     is_subtotal: bool = False
     in_thousands: bool = True  # Comparative statements are typically in thousands
     line_number: int = 0
+    # Set when normalization.column_shift moved this row's values into the slots the source prints them in.
+    column_repair: str | None = None
     verified: bool = False
     verification_method: VerificationMethod = Field(
         default=VerificationMethod.NONE,
@@ -243,6 +245,9 @@ class AuditReport(BaseModel):
 class ComparativeStatementRow(BaseModel):
     """Flattened row for comparative_statements.csv output."""
 
+    # `<report_id>:<ordinal>` — the row's position in its report's extracted statement, in document order.
+    # Stable for a given extraction; the key that ties a row across the CSV, Parquet, JSON, and sidecar files.
+    row_id: str = ""
     report_id: str
     congress: int
     chamber: str
@@ -287,6 +292,8 @@ class ComparativeStatementRow(BaseModel):
     # correct, but `prior_year_enacted` / `budget_estimate` / the deltas are mislabeled
     # category columns and must not be read as prior-year/request. See docs/KNOWN_ISSUES.md.
     column_layout: str = "standard"
+    # `three_column_shift` or `house_allowance_columns` when normalization.column_shift remapped the row's values; see that module.
+    column_repair: str | None = None
     # Account crosswalk + normalization (added by the output enrichment step)
     account_key: str | None = None
     account_key_title: str | None = None
@@ -296,6 +303,8 @@ class ComparativeStatementRow(BaseModel):
     # account keyed. Populated only when account_match starts with `tango`.
     account_key_agency: str | None = None
     account_key_bureau: str | None = None
+    # A key the matchers proposed and normalization.account_gate withheld as demonstrably wrong; `account_match` says why.
+    account_key_withheld: str | None = None
     designation: str | None = None
     real_factor_2024: float | None = None
 

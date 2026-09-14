@@ -9,11 +9,34 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- `account_year_totals`: one total per report and account, taken only from the line the source presents as the account; 3,307 of 9,974 are left unresolved rather than guessed.
+- `nonstandard_layout_rows`: the values emptied from rows whose columns cannot be trusted, keyed by the new `row_id`.
+- Release `manifest.json` recording the code revision, a hash of the extracted snapshot, counts, every release check, and file hashes. The build fails if a check fails.
+- JSON copies of every release table, verified row for row against the CSV and Parquet.
+- `docs/ACCURACY_REVIEW.md`: a blind cell-by-cell comparison of 24 source pages with the release, and a multi-year check of three accounts.
+- Columns `row_id`, `column_repair`, and `account_key_withheld`.
+
 ### Changed
+
+- Rows from nonstandard layouts (`category_split`, `procurement_qty`, `text_in_amount`, `amount_in_label`, `signed_level`, `adjustment_detail`) have their untrusted columns emptied and no verification tier. 3,026 rows.
+- 5,716 account keys that failed a jurisdiction, generic-label, heading, or tie-break check are withheld; 22,852 rows keep one.
+- Docs rewritten against the release; claims of complete verification removed.
 
 ### Breaking
 
+- `/api/line_items/compare` requires `account_key` (the `account` substring filter is gone), returns one series per chamber and stage, and returns 422 for real-dollar years without a deflator.
+- `inflation.real_dollars` raises for a year outside the deflator series instead of returning None.
+- The release's `account_authority` table is renamed `account_title_changes` and built from account totals.
+
 ### Fixed
+
+- FY2026–27 House three-column pages had the bill in `budget_estimate` and the delta in `committee_recommendation`. 647 rows repaired where the rows' own arithmetic proves the layout (KNOWN_ISSUES #11).
+- Senate rows whose leading columns print blank placeholders slid one column left or lost their amounts. 370 rows regained values (#12).
+- Five FY2016 Senate statements carried the House allowance in `committee_recommendation`. 861 rows repaired (#13).
+- Enacted rows whose labels contain dashes or typographic apostrophes were dropped. 980 rows recovered (#14).
+- FY2026 Senate statements had recommendations overwritten by the delta or a blank placeholder when the header reading counted fewer columns than the rows print. 1,859 rows corrected in six reports (#20).
+- 857 rows lacked a fiscal year and 13,171 a subcommittee; both are filled from the report catalog or the enacted division (#17).
+- `/compare` double-counted account lines with their breakdowns and mixed chambers and stages; flow and account history promoted the largest program line to an account total (#18).
 
 - House vision pages whose header sets "Committee vs." on its own line had their delta columns written over the enacted and request amounts. The rows turned unverifiable rather than failing, so no gate escalated them, and only 29% of CRPT-119hrpt696's rows (Labor-HHS FY2027) matched the page. A repeated Enacted/Request header now maps to its delta slot, two new signals escalate a delta read into a level column and a page dropped at a statement's edge, and the report was re-read with Gemini: all 933 value rows now match a hand transcription, and its strict reconciliation rose from 69.9% to 87.2% (KNOWN_ISSUES #10).
 - Twelve Labor-HHS rows lost a false account match: "Inspector General Federal Funds" had been keyed to a Treasury advances account, and "User Fees" to National Park Service filming fees. The Tango crosswalk learns each subcommittee's agency scope from the corpus, and the corrected FY2027 rows widened Labor-HHS's scope enough to leave those matches ambiguous.
