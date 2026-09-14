@@ -1,23 +1,23 @@
 # The dataset
 
-Line-item appropriations data extracted from congressional committee reports, FY2016–FY2027: **114,532 line items** across **246 reports**, both chambers, committee and enacted stages.
+Line-item appropriations data extracted from congressional committee reports, FY2016–FY2027: **115,413 line items** across **246 reports**, both chambers, committee and enacted stages.
 
 Download it from the [latest release](https://github.com/tandemgov/appropriations-committee-reports/releases/latest). Everything here is CC0 — public domain, no attribution required (though it's appreciated).
 
 ## Read this before you use a number
 
-**Not every row is verified.** 26% of rows have no independent corroboration, and a few hundred have values sitting in the wrong columns. Both conditions are flagged in the data. If you are going to cite a dollar figure, filter first:
+**Not every row is verified.** 27% of rows have no independent corroboration, and a few hundred have values sitting in the wrong columns. Both conditions are flagged in the data. If you are going to cite a dollar figure, filter first:
 
 ```python
 import pandas as pd
 
 df = pd.read_parquet("comparative_statements.parquet")
 
-# The subset with a corroborated amount in a standard column layout: 84,013 rows (73.4%).
+# The subset with a corroborated amount in a standard column layout: 84,555 rows (73.3%).
 strict = df[(df.column_layout == "standard") & (df.verification_tier != "none")]
 ```
 
-That is the honest default. The other 26% are not junk — they are mostly correct — but nothing in the document independently confirms them, so they should not be quoted without checking the source PDF.
+That is the honest default. The other 27% are not junk — they are mostly correct — but nothing in the document independently confirms them, so they should not be quoted without checking the source PDF.
 
 ### `verification_tier` — what the amount rests on
 
@@ -97,7 +97,7 @@ See [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) for exactly what goes wrong i
 
 | File | Rows | Description |
 |---|---:|---|
-| `comparative_statements.{csv,parquet}` | 114,532 | The main table. One row per line item. |
+| `comparative_statements.{csv,parquet}` | 115,413 | The main table. One row per line item. |
 | `inline_funding_tables.{csv,parquet}` | 13,853 | Narrative funding tables from report prose. String-verified against source text. |
 | `account_authority.{csv,parquet}` | 732 | Federal account reference used by the crosswalk. |
 | `SHA256SUMS` | — | Checksums for all of the above. |

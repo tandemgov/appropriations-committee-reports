@@ -29,7 +29,7 @@ from approps.extraction.comparative_house import (
     _page_to_base64_png,
 )
 from approps.extraction.nemotron_parse import extract_house_nemotron
-from approps.extraction.verify import page_of, verify
+from approps.extraction.verify import page_of, row_status, verify
 from approps.output.schemas import ComparativeStatementLine
 from approps.verification.recall_check import (
     audit_recall,
@@ -103,6 +103,14 @@ def _shifted_column_pages(lines: list[dict]) -> set[int]:
         for ln in lines
         if any(((ln.get(c) or {}).get("raw_text") or "").lstrip().startswith("+") for c in _LEVEL_COLS)
     }
+
+
+def _looks_like_statement(page_lines: list[dict]) -> bool:
+    """Whether a re-read page carries a row whose delta arithmetic closes.
+
+    The page beside a statement is often another table — a project list, a vote roster, an authorization table — that Gemini maps into the five columns anyway; only a comparative table can close a delta identity.
+    """
+    return any(row_status(ln) == "pass" for ln in page_lines)
 
 
 class PerDayQuotaError(Exception):
@@ -246,7 +254,8 @@ def extract_house_hybrid(
         logger.info(f"No inline CSV for {report_id}; recall cross-check skipped")
 
     # 3. Suspect pages -------------------------------------------------------------
-    gap_pages = _statement_gap_pages(lines, image_pages) | _statement_edge_pages(lines, image_pages)
+    edge_pages = _statement_edge_pages(lines, image_pages)
+    gap_pages = _statement_gap_pages(lines, image_pages) | edge_pages
     if gap_pages:
         logger.info(f"Statement gaps (produced no rows inside or at the edge of a run): {sorted(gap_pages)}")
     shifted_pages = _shifted_column_pages(lines)
@@ -274,6 +283,12 @@ def extract_house_hybrid(
         except Exception as e:  # noqa: BLE001
             logger.error(f"  gemini page {page_num} ERROR: {e} (keeping Nemotron rows)")
 
+    rejected = sorted(p for p in edge_pages if p in gemini_lines and not _looks_like_statement(gemini_lines[p]))
+    for page_num in rejected:
+        del gemini_lines[page_num]
+    if rejected:
+        logger.info(f"Edge pages holding no comparative rows, kept out: {rejected}")
+
     suspect_set = set(gemini_lines)
     merged = [ln for ln in lines if page_of(ln) not in suspect_set]
     for page_lines in gemini_lines.values():
@@ -288,6 +303,7 @@ def extract_house_hybrid(
         "pages_table_unreadable": sorted(unreadable),
         "statement_gap_pages": sorted(gap_pages),
         "shifted_column_pages": sorted(shifted_pages),
+        "edge_pages_rejected": rejected,
         "gemini_calls": gemini_calls,
         "gemini_calls_saved_vs_pure": len(image_pages) - gemini_calls,
         "nemotron_pass_rate": before["pass_rate"],

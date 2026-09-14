@@ -17,11 +17,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - House vision pages whose header sets "Committee vs." on its own line had their delta columns written over the enacted and request amounts. The rows turned unverifiable rather than failing, so no gate escalated them, and only 29% of CRPT-119hrpt696's rows (Labor-HHS FY2027) matched the page. A repeated Enacted/Request header now maps to its delta slot, two new signals escalate a delta read into a level column and a page dropped at a statement's edge, and the report was re-read with Gemini: all 933 value rows now match a hand transcription, and its strict reconciliation rose from 69.9% to 87.2% (KNOWN_ISSUES #10).
 - Twelve Labor-HHS rows lost a false account match: "Inspector General Federal Funds" had been keyed to a Treasury advances account, and "User Fees" to National Park Service filming fees. The Tango crosswalk learns each subcommittee's agency scope from the corpus, and the corrected FY2027 rows widened Labor-HHS's scope enough to leave those matches ambiguous.
+- House statements that lost their first or last page to the vision pass get it back. 107 candidate pages across 69 reports were re-read, and a page is now kept only when one of its rows closes a delta identity: 46 pages came back (885 line items), and 21 vote rosters, project lists and authorization tables that an ungated first pass had merged in were turned away (KNOWN_ISSUES #10).
 - Senate statements no longer lose the rows above their first subtotal. Data start was found by counting to the third rule, which falls inside the table whenever a statement rules off its opening subtotal (KNOWN_ISSUES #9).
 - Senate value columns are now placed by their header names rather than their order. FY2026 statements print three columns, and a positional read filed the recommendation as the budget estimate and a delta as the recommendation across 862 rows in six reports (KNOWN_ISSUES #8).
 - House vision pages whose table header failed OCR were dropped unflagged, costing Defense FY2025 its whole Title III Procurement block. Two new signals now escalate them, and re-extracting the 307 affected pages recovered 5,160 line items across 73 reports (KNOWN_ISSUES #7).
 
 ### Internal / Infra
+
+- `scripts/repair_dropped_pages.py` closes each PDF before opening the next. It held every parsed page open, and a corpus run was killed for memory.
 
 ## [1.3.0] - 2026-09-02
 

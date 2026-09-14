@@ -19,7 +19,12 @@ from pathlib import Path
 import pdfplumber
 
 from approps.extraction.comparative_house import _find_image_pages, _items_to_lines, _page_to_base64_png
-from approps.extraction.hybrid import _gemini_extract_retry, _statement_edge_pages, _statement_gap_pages
+from approps.extraction.hybrid import (
+    _gemini_extract_retry,
+    _looks_like_statement,
+    _statement_edge_pages,
+    _statement_gap_pages,
+)
 from approps.extraction.verify import page_of, verify
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -47,23 +52,24 @@ def _repair_one(path: Path, workers: int, dry_run: bool) -> dict | None:
     if not pdf_path.exists():
         return None
 
-    pdf = pdfplumber.open(str(pdf_path))
-    image_pages = _find_image_pages(pdf)
-    gaps = sorted(_statement_gap_pages(lines, image_pages) | _statement_edge_pages(lines, image_pages))
-    if not gaps:
-        return None
-    if dry_run:
-        return {"report_id": report_id, "gap_pages": gaps, "recovered": 0, "rows_before": len(lines)}
+    # Close each PDF before the next: pdfplumber caches every parsed page, and holding all of them killed a corpus run for memory.
+    with pdfplumber.open(str(pdf_path)) as pdf:
+        image_pages = _find_image_pages(pdf)
+        gaps = sorted(_statement_gap_pages(lines, image_pages) | _statement_edge_pages(lines, image_pages))
+        if not gaps:
+            return None
+        if dry_run:
+            return {"report_id": report_id, "gap_pages": gaps, "recovered": 0, "rows_before": len(lines)}
 
-    # Render here, not in the pool: pdfium shares mutable state per document and corrupts under threads.
-    rendered: list[tuple[int, str]] = []
-    failed: list[int] = []
-    for page_num in gaps:
-        try:
-            rendered.append((page_num, _page_to_base64_png(pdf.pages[page_num - 1], resolution=300)))
-        except Exception as exc:  # noqa: BLE001 - record and keep the rest
-            logger.error("  %s page %s render failed: %s", report_id, page_num, exc)
-            failed.append(page_num)
+        # Render here, not in the pool: pdfium shares mutable state per document and corrupts under threads.
+        rendered: list[tuple[int, str]] = []
+        failed: list[int] = []
+        for page_num in gaps:
+            try:
+                rendered.append((page_num, _page_to_base64_png(pdf.pages[page_num - 1], resolution=300)))
+            except Exception as exc:  # noqa: BLE001 - record and keep the rest
+                logger.error("  %s page %s render failed: %s", report_id, page_num, exc)
+                failed.append(page_num)
 
     def read(job: tuple[int, str]) -> tuple[int, list[dict], str | None]:
         # Catch inside the worker: pool.map re-raises at iteration, losing the whole report.
@@ -80,12 +86,17 @@ def _repair_one(path: Path, workers: int, dry_run: bool) -> dict | None:
             return page_num, [], str(exc)
 
     recovered: list[dict] = []
+    rejected: list[int] = []
     with ThreadPoolExecutor(max_workers=workers) as pool:
         for page_num, page_rows, error in pool.map(read, rendered):
             if error:
                 logger.error("  %s page %s failed: %s", report_id, page_num, error)
                 failed.append(page_num)
-            recovered.extend(page_rows)
+            elif page_rows and not _looks_like_statement(page_rows):
+                logger.info("  %s page %s holds no comparative rows, kept out", report_id, page_num)
+                rejected.append(page_num)
+            else:
+                recovered.extend(page_rows)
 
     if not recovered:
         return {"report_id": report_id, "gap_pages": gaps, "recovered": 0, "rows_before": len(lines)}
@@ -97,6 +108,7 @@ def _repair_one(path: Path, workers: int, dry_run: bool) -> dict | None:
     report["repaired_gap_pages"] = gaps
     report["repaired_rows_added"] = len(recovered)
     report["repaired_pages_failed"] = failed
+    report["repaired_pages_rejected"] = rejected
     report["total_lines"] = len(merged)
     after = verify(merged)
     report["hybrid_pass_rate"] = after["pass_rate"]
