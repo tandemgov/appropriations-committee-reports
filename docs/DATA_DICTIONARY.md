@@ -45,7 +45,7 @@ Rows are line items, subtotals, and headings as the source printed them: **do no
 | `is_subtotal` | bool | A `Total`/`Subtotal` row. |
 | `is_memo` | bool | A memo line (limitation, transfer, "of which") — by a parenthesized amount or by the House non-add check. Says what the row is, not whether its printed total adds it: about a fifth of memo rows are added in by their enclosing total. |
 | `designation` | enum | `base`, `OCO`, `emergency`, `disaster`, `rescission`, `CHIMP`, read from parentheticals and suffixes only. |
-| `real_factor_2024` | float | Multiply a nominal amount by this to get FY2024 dollars (CPI-U). **Empty for FY2026 and FY2027**, which have no annual CPI-U yet; do not treat empty as 1. |
+| `real_factor_2024` | float | Converts the row's **report-year** amounts — `budget_estimate` and `committee_recommendation` — to FY2024 dollars (CPI-U). **It does not apply to `prior_year_enacted`**, which is in the previous year's dollars: use the factor for `fiscal_year - 1` (`data/reference/deflators.csv`, or `real_factor_2024` on any row of that year). Do not deflate the delta columns; they mix two years. **Empty for FY2026 and FY2027**, which have no annual CPI-U yet; do not treat empty as 1. |
 
 ### Can this row's numbers be trusted?
 

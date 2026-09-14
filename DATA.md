@@ -61,7 +61,7 @@ Every amount is in **whole dollars**; a statement printed `[In thousands of doll
 
 Amounts may be negative (rescissions, offsets). Parentheses in the source mark a memo line (a limitation, a transfer, an "of which"), stored as a positive amount with `is_memo = true`. About a fifth of memo rows are added in by the printed total above them, so do not drop memos wholesale before summing.
 
-`real_factor_2024` converts nominal dollars to FY2024 dollars (CPI-U). **It is empty for FY2026 and FY2027**, which have no annual deflator yet; treat empty as unavailable, not as 1.
+`real_factor_2024` converts a row's report-year amounts (`budget_estimate`, `committee_recommendation`) to FY2024 dollars (CPI-U). `prior_year_enacted` is in the previous year's dollars, so deflate it with the previous year's factor, and do not deflate the deltas. **The factor is empty for FY2026 and FY2027**, which have no annual deflator yet; treat empty as unavailable, not as 1.
 
 ## Coverage
 

@@ -82,7 +82,7 @@ def compare_line_items(
 
     Each point is the account total for one report, selected by `normalization.account_totals` (the account's own line, never a sum of its breakdown).
     Chambers and stages are never combined. Reports whose total cannot be resolved are listed under `unresolved` rather than guessed.
-    With `real=true`, every point must have a deflator; if any fiscal year lacks one the request fails with 422 rather than mixing real and nominal dollars.
+    With `real=true`, each point is deflated from its price year — the report's fiscal year, or the year before for `prior_year_enacted` — and if any price year lacks a deflator the request fails with 422 rather than mixing real and nominal dollars.
     """
     if metric not in METRICS:
         raise HTTPException(400, f"metric must be one of {METRICS}")
@@ -93,19 +93,22 @@ def compare_line_items(
 
     if real:
         deflators = load_deflators()
-        years = {p["fiscal_year"] for s in result["series"] for p in s["points"] if p["value"] is not None}
+        # A report's prior-year column is last year's enacted level, in last year's dollars; the request and recommendation are in the report's year.
+        lag = 1 if metric == "prior_year_enacted" else 0
+        years = {p["fiscal_year"] - lag for s in result["series"] for p in s["points"] if p["value"] is not None}
         missing = sorted(y for y in years if y not in deflators)
         if missing:
             raise HTTPException(
                 422,
-                f"No CPI-U deflator for fiscal year(s) {missing}, so this series cannot be expressed in FY{_REAL_BASE_YEAR} dollars. "
+                f"No CPI-U deflator for price year(s) {missing}, so this series cannot be expressed in FY{_REAL_BASE_YEAR} dollars. "
                 "Request nominal values (real=false).",
             )
         for s in result["series"]:
             for p in s["points"]:
                 if p["value"] is not None:
+                    p["price_year"] = p["fiscal_year"] - lag
                     p["nominal_value"] = p["value"]
-                    p["value"] = round(p["value"] * deflators[_REAL_BASE_YEAR] / deflators[p["fiscal_year"]])
+                    p["value"] = round(p["value"] * deflators[_REAL_BASE_YEAR] / deflators[p["price_year"]])
 
     result["real"] = real
     result["base_year"] = _REAL_BASE_YEAR if real else None

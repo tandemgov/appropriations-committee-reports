@@ -43,6 +43,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The account gate no longer admits a cross-jurisdiction key because two Senate reports repeat the same label-only match; every agency has a jurisdiction entry and the only exceptions are two reviewed accounts (#16).
 - Account history's `report_count` counts reports in conflicted years; it had dropped them (070-0113 reported 11 of 13).
 - The API reports the package version instead of 0.1.0.
+- `/api/line_items/compare?real=true` deflated `prior_year_enacted` with the report year's CPI-U instead of the prior year's, understating it by about one year of inflation; each point now reports its `price_year`.
 - `scripts/accuracy_review.py` applies the typeset adjustment-row exclusion itself, so it reproduces the published rates.
 
 - House vision pages whose header sets "Committee vs." on its own line had their delta columns written over the enacted and request amounts. The rows turned unverifiable rather than failing, so no gate escalated them, and only 29% of CRPT-119hrpt696's rows (Labor-HHS FY2027) matched the page. A repeated Enacted/Request header now maps to its delta slot, two new signals escalate a delta read into a level column and a page dropped at a statement's edge, and the report was re-read with Gemini: all 933 value rows now match a hand transcription, and its strict reconciliation rose from 69.9% to 87.2% (KNOWN_ISSUES #10).

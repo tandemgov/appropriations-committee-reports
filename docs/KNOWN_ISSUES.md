@@ -484,6 +484,7 @@ Flow and account history picked each account's largest-magnitude row as its tota
 All three now use `normalization.account_totals`: the account's own titled line, or no total.
 `/compare` requires `account_key`, returns one series per chamber and stage, lists unresolved reports, and fails with 422 when a requested real-dollar series has a year without a deflator.
 `inflation.real_dollars` raises for a year outside the series instead of returning nothing.
+A later review found that real-dollar requests for `prior_year_enacted` used the report year's deflator; that column is last year's enacted level, so it is now deflated from `fiscal_year - 1` (an FY2024 report's $100,000 prior-year figure is $102,949 in FY2024 dollars, not $100,000).
 
 Account history summed the same way `/compare` once did: when two reports of one chamber and stage both claimed an account for a year, the history added them, so `/api/accounts/070-0113/history` showed $730.7 million by adding a Homeland Security figure to a wrongly keyed Agriculture one. It now reports that year as a `conflict` with no amount, and conflicted years no longer drive title changes.
 

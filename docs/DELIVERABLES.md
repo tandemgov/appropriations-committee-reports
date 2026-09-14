@@ -58,7 +58,18 @@ Report both kinds of number, and do not describe the data as verified without sa
 ### Rebuild the release from extracted data
 
 This is the reproducible path, and the one tested in a clean checkout.
-It needs the extracted report files (`data/extracted/`, not in git; hash recorded in the manifest), no API keys, and a few minutes.
+It needs the extracted report files, no API keys, and a few minutes.
+
+The extracted files are not in git: they are 213 MB of intermediate JSON, and a House re-extraction cannot reproduce them exactly because vision output varies.
+They ship beside the release as a snapshot archive, `approps-extracted-<hash>.tar.gz` (about 11 MB), with a `.sha256` file; `<hash>` is the first 12 characters of `source_snapshot.extracted_sha256` in the release manifest.
+The manifest hash alone cannot recreate the files, so a rebuild needs this archive, and the handoff must deliver it or a stable link to it.
+
+```bash
+shasum -a 256 -c approps-extracted-<hash>.tar.gz.sha256
+mkdir -p data && tar -xzf approps-extracted-<hash>.tar.gz -C data   # creates data/extracted/
+```
+
+After `build_release.py`, the new manifest's `source_snapshot.extracted_sha256` must equal the published one, and every data file's hash in `files` should match.
 
 ```bash
 uv sync --all-extras
